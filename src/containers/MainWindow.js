@@ -1,20 +1,16 @@
 import React from 'react';
 // import styled from 'styled-components';
 import SplitPane from 'react-split-pane';
-import Request from '../components/Request';
+import Sidebar from './Sidebar';
 import './splitpane.css';
-const R = require('ramda');
 
 const MainWindow = props => 
-    <SplitPane split="vertical" minSize={100} defaultSize={200}>
+    <SplitPane className="bp3-dark" split="vertical" minSize={200} defaultSize={270}>
         <div>
-            {renderRequests(props.requests)}
+            <Sidebar requests={props.requests} />
         </div>
 
         <div>{ props.name }</div>
     </SplitPane>;
-
-const renderRequests = R.map(r => <Request model={r} />);
-
 
 export default MainWindow;

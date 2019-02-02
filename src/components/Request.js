@@ -1,32 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+import { Card, Text, Colors } from "@blueprintjs/core";
 
-const RequestBox = styled.div`
-  overflow: hidden;
-  margin-top: 5px;
-`;
-
+// blueprint Indogo5
 const Method = styled.span`
-  color: red;
-`;
-
-const Name = styled.div`
-  color: grey;
-  white-space: nowrap;
-`;
-
-const Url = styled.span`
-  color: black;
-  white-space: nowrap;
-  margin-left: 5px;
+  color: #AD99FF;
+  margin-right: 5px;
 `;
 
 const Request = props => (
-  <RequestBox>
-    <Name>{props.model.name}</Name>
-    <Method>{props.model.method}</Method>
-    <Url>{props.model.url}</Url>
-  </RequestBox>
+  <Card>
+    <Text ellipsize={true}>
+      <Method>{props.model.method}</Method>
+      {props.model.name}
+    </Text>
+  </Card>
 );
 
 export default Request;
