@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Tab, Tabs, ButtonGroup, Button } from "@blueprintjs/core";
+import { Card, Tab, Tabs, ButtonGroup, Button, Popover, Menu, MenuItem } from "@blueprintjs/core";
 import styled from "styled-components";
 import RequestPanel from './RequestPanel';
 
@@ -18,8 +18,19 @@ const Sidebar = props =>
     <BottomBar>
       <ButtonGroup minimal={false} fill={false}>
         <Button icon="add">Add</Button>
+        <Popover content={ <EnvMenu />} >
+          <Button rightIcon='caret-up' icon='eye-open' text='Environment' />
+        </Popover>
       </ButtonGroup>
     </BottomBar>
   </Card>;
+
+const EnvMenu = props =>
+  <Menu>
+    <MenuItem text='default' />
+    <MenuItem text='staging' />
+    <MenuItem text='production' />
+  </Menu>;
+
 
 export default Sidebar;
