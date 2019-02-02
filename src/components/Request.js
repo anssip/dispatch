@@ -8,13 +8,18 @@ const Method = styled.span`
   margin-right: 5px;
 `;
 
+const RequestCard = styled.div`
+  padding: 5px;
+  cursor: pointer;
+`;
+
 const Request = props => (
-  <Card>
+  <RequestCard onClick={_ => console.log('request clidked')}>
     <Text ellipsize={true}>
       <Method>{props.model.method}</Method>
       {props.model.name}
     </Text>
-  </Card>
+  </RequestCard>
 );
 
 export default Request;
