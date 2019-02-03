@@ -18,24 +18,36 @@ class RequestDetail extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { template: '--' };
+    this.state = { template: '--', contentType: 'application/json' };
   }
   render() {
     return (
-    <div>
-      <FormGroup
-        label="Template"
-        labelFor="templateSelect"
-        inline={true}
-      >
-        <HTMLSelect onChange={e => this.selectTemplate(e.currentTarget.value)} id="templateSelect" options={['--', 'source', 'sink']} className={Classes.FIXED} />
-      </FormGroup>
-      <BodyDivider>
-        <BodyContainer>
-          {this.isTemplated() ? <TemplatedBody /> : <Body />}
-        </BodyContainer>
-      </BodyDivider>
-    </div>);
+      <div>
+        <FormGroup
+          label="Template & type"
+          labelFor="templateSelect"
+          inline={true}
+        >
+          <HTMLSelect 
+            onChange={e => this.selectTemplate(e.currentTarget.value)} 
+            id="templateSelect" 
+            options={['--', 'source', 'sink']} 
+            value={this.state.template}
+            className={Classes.FIXED} />
+          <HTMLSelect 
+            onChange={e => this.selectContentType(e.currentTarget.value)} 
+            id="contentTypeSelect" 
+            options={['JSON', 'Other', 'No body']} 
+            value={this.state.contentType}
+            className={Classes.FIXED} 
+            disabled={this.isTemplated()}/>
+        </FormGroup>
+        <BodyDivider>
+          <BodyContainer>
+            {this.isTemplated() ? <TemplatedBody /> : <Body contentType={this.state.contentType} />}
+          </BodyContainer>
+        </BodyDivider>
+      </div>);
   }
   selectTemplate(template) {
     console.log(template);
@@ -44,6 +56,9 @@ class RequestDetail extends React.Component {
   isTemplated() {
     console.log("is templated?");
     return this.state.template !== "--";
+  }
+  selectContentType(contentType) {
+    this.setState({ contentType });
   }
 }
 

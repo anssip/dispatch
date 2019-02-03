@@ -20,7 +20,7 @@ const RequestDetails = props =>
       </ControlGroup>
       <TabContainer>
         <Tabs id="mainTabs" onChange={_ => console.log('request tab changed')} defaultSelectedTabId="body">
-          <Tab id="body" title="Requests" panel={<RequestDetailPane component={<BodyDetail />} />} />
+          <Tab id="body" title="Body" panel={<RequestDetailPane component={<BodyDetail />} />} />
           <Tab id="query" title="Query" />
           <Tab id="headers" title="Headers" />
           <Tab id="auth" title="Auth" />
