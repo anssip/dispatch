@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import SplitPane from 'react-split-pane';
 import Sidebar from './Sidebar';
 import './splitpane.css';
-import RequestDetails from '../components/RequestDetails';
+import RequestDetails from './RequestDetails';
 
 const DetailPanel = styled.div`
   position: relative;
