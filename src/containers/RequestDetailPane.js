@@ -19,5 +19,4 @@ const RequestDetailPane = props =>
   </TopDivider>
   ;
 
-
 export default RequestDetailPane;

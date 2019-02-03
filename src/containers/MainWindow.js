@@ -4,6 +4,7 @@ import SplitPane from 'react-split-pane';
 import Sidebar from './Sidebar';
 import './splitpane.css';
 import RequestDetails from './RequestDetails';
+import { ResizeSensor } from "@blueprintjs/core";
 
 const DetailPanel = styled.div`
   position: relative;
@@ -12,11 +13,28 @@ const DetailPanel = styled.div`
   width: 100%;
 `;
 
-const MainWindow = props => 
-    <SplitPane className="bp3-dark" split="vertical" minSize={200} defaultSize={270}>
-        <Sidebar requests={props.requests} />
+class MainWindow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { paneWidth: 0 };
+  }
 
-        <RequestDetails />
-    </SplitPane>;
+  render() {
+    return (
+      <SplitPane className="bp3-dark" split="vertical" minSize={200} defaultSize={270}>
+        <Sidebar requests={this.props.requests} />
+
+        <ResizeSensor onResize={entries => this.handleResize(entries)}>
+          <RequestDetails paneWidth={ this.state.paneWidth } />
+        </ResizeSensor>
+      </SplitPane>
+    );
+  }
+  handleResize(entries) {
+    console.log(`right pane width: ${entries[0].contentRect.width}`);
+    this.setState({ paneWidth: entries[0].contentRect.width });
+  }
+
+}
 
 export default MainWindow;

@@ -44,7 +44,7 @@ class RequestDetail extends React.Component {
         </FormGroup>
         <BodyDivider>
           <BodyContainer>
-            {this.isTemplated() ? <TemplatedBody /> : <Body contentType={this.state.contentType} />}
+            {this.isTemplated() ? <TemplatedBody /> : <Body paneWidth={this.props.paneWidth} contentType={this.state.contentType} />}
           </BodyContainer>
         </BodyDivider>
       </div>);

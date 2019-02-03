@@ -10,9 +10,13 @@ const TabContainer = styled.div`
   margin-top 20px;
 `;
 
+const MainPane = styled.div`
+  height: 100%;
+`;
+
 const RequestDetails = props =>
-  <div>
-    <Card>
+  <MainPane>
+    <Card style={{ height: "100%" }}>
       <ControlGroup fill={true}>
         <HTMLSelect options={METHODS} className={Classes.FIXED} />
         <InputGroup placeholder="http://localhost:8080/users" />
@@ -20,15 +24,14 @@ const RequestDetails = props =>
       </ControlGroup>
       <TabContainer>
         <Tabs id="mainTabs" onChange={_ => console.log('request tab changed')} defaultSelectedTabId="body">
-          <Tab id="body" title="Body" panel={<RequestDetailPane component={<BodyDetail />} />} />
+          <Tab id="body" title="Body" panel={<RequestDetailPane component={<BodyDetail paneWidth={props.paneWidth} />} />} />
           <Tab id="query" title="Query" />
           <Tab id="headers" title="Headers" />
           <Tab id="auth" title="Auth" />
         </Tabs>
       </TabContainer>
     </Card>
-
-  </div>
+  </MainPane>
   ;
 
 export default RequestDetails;
