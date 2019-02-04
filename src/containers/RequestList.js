@@ -5,7 +5,7 @@ import { InputGroup } from "@blueprintjs/core";
 import Request from '../components/Request';
 const R = require('ramda');
 
-const RequestPanel = props =>
+const RequestList = props =>
   <div>
     <InputGroup
       className='search'
@@ -22,4 +22,4 @@ const RequestPanel = props =>
 
 const renderRequests = R.map((r, i) => <Request id={i} model={r} />);
 
-export default RequestPanel;
+export default RequestList;

@@ -2,8 +2,8 @@ import React from "react";
 import { Divider, FormGroup, Text, Classes, Card, ControlGroup, HTMLSelect, InputGroup, Button, Tabs, Tab } from "@blueprintjs/core";
 import styled from "styled-components";
 import { template } from "handlebars";
-import Body from "./Body";
-import TemplatedBody from "./TemplatedBody";
+import BodyViewComponent from "./BodyViewComponent";
+import TemplatedBodyViewComponent from "./TemplatedBodyViewComponent";
 
 
 const BodyContainer = styled.div`
@@ -14,7 +14,7 @@ const BodyDivider = styled.div`
   margin-top: 20px;
 `;
 
-class RequestDetail extends React.Component {
+class BodyView extends React.Component {
 
   constructor(props) {
     super(props);
@@ -44,7 +44,7 @@ class RequestDetail extends React.Component {
         </FormGroup>
         <BodyDivider>
           <BodyContainer>
-            {this.isTemplated() ? <TemplatedBody /> : <Body paneWidth={this.props.paneWidth} contentType={this.state.contentType} />}
+            {this.isTemplated() ? <TemplatedBodyViewComponent /> : <BodyViewComponent paneWidth={this.props.paneWidth} contentType={this.state.contentType} />}
           </BodyContainer>
         </BodyDivider>
       </div>);
@@ -62,4 +62,4 @@ class RequestDetail extends React.Component {
   }
 }
 
-export default RequestDetail;
+export default BodyView;

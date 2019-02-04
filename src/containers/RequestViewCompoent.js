@@ -10,7 +10,7 @@ const TopDivider = styled.div`
   margin-top: -10px;
 `;
 
-const RequestDetailPane = props =>
+const RequestViewComponent = props =>
   <TopDivider>
     <Divider />
     <DetailContainer>
@@ -19,4 +19,4 @@ const RequestDetailPane = props =>
   </TopDivider>
   ;
 
-export default RequestDetailPane;
+export default RequestViewComponent;

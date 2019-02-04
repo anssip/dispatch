@@ -3,6 +3,6 @@ import { Divider, FormGroup, Text, Classes, Card, ControlGroup, HTMLSelect, Inpu
 import styled from "styled-components";
 import { template } from "handlebars";
 
-const TemplatedBody = props => "templated body";
+const TemplatedBodyViewComponent = props => "templated body";
 
-export default TemplatedBody;
+export default TemplatedBodyViewComponent;

@@ -2,7 +2,7 @@ import React from "react";
 import {  ResizeSensor, TextArea, Intent, Divider, FormGroup, Text, Classes, Card, ControlGroup, HTMLSelect, InputGroup, Button, Tabs, Tab } from "@blueprintjs/core";
 import styled from "styled-components";
 
-class Body extends React.Component {
+class BodyViewComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: '' };
@@ -26,4 +26,4 @@ class Body extends React.Component {
   }
 }
 
-export default Body;
+export default BodyViewComponent;

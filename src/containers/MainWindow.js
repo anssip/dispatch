@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import SplitPane from 'react-split-pane';
 import Sidebar from './Sidebar';
 import './splitpane.css';
-import RequestDetails from './RequestDetails';
+import RequestView from './RequestView';
 import { ResizeSensor } from "@blueprintjs/core";
 
 const DetailPanel = styled.div`
@@ -25,7 +25,7 @@ class MainWindow extends React.Component {
         <Sidebar requests={this.props.requests} />
 
         <ResizeSensor onResize={entries => this.handleResize(entries)}>
-          <RequestDetails paneWidth={ this.state.paneWidth } />
+          <RequestView paneWidth={ this.state.paneWidth } />
         </ResizeSensor>
       </SplitPane>
     );

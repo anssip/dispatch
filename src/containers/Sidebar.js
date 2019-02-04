@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Tab, Tabs, ButtonGroup, Button, Popover, Menu, MenuItem } from "@blueprintjs/core";
 import styled from "styled-components";
-import RequestPanel from './RequestPanel';
+import RequestList from './RequestList';
 
 const BottomBar = styled.div`
   position: fixed;
@@ -12,7 +12,7 @@ const BottomBar = styled.div`
 const Sidebar = props =>
   <Card className='left-pane'>
     <Tabs id="sidebarTabs" onChange={_ => console.log('tab changed')} defaultSelectedTabId="requests">
-      <Tab id="requests" title="Requests" panel={<RequestPanel requests={props.requests} />} />
+      <Tab id="requests" title="Requests" panel={<RequestList requests={props.requests} />} />
       <Tab id="templates" title="Templates" />
     </Tabs>
     <BottomBar>
