@@ -13,7 +13,7 @@ const Sidebar = props =>
   <Card className='left-pane'>
     <Tabs id="sidebarTabs" onChange={_ => console.log('tab changed')} defaultSelectedTabId="requests">
       <Tab id="requests" title="Requests" panel={<RequestList requests={props.requests} />} />
-      <Tab id="templates" title="Templates" />
+      <Tab id="templates" title="Context" />
     </Tabs>
     <BottomBar>
       <ButtonGroup minimal={false} fill={false}>

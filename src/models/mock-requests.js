@@ -5,9 +5,7 @@ const requests = [
     url: "https://localhost:8000/connectors/gt-source",
     headers: {},
     body: {
-      config: {
-        templateRef: "source.config"
-      }
+      config: "{{source.config}}"
     },
     teampalteVars: {
       "source.config": {
@@ -24,3 +22,14 @@ const requests = [
 ];
 
 export default requests;
+
+/*
+> var object = require('json-templater/object');
+
+> object({ body: "{{foo}}"}, { foo: {a:1,b:2} })
+==> { body: { a: 1, b: 2 } }
+> object({ body: "{{foo.bar}}"}, { foo: {a:1,b:2,bar:{ jee:'geee', juu: 7 }} })
+==> { body: { jee: 'geee', juu: 7 } }
+> object({ body: "{{foo.bar}}"}, { foo: {a:1,b:2,bar:{ jee: '{{geee}}', juu: 7 }} })
+
+*/
