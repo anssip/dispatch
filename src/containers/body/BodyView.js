@@ -1,15 +1,15 @@
 import React from "react";
-import { Divider, FormGroup, Text, Classes, Card, ControlGroup, HTMLSelect, InputGroup, Button, Tabs, Tab } from "@blueprintjs/core";
+import { FormGroup, Text, Classes, Card, ControlGroup, HTMLSelect, InputGroup, Button, Tabs, Tab } from "@blueprintjs/core";
 import styled from "styled-components";
 import { template } from "handlebars";
 import BodyViewComponent from "./BodyViewComponent";
 
 
-const BodyContainer = styled.div`
+const BodyWrapper = styled.div`
   padding-top: 10px;
 `;
 
-const BodyDivider = styled.div`
+const Divider = styled.div`
   margin-top: 20px;
 `;
 
@@ -35,11 +35,11 @@ class BodyView extends React.Component {
             className={Classes.FIXED} 
             />
         </FormGroup>
-        <BodyDivider>
-          <BodyContainer>
+        <Divider>
+          <BodyWrapper>
             <BodyViewComponent paneWidth={this.props.paneWidth} contentType={this.state.contentType} />
-          </BodyContainer>
-        </BodyDivider>
+          </BodyWrapper>
+        </Divider>
       </div>);
   }
   selectContentType(contentType) {

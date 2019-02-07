@@ -5,7 +5,7 @@ const requests = [
     url: "https://localhost:8000/connectors/gt-source",
     headers: {},
     body: {
-      config: "{{source.config}}"
+      config: "{{ctx.source.config}}"
     },
     teampalteVars: {
       "source.config": {
