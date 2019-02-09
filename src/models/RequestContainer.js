@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider, Subscribe, Container } from 'overstated';
 import mockRequests from './mock-requests';
+import { identity } from 'rxjs';
 
 const R = require('ramda');
 
@@ -11,8 +12,10 @@ class RequestContainer extends Container {
   addRequest() {
     this.setState({ requests: [...this.state.requests, this.createEmptyRequest()] });
   }
-  replaceRequest(request) {
-    this.setState({ requests: this.state.requests.map((r, i) => r.selected ? request : r) });
+  replaceSelectedRequest(replaceWith) {
+    this.setState({ 
+      requests: R.map( R.when(R.prop('selected'), R.partial(R.identity, [replaceWith])), this.state.requests)
+    });
   }
   getRequests() {
     return this.state.requests;
@@ -45,18 +48,21 @@ class RequestContainer extends Container {
     console.log(`selecting request at ${index}`);
     const req = this.cloneNonSelected(this.state.requests[index]);
     req.selected = true;
-    const newRequests = this.state.requests.map(r => this.cloneNonSelected(r))
-    this.setState({ requests: newRequests.map((r, i) => i === index ? req : r) });
+    const newRequests = R.map(this.cloneNonSelected, this.state.requests);
+    const arrayIndexes = [...Array(newRequests.length).keys()];
+    this.setState({ 
+      requests: R.map(R.ifElse(R.equals(index), R.partial(R.identity, [req]), R.partialRight(R.prop, [newRequests])), arrayIndexes)
+    });
   }
   getSelected() {
     console.log('getSelected');
     if (this.isEmpty()) return {};
-    return this.state.requests.find(r => r.selected);
+    return R.find(R.prop('selected'))(this.state.requests);
   }
   setProp(prop, req, value) {
     const newRequet = R.clone(req);
     newRequet[prop] = value;
-    this.replaceRequest(newRequet);
+    this.replaceSelectedRequest(newRequet);
   }
   setMethod = R.partial(R.bind(this.setProp, this), ['method']);
   setName = R.partial(R.bind(this.setProp, this), ['name']);
