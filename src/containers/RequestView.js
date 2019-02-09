@@ -18,30 +18,38 @@ const MainPane = styled.div`
   height: 100%;
 `;
 
-const RequestView = ({ request, paneWidth }) =>
-  <MainPane>
-    <Card style={{ height: "100%" }}>
-      <ControlGroup fill={true}>
-        <HTMLSelect options={METHODS} className={Classes.FIXED} />
-        <InputGroup value={request.url} placeholder="http://localhost:8080/users" />
-        <Button icon="arrow-right" className={Classes.FIXED} />
-      </ControlGroup>
-      <TabContainer>
-        <Tabs id="mainTabs" onChange={_ => console.log('request tab changed')} defaultSelectedTabId="body">
-          <Tab id="body" title="Body" panel={<RequestViewComponent component={<BodyView paneWidth={paneWidth} />} />} />
-          <Tab id="query" title="Query" />
-          <Tab id="headers" title="Headers" />
-          <Tab id="auth" title="Auth" />
-        </Tabs>
-      </TabContainer>
-    </Card>
-  </MainPane>
-  ;
+const RequestView = ({ container, request, paneWidth }) => {
+  if (request) {
+    console.log(`${request.method}`);
+    return (
+    <MainPane>
+      <Card style={{ height: "100%" }}>
+        <ControlGroup fill={true}>
+          <HTMLSelect value={request.method} onChange={e => container.setMethod(request, e.currentTarget.value)} options={METHODS} className={Classes.FIXED} />
+          <InputGroup value={request.url} placeholder="http://localhost:8080/users" />
+          <Button icon="arrow-right" className={Classes.FIXED} />
+        </ControlGroup>
+
+        <TabContainer>
+          <Tabs id="mainTabs" onChange={_ => console.log('request tab changed')} defaultSelectedTabId="body">
+            <Tab id="body" title="Body" panel={<RequestViewComponent component={<BodyView paneWidth={paneWidth} />} />} />
+            <Tab id="query" title="Query" />
+            <Tab id="headers" title="Headers" />
+            <Tab id="auth" title="Auth" />
+          </Tabs>
+        </TabContainer>
+      </Card>
+    </MainPane>);
+  } else {
+    return <div>Select a request</div>;
+  }
+};
 
 // @ts-ignore
 export default connect({
   container: requestContainer,
   selector: ({ container }) => ({
-    request: container.getSelected()
+    request: container.getSelected(),
+    container
   })
 })(RequestView);
