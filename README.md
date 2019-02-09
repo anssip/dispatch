@@ -1,10 +1,13 @@
-# gasbag
-A very talkative REST automation and testing tool for developers
+# Dispatch
+
+A tool for REST API design, and for request testing and management.
 
 
 ## TODO:
 
-* Introduce (Overstated)[https://github.com/fabiospampinato/overstated] for requests and templates.
+* Wire URL and body with RequestContainer
+* Add Context (a container for templates)
+* Add Environment (a container for env variables)
 
 * Body JSON view to show request JSON which has references to the objects and variables defined in the context.
   * CTRL+SPACE opens a context picker which fills in the reference in format `{{ctx.foo.bar}}`

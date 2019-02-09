@@ -53,11 +53,13 @@ class RequestContainer extends Container {
     if (this.isEmpty()) return {};
     return this.state.requests.find(r => r.selected);
   }
-  setMethod(req, method) {
+  setProp(prop, req, value) {
     const newRequet = R.clone(req);
-    newRequet.method = method;
+    newRequet[prop] = value;
     this.replaceRequest(newRequet);
   }
+  setMethod = R.partial(R.bind(this.setProp, this), ['method']);
+  setName = R.partial(R.bind(this.setProp, this), ['name']);
 }
 
 export default RequestContainer;

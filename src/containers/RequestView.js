@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider, Classes, Card, ControlGroup, HTMLSelect, InputGroup, Button, Tabs, Tab } from "@blueprintjs/core";
+import { EditableText, Classes, Card, ControlGroup, HTMLSelect, InputGroup, Button, Tabs, Tab } from "@blueprintjs/core";
 import styled from "styled-components";
 import RequestViewComponent from "./RequestViewCompoent";
 import BodyView from "./body/BodyView";
@@ -18,17 +18,28 @@ const MainPane = styled.div`
   height: 100%;
 `;
 
-const RequestView = ({ container, request, paneWidth }) => {
+const NameWrapper = styled.h2`
+  margin-top: 10px;
+  text-align: left;
+`;
+
+const RequestView = ({ request, paneWidth, setMethod, setName }) => {
   if (request) {
     console.log(`${request.method}`);
+
+    const onMethodChange = R.compose(R.partial(setMethod, [request]), R.prop('value'), R.prop('currentTarget'));
     return (
     <MainPane>
       <Card style={{ height: "100%" }}>
         <ControlGroup fill={true}>
-          <HTMLSelect value={request.method} onChange={e => container.setMethod(request, e.currentTarget.value)} options={METHODS} className={Classes.FIXED} />
+          <HTMLSelect value={request.method} onChange={onMethodChange} options={METHODS} className={Classes.FIXED} />
+          {/* TODO: wire URL with RequestContainer */}
           <InputGroup value={request.url} placeholder="http://localhost:8080/users" />
           <Button icon="arrow-right" className={Classes.FIXED} />
         </ControlGroup>
+        <NameWrapper>
+          <EditableText value={request.name} onChange={R.partial(setName, [request])} />
+        </NameWrapper>
 
         <TabContainer>
           <Tabs id="mainTabs" onChange={_ => console.log('request tab changed')} defaultSelectedTabId="body">
@@ -50,6 +61,7 @@ export default connect({
   container: requestContainer,
   selector: ({ container }) => ({
     request: container.getSelected(),
-    container
+    setMethod: R.bind(container.setMethod, container),
+    setName: R.bind(container.setName, container)
   })
 })(RequestView);
