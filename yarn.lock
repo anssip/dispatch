@@ -968,15 +968,38 @@
   resolved "https://registry.yarnpkg.com/@types/dom4/-/dom4-2.0.1.tgz#506d5781b9bcab81bd9a878b198aec7dee2a6033"
   integrity sha512-kSkVAvWmMZiCYtvqjqQEwOmvKwcH+V4uiv3qPQ8pAh1Xl39xggGEo8gHUqV4waYGHezdFw0rKBR8Jt0CrQSDZA==
 
+"@types/lodash@^4.14.118":
+  version "4.14.120"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.120.tgz#cf265d06f6c7a710db087ed07523ab8c1a24047b"
+  integrity sha512-jQ21kQ120mo+IrDs1nFNVm/AsdFxIx2+vZ347DbogHJPd/JzKNMOqU6HCYin1W6v8l5R9XSO2/e9cxmn7HAnVw==
+
 "@types/node@^10.12.18":
   version "10.12.21"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.21.tgz#7e8a0c34cf29f4e17a36e9bd0ea72d45ba03908e"
   integrity sha512-CBgLNk4o3XMnqMc0rhb6lc77IwShMEglz05deDcn2lQxyXEZivfwgYJu7SMha9V5XcrP6qZuevTHV/QrN2vjKQ==
 
+"@types/node@^10.12.8":
+  version "10.12.23"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.23.tgz#308a3acdc5d1c842aeadc50b867d99c46cfae868"
+  integrity sha512-EKhb5NveQ3NlW5EV7B0VRtDKwUfVey8LuJRl9pp5iW0se87/ZqLjG0PMf2MCzPXAJYWZN5Ltg7pHIAf9/Dm1tQ==
+
+"@types/prop-types@*":
+  version "15.5.8"
+  resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.5.8.tgz#8ae4e0ea205fe95c3901a5a1df7f66495e3a56ce"
+  integrity sha512-3AQoUxQcQtLHsK25wtTWIoIpgYjH3vSDroZOUr7PpCHw/jLY1RB9z9E8dBT/OSmwStVgkRNvdh+ZHNiomRieaw==
+
 "@types/q@^1.5.1":
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.1.tgz#48fd98c1561fe718b61733daed46ff115b496e18"
   integrity sha512-eqz8c/0kwNi/OEHQfvIuJVLTst3in0e7uTKeuY+WL/zfKn0xVujOTp42bS/vUUokhK5P2BppLd9JXMOMHcgbjA==
+
+"@types/react@^16.7.6":
+  version "16.8.2"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.2.tgz#3b7a7f7ea89d1c7d68b00849fb5de839011c077b"
+  integrity sha512-6mcKsqlqkN9xADrwiUz2gm9Wg4iGnlVGciwBRYFQSMWG6MQjhOZ/AVnxn+6v8nslFgfYTV8fNdE6XwKu6va5PA==
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^2.2.0"
 
 "@types/tapable@1.0.2":
   version "1.0.2"
@@ -2848,6 +2871,11 @@ create-react-context@<=0.2.2:
     fbjs "^0.8.0"
     gud "^1.0.0"
 
+create-react-context@^0.1.5:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/create-react-context/-/create-react-context-0.1.6.tgz#0f425931d907741127acc6e31acb4f9015dd9fdc"
+  integrity sha512-eCnYYEUEc5i32LHwpE/W7NlddOB9oHwsPaWtWzYtflNkkwa3IfindIcoXdVWs12zCbwaMCavKNu84EXogVIWHw==
+
 cross-env@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-5.2.0.tgz#6ecd4c015d5773e614039ee529076669b9d126f2"
@@ -3110,6 +3138,11 @@ cssstyle@^1.0.0, cssstyle@^1.1.1:
   dependencies:
     cssom "0.3.x"
 
+csstype@^2.2.0:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.2.tgz#3043d5e065454579afc7478a18de41909c8a2f01"
+  integrity sha512-Rl7PvTae0pflc1YtxtKbiSqq20Ts6vpIYOD5WBafl4y123DyHUeLrRdQP66sQW8/6gmX8jrYJLXwNeMqYVJcow==
+
 currently-unhandled@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/currently-unhandled/-/currently-unhandled-0.4.1.tgz#988df33feab191ef799a61369dd76c17adf957ea"
@@ -3212,6 +3245,11 @@ deep-is@~0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
   integrity sha1-s2nW+128E+7PUk+RsHD+7cNXzzQ=
+
+deep-object-diff@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/deep-object-diff/-/deep-object-diff-1.1.0.tgz#d6fabf476c2ed1751fc94d5ca693d2ed8c18bc5a"
+  integrity sha512-b+QLs5vHgS+IoSNcUE4n9HP2NwcHj7aqnJWsjPtuG75Rh5TOaGt0OjAYInh77d5T16V5cRDC+Pw/6ZZZiETBGw==
 
 default-gateway@^2.6.0:
   version "2.7.2"
@@ -7468,6 +7506,19 @@ osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
+overstated@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/overstated/-/overstated-1.1.3.tgz#434a309f0925721c6383a4eacb32cbcb997f9984"
+  integrity sha512-o4v+Jkm/CqLTqh03O0RLKFp05zrjpdje9gPeJ+1U1M9Rv97BHRJNeGfIvYTUAQKkKB8LTsIh201PhfIvVcZwWQ==
+  dependencies:
+    unstated "^2.1.1"
+    unstated-compose "^1.0.7"
+    unstated-connect2 "^1.1.7"
+    unstated-debug "^0.3.2"
+    unstated-hmr "^1.0.6"
+    unstated-suspense-autosuspend "^1.1.0"
+    unstated-suspense-middleware "^1.1.0"
+
 p-defer@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-defer/-/p-defer-1.0.0.tgz#9f6eb182f6c9aa8cd743004a7d4f96b196b0fb0c"
@@ -8846,6 +8897,24 @@ react-scripts@^2.1.3:
   optionalDependencies:
     fsevents "1.2.4"
 
+react-selectr@^1.0.1:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-selectr/-/react-selectr-1.0.3.tgz#6707bc710e2a28fa27685553c23ff54487ddb1f6"
+  integrity sha512-Tw/VBn06JeugcH8l9625XLx8z1X3miZBpWBKGEpR/QolFlPmZGab7sGKyiFnulosvsO/rySV0PQ7P7UHhBJN6A==
+  dependencies:
+    "@types/node" "^10.12.8"
+    "@types/react" "^16.7.6"
+    shallowequal "^1.1.0"
+
+react-should-component-update@^1.1.0:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-should-component-update/-/react-should-component-update-1.1.2.tgz#1d44b5a1229381e61355294d8630e60a8b0de76a"
+  integrity sha512-iDJO3CiNHwsPhJC6Tw4LllooyR3dGcNDgAUoD6oPPCx3iVNy3dERP/kdsRff1Q1GZKp7k9vkBZCrD2bUYPSdlA==
+  dependencies:
+    "@types/node" "^10.12.8"
+    "@types/react" "^16.7.6"
+    lodash "^4.17.11"
+
 react-split-pane@^0.1.85:
   version "0.1.85"
   resolved "https://registry.yarnpkg.com/react-split-pane/-/react-split-pane-0.1.85.tgz#64819946a99b617ffa2d20f6f45a0056b6ee4faa"
@@ -9585,6 +9654,11 @@ shallow-clone@^1.0.0:
     is-extendable "^0.1.1"
     kind-of "^5.0.0"
     mixin-object "^2.0.1"
+
+shallowequal@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-1.1.0.tgz#188d521de95b9087404fd4dcb68b13df0ae4e7f8"
+  integrity sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==
 
 shebang-command@^1.2.0:
   version "1.2.0"
@@ -10578,6 +10652,76 @@ unset-value@^1.0.0:
   dependencies:
     has-value "^0.3.1"
     isobject "^3.0.0"
+
+unstated-compose@^1.0.7:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/unstated-compose/-/unstated-compose-1.0.8.tgz#ba8dad17be8513b60902817d43a51b82207405d8"
+  integrity sha512-YCc6DfavJZI5+BUlK7dJjmQCeptGP8ZEZ4wyayBtOJFDpNYtRj25PRM+V4Cv7+Vfx7bXJVcUAcM2dsr57G3M9g==
+  dependencies:
+    "@types/node" "^10.12.8"
+
+unstated-connect2@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/unstated-connect2/-/unstated-connect2-1.1.7.tgz#3954fef5c9d3a3fd94c0bcd22603dfd7e95eb55e"
+  integrity sha512-8EVYwX2vEq+qKO+RU2Y4LQ0lzDKlS8Y7QxgDM1DH6n68BvyfItNNchjU4ZYhaXn/pgMrGoArwC9PW82gcXG5lQ==
+  dependencies:
+    "@types/node" "^10.12.8"
+    "@types/react" "^16.7.6"
+    lodash "^4.17.11"
+    react-selectr "^1.0.1"
+    react-should-component-update "^1.1.0"
+    unstated-with-containers "^1.1.4"
+
+unstated-debug@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/unstated-debug/-/unstated-debug-0.3.2.tgz#8753fb159c82ebec0a5fc0715c03ea5086cb3677"
+  integrity sha512-wwUj1hcw6+PGLUZNVEyEmEJnViVBMOwh0M7gtJyFpLpRyr4gKJ9jobWeq3Ysu5A5elvWLRihtNVf/LQpJEWYwA==
+  dependencies:
+    deep-object-diff "^1.1.0"
+
+unstated-hmr@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/unstated-hmr/-/unstated-hmr-1.0.6.tgz#c419389d7b7321f712065e8d3a3d089af2d2564e"
+  integrity sha512-/5a21LuDLFNgmrRB+UTsZln32Suhn3/8k8019x0WPP90VO3QdxtdhNhMIP7DhaOGzZg2EfJAza19mALROlVYQw==
+  dependencies:
+    "@types/node" "^10.12.8"
+
+unstated-suspense-autosuspend@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/unstated-suspense-autosuspend/-/unstated-suspense-autosuspend-1.2.0.tgz#cf0f76f0803ac34165a3e3836f29bb33b304abad"
+  integrity sha512-J+tkpkZbtlt/jviKE2FpLQfOzTkKztErhxlQW1EQKY+pFPmroFTt2vVbVjV/3WyWm4Ha7kz888oM1wWsj2NNiA==
+  dependencies:
+    "@types/lodash" "^4.14.118"
+    lodash "^4.17.11"
+
+unstated-suspense-middleware@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/unstated-suspense-middleware/-/unstated-suspense-middleware-1.1.1.tgz#f76a24f4c3498c4b521a76c467e48603b88f09db"
+  integrity sha512-vLC/5UhLlvnzMyPEz8eF06C0dxOjjHNfP60+ByOmvARkBMwxy51F8RlkPpRqZucNbLQkByAk4snR7Fo70OttKQ==
+  dependencies:
+    "@types/node" "^10.12.8"
+    unstated-suspense "^1.0.1"
+
+unstated-suspense@^1.0.1:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/unstated-suspense/-/unstated-suspense-1.0.3.tgz#779e5a457f0c9fd0d228c077e3c6882a9e14df0f"
+  integrity sha512-71lFurwK8S0gLH4x/weMjioBBnkMEG3vlI2LG5qZY+PiSbUZFqlxR6df8rmhZ8YDSCNb6KXMYQvg3g+DN4U0Gg==
+  dependencies:
+    "@types/node" "^10.12.8"
+
+unstated-with-containers@^1.1.4:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/unstated-with-containers/-/unstated-with-containers-1.1.6.tgz#abd877d057c3f4abf2a04fb474a6153bb9ffa303"
+  integrity sha512-HiBBpw6szXji7BkHt8o0FMCehyKyaKTm6FESvbnp1Da0bNFs9oFb9nMeHCgx+YaqeCexdY7g5B2wTkJ59dsNfw==
+  dependencies:
+    "@types/react" "^16.7.6"
+
+unstated@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/unstated/-/unstated-2.1.1.tgz#36b124dfb2e7a12d39d0bb9c46dfb6e51276e3a2"
+  integrity sha512-fORlTWMZxq7NuMJDxyIrrYIZKN7wEWYQ9SiaJfIRcSpsowr6Ph/JIfK2tgtXLW614JfPG/t5q9eEIhXRCf55xg==
+  dependencies:
+    create-react-context "^0.1.5"
 
 unzip-response@^2.0.1:
   version "2.0.1"

@@ -3,6 +3,10 @@ import { Divider, Classes, Card, ControlGroup, HTMLSelect, InputGroup, Button, T
 import styled from "styled-components";
 import RequestViewComponent from "./RequestViewCompoent";
 import BodyView from "./body/BodyView";
+import connect from 'unstated-connect2';
+import requestContainer from '../models/RequestContainer';
+
+const R = require('ramda');
 
 const METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
 
@@ -14,17 +18,17 @@ const MainPane = styled.div`
   height: 100%;
 `;
 
-const RequestView = props =>
+const RequestView = ({ request, paneWidth }) =>
   <MainPane>
     <Card style={{ height: "100%" }}>
       <ControlGroup fill={true}>
         <HTMLSelect options={METHODS} className={Classes.FIXED} />
-        <InputGroup placeholder="http://localhost:8080/users" />
+        <InputGroup value={request.url} placeholder="http://localhost:8080/users" />
         <Button icon="arrow-right" className={Classes.FIXED} />
       </ControlGroup>
       <TabContainer>
         <Tabs id="mainTabs" onChange={_ => console.log('request tab changed')} defaultSelectedTabId="body">
-          <Tab id="body" title="Body" panel={<RequestViewComponent component={<BodyView paneWidth={props.paneWidth} />} />} />
+          <Tab id="body" title="Body" panel={<RequestViewComponent component={<BodyView paneWidth={paneWidth} />} />} />
           <Tab id="query" title="Query" />
           <Tab id="headers" title="Headers" />
           <Tab id="auth" title="Auth" />
@@ -34,4 +38,10 @@ const RequestView = props =>
   </MainPane>
   ;
 
-export default RequestView;
+// @ts-ignore
+export default connect({
+  container: requestContainer,
+  selector: ({ container }) => ({
+    request: container.getSelected()
+  })
+})(RequestView);

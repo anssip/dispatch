@@ -22,7 +22,7 @@ class MainWindow extends React.Component {
   render() {
     return (
       <SplitPane className="bp3-dark" split="vertical" minSize={200} defaultSize={270}>
-        <Sidebar requests={this.props.requests} />
+        <Sidebar />
 
         <ResizeSensor onResize={entries => this.handleResize(entries)}>
           <RequestView paneWidth={ this.state.paneWidth } />

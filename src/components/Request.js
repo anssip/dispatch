@@ -14,7 +14,7 @@ const RequestCard = styled.div`
 `;
 
 const Request = props => (
-  <RequestCard onClick={_ => console.log('request clidked')}>
+  <RequestCard onClick={props.handleClick}>
     <Text ellipsize={true}>
       <Method>{props.model.method}</Method>
       {props.model.name}
