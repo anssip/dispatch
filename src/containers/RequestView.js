@@ -5,6 +5,7 @@ import RequestViewComponent from "./RequestViewCompoent";
 import BodyView from "./body/BodyView";
 import connect from 'unstated-connect2';
 import requestContainer from '../models/RequestContainer';
+import Input from "../components/Input";
 
 const R = require('ramda');
 
@@ -23,36 +24,56 @@ const NameWrapper = styled.h2`
   text-align: left;
 `;
 
-const RequestView = ({ request, paneWidth, setMethod, setName }) => {
-  if (request) {
-    console.log(`${request.method}`);
 
-    const onMethodChange = R.compose(R.partial(setMethod, [request]), R.prop('value'), R.prop('currentTarget'));
-    return (
-    <MainPane>
-      <Card style={{ height: "100%" }}>
-        <ControlGroup fill={true}>
-          <HTMLSelect value={request.method} onChange={onMethodChange} options={METHODS} className={Classes.FIXED} />
-          {/* TODO: wire URL with RequestContainer */}
-          <InputGroup value={request.url} placeholder="http://localhost:8080/users" />
-          <Button icon="arrow-right" className={Classes.FIXED} />
-        </ControlGroup>
-        <NameWrapper>
-          <EditableText value={request.name} onChange={R.partial(setName, [request])} />
-        </NameWrapper>
+class RequestView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { paneWidth: 0, prevReq: {} };
+    this.prevRequest = {};
+  }
 
-        <TabContainer>
-          <Tabs id="mainTabs" onChange={_ => console.log('request tab changed')} defaultSelectedTabId="body">
-            <Tab id="body" title="Body" panel={<RequestViewComponent component={<BodyView paneWidth={paneWidth} />} />} />
-            <Tab id="query" title="Query" />
-            <Tab id="headers" title="Headers" />
-            <Tab id="auth" title="Auth" />
-          </Tabs>
-        </TabContainer>
-      </Card>
-    </MainPane>);
-  } else {
-    return <div>Select a request</div>;
+  render() {
+    const { container, request, paneWidth, setMethod, setName, setUrl } = this.props;
+
+    if (request) {
+      console.log(`${request.method}`);
+
+      const onMethodChange = R.compose(
+        R.partial(setMethod, [request]),
+        R.prop('value'),
+        R.prop('currentTarget'));
+
+      const onUrlChange = R.partial(setUrl, [request]);
+      
+      const onNameChange = R.compose(R.bind(this.setState, this), R.objOf("name"));
+      const onNameConfirm = () => setName(request, this.state.name);
+
+
+      return (
+        <MainPane>
+          <Card style={{ height: "100%" }}>
+            <ControlGroup fill={true}>
+              <HTMLSelect value={request.method} onChange={onMethodChange} options={METHODS} className={Classes.FIXED} />
+              <Input value={request.url} onChange={onUrlChange} />
+              <Button icon="arrow-right" className={Classes.FIXED} />
+            </ControlGroup>
+            <NameWrapper>
+              <EditableText value={this.state.name || request.name} onChange={onNameChange} onConfirm={onNameConfirm} />
+            </NameWrapper>
+
+            <TabContainer>
+              <Tabs id="mainTabs" onChange={_ => console.log('request tab changed')} defaultSelectedTabId="body">
+                <Tab id="body" title="Body" panel={<RequestViewComponent component={<BodyView paneWidth={paneWidth} />} />} />
+                <Tab id="query" title="Query" />
+                <Tab id="headers" title="Headers" />
+                <Tab id="auth" title="Auth" />
+              </Tabs>
+            </TabContainer>
+          </Card>
+        </MainPane>);
+    } else {
+      return <div>Select a request</div>;
+    }
   }
 };
 
@@ -60,8 +81,10 @@ const RequestView = ({ request, paneWidth, setMethod, setName }) => {
 export default connect({
   container: requestContainer,
   selector: ({ container }) => ({
+    container,
     request: container.getSelected(),
     setMethod: R.bind(container.setMethod, container),
-    setName: R.bind(container.setName, container)
+    setName: R.bind(container.setName, container),
+    setUrl: R.bind(container.setUrl, container)
   })
 })(RequestView);

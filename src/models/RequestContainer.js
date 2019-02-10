@@ -13,7 +13,7 @@ class RequestContainer extends Container {
     this.setState({ requests: [...this.state.requests, this.createEmptyRequest()] });
   }
   replaceSelectedRequest(replaceWith) {
-    this.setState({ 
+    return this.setState({ 
       requests: R.map( R.when(R.prop('selected'), R.partial(R.identity, [replaceWith])), this.state.requests)
     });
   }
@@ -62,10 +62,13 @@ class RequestContainer extends Container {
   setProp(prop, req, value) {
     const newRequet = R.clone(req);
     newRequet[prop] = value;
-    this.replaceSelectedRequest(newRequet);
+    return this.replaceSelectedRequest(newRequet);
   }
   setMethod = R.partial(R.bind(this.setProp, this), ['method']);
   setName = R.partial(R.bind(this.setProp, this), ['name']);
+  setUrl = R.partial(R.bind(this.setProp, this), ['url']);
+
 }
+
 
 export default RequestContainer;
