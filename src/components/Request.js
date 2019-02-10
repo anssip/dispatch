@@ -9,12 +9,13 @@ const Method = styled.span`
 `;
 
 const RequestCard = styled.div`
-  padding: 5px;
+  padding: 10px;
+  margin-left: -10px;
   cursor: pointer;
 `;
 
 const Request = props => (
-  <RequestCard onClick={props.handleClick}>
+  <RequestCard style={props.model.selected ? { color: "#fff", backgroundColor: "#394B59" } : { color: "#aaa" }} onClick={props.handleClick}>
     <Text ellipsize={true}>
       <Method>{props.model.method}</Method>
       {props.model.name}

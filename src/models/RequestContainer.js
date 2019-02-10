@@ -10,7 +10,7 @@ class RequestContainer extends Container {
   state = { requests: mockRequests, context: [] };
 
   addRequest() {
-    this.setState({ requests: [...this.state.requests, this.createEmptyRequest()] });
+    this.setState({ requests: [... R.map(this.cloneNonSelected, this.state.requests), this.createEmptyRequest()] });
   }
   replaceSelectedRequest(replaceWith) {
     return this.setState({ 
