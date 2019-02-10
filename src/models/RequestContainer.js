@@ -31,7 +31,8 @@ class RequestContainer extends Container {
       method: 'GET',
       name: this.getNamePlaceholder(),
       url: 'http://echo.dispatch.rest',
-      selected: true
+      selected: true,
+      body: ""
     };
   }
   getNamePlaceholder() {
@@ -67,7 +68,7 @@ class RequestContainer extends Container {
   setMethod = R.partial(R.bind(this.setProp, this), ['method']);
   setName = R.partial(R.bind(this.setProp, this), ['name']);
   setUrl = R.partial(R.bind(this.setProp, this), ['url']);
-
+  setBody = R.partial(R.bind(this.setProp, this), ['body']);
 }
 
 
