@@ -13,7 +13,9 @@ require("codemirror/mode/javascript/javascript");
 const R = require("ramda");
 const jsStringify = require("javascript-stringify");
 const object = require("json-templater").object;
-const fill = (tmpl, ...rest) => rest.reduce((acc, curr) => object(acc, curr), tmpl);
+const string = require('json-templater/string');
+
+const fill = (tmpl, ...rest) => [ctx, ...rest, env].reduce((acc, curr) => object(acc, curr), tmpl);
 
 // mock data
 const ctx = {
@@ -78,10 +80,7 @@ class BodyViewComponent extends React.Component {
 
   }
   evalBody(value) {
-    let tmpValue = value.trim();
-    // tmpValue = tmpValue.indexOf('{') === 0 ? JSON.stringify(value) : value;
-
-    tmpValue = `let __x = ${tmpValue}; __x;`;
+    let tmpValue = `let __x = ${value}; __x;`;
     console.log(`about to eval`, tmpValue);
     tmpValue = eval(tmpValue);
     console.log(`afer eval`, tmpValue);
@@ -93,13 +92,14 @@ class BodyViewComponent extends React.Component {
     try {
       console.log(`======> about to fill`, value);
 
-      // let tmpValue = this.evalBody(value);
-      // console.log(`afer initial eval`, tmpValue);
+      let tmpValue = this.evalBody(value);
+      console.log(`afer initial eval`, tmpValue);
 
-      const tmpValue = fill(JSON.parse(value), ctx, env);
+      // TODO: add checkbox "fill from env"
+      tmpValue = fill(tmpValue);
       console.log(`after ctx fill`, tmpValue);
 
-      const result = JSON.stringify((tmpValue), null, 2);
+      const result = JSON.stringify(tmpValue, null, 2);
       console.log(`result ${JSON.stringify(result)}`);
 
       return result;
