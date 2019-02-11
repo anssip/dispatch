@@ -41,18 +41,22 @@ class RequestContainer extends Container {
     return oldWithNum ? `request-${Number(oldWithNum.name.split('request-')[1]) + 1}` : 'request-0';
   }
   cloneNonSelected(request) {
+    if (! request) throw new Error('request not specified');
     const newRequest = R.clone(request);
+    if (! newRequest) throw new Error('failed to clone the request');
     newRequest.selected = false;
     return newRequest;
   }
   select(index) {
     console.log(`selecting request at ${index}`);
     const req = this.cloneNonSelected(this.state.requests[index]);
+    console.log('clone result', req);    
     req.selected = true;
     const newRequests = R.map(this.cloneNonSelected, this.state.requests);
     const arrayIndexes = [...Array(newRequests.length).keys()];
     this.setState({ 
-      requests: R.map(R.ifElse(R.equals(index), R.partial(R.identity, [req]), R.partialRight(R.prop, [newRequests])), arrayIndexes)
+      requests: newRequests.map((r, i) => i === index ? req : r)
+      // requests: R.map(R.ifElse(R.equals(index), R.partial(R.identity, [req]), R.partialRight(R.prop, [newRequests])), arrayIndexes)
     });
   }
   getSelected() {

@@ -4,9 +4,9 @@ const requests = [
     method: "POST",
     url: "https://localhost:8000/connectors/gt-source",
     headers: {},
-    body: {
-      config: "{{ctx.source.config}}"
-    },
+    body: JSON.stringify({
+      req1_config: "{{ctx.source.config}}"
+    }),
     teampalteVars: {
       "source.config": {
         jdbcUrl: "",
@@ -17,7 +17,11 @@ const requests = [
   {
     name: "Create gametrans sink",
     method: "POST",
-    url: "https://localhost:8000/connectors/gt-sink"
+    url: "https://localhost:8000/connectors/gt-sink",
+    body: JSON.stringify({
+      anotherConfig: "{{ctx.source.config}}",
+      nunjucks: { foo:100 }
+    })
   }
 ];
 

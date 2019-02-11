@@ -39,41 +39,50 @@ const Wrapper = styled.div`
 class BodyViewComponent extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = { value: null };
     const { request, setBody } = this.props;
-
-
-    // should we store the body as JSON in state?
+    console.log("================  CREATING BODY VIEW =====================", request);
     this.state = { value: request.body };
+
+    // this.state = { value: request.body };
 
     console.log(request.body);
   }
   render() {
+    console.log(this.props);
     const { request, setBody } = this.props;
     const width = `${this.props.paneWidth - 41}px`;
+    console.log(
+      "================  BODY VIEW RENDER =====================",
+      request
+    );
     //console.log(`Body: ${width}`);
-
+  
     return (
       <Wrapper>
         <CodeMirror
-          value={JSON.stringify(request.body, null, "  ")}
+          value={request.body}
           options={{
             mode: "javascript",
             lineNumbers: true,
             theme: "midnight"
           }}
           onBeforeChange={(editor, data, value) => {
-            this.setState({ value: `let x = ${value}; x;` });
             console.log("onBeforeChange");
+
+
+            // TODO: handle the evaluation outside of state. In the preview generation only.
+            this.setState({ value: `let x = ${value}; x;` });
+            
+            setBody(request, this.state.value);
           }}
           onChange={(editor, data, value) => {
             console.log("onChange");
+            // setBody(request, this.state.value);
           }}
         />
         <TextArea
           large={true}
-          onChange={e => this.handleChange(e.target.value)}
-          value={this.getPreview()}
+          defaultValue={this.getPreview(request)}
           fill={true}
           style={{ marginTop: "10px", height: "200px", width, maxWidth: width, minWidth: width }}
         />
@@ -81,22 +90,19 @@ class BodyViewComponent extends React.Component {
 
   }
 
-  getPreview() {
-    console.log(this.state.value);
+  getPreview(request) {
+    const value = this.state.value || request.body;
     // @ts-ignore
     try {
 
-      if (this.state.value.indexOf("let x") < 0) {
-        return fill(this.state.value, env);
+      if (value.indexOf("let x") < 0) {
+        return fill(value, env);
       } 
-      return JSON.stringify((eval(fill(this.state.value, env))), null, 2);
+      return JSON.stringify((eval(fill(value, env))), null, 2);
     } catch (e) {
       console.error(e);
       return null;
     }
-  }
-  handleChange(value) {
-    this.setState({ value });
   }
 }
 

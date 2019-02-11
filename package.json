@@ -46,6 +46,7 @@
     "cross-env": "^5.2.0",
     "electron-is-dev": "^1.0.1",
     "electron-log": "^3.0.0",
+    "fork-ts-checker-webpack-plugin": "^0.5.2",
     "javascript-stringify": "^1.6.0",
     "json-templater": "^1.2.0",
     "overstated": "^1.1.3",
