@@ -17,20 +17,23 @@ const fill = (tmpl, ...rest) => rest.reduce((acc, curr) => object(acc, curr), tm
 
 // mock data
 const ctx = {
-  source: {
-    name: "megaman",
-    value: 100,
-    jdbc: "{{jdbc}}",
-    password: "{{pwd}}"
-  },
-  tmplX: {
-    foo: "{{foo}}",
-    bar: "{{bar}}"
+  ctx: {
+    source: {
+      name: "megaman",
+      value: 100,
+      jdbc: "{{jdbc}}",
+      password: "{{pwd}}"
+    },
+    tmplX: {
+      foo: "{{foo}}",
+      bar: "{{bar}}"
+    }
   }
 };
 
 const env = {
-  jdbc: "jdbc://mydb.net"
+  jdbc: "jdbc://mydb.net",
+  pwd: "password-from-env"
 }
 
 const Wrapper = styled.div`
@@ -40,23 +43,12 @@ class BodyViewComponent extends React.Component {
   constructor(props) {
     super(props);
     const { request, setBody } = this.props;
-    console.log("================  CREATING BODY VIEW =====================", request);
-    this.state = { value: request.body };
-
-    // this.state = { value: request.body };
-
-    console.log(request.body);
   }
   render() {
     console.log(this.props);
     const { request, setBody } = this.props;
     const width = `${this.props.paneWidth - 41}px`;
-    console.log(
-      "================  BODY VIEW RENDER =====================",
-      request
-    );
-    //console.log(`Body: ${width}`);
-  
+
     return (
       <Wrapper>
         <CodeMirror
@@ -68,32 +60,49 @@ class BodyViewComponent extends React.Component {
           }}
           onBeforeChange={(editor, data, value) => {
             console.log("onBeforeChange");
-            this.setState({ value });            
-            setBody(request, this.state.value);
+            // this.setState({ value });            
+            setBody(request, value);
           }}
           onChange={(editor, data, value) => {
             console.log("onChange");
-            // setBody(request, this.state.value);
           }}
         />
         <TextArea
           large={true}
-          value={this.getPreview(this.state.value)}
-          defaultValue={this.getPreview(this.state.value)}
+          value={this.getPreview(request.body)}
+          defaultValue={this.getPreview(request.body)}
           fill={true}
           style={{ marginTop: "10px", height: "200px", width, maxWidth: width, minWidth: width }}
         />
       </Wrapper>);
 
   }
+  evalBody(value) {
+    let tmpValue = value.trim();
+    // tmpValue = tmpValue.indexOf('{') === 0 ? JSON.stringify(value) : value;
 
-  getPreview(request) {
-    const value = this.state.value || request.body;
+    tmpValue = `let __x = ${tmpValue}; __x;`;
+    console.log(`about to eval`, tmpValue);
+    tmpValue = eval(tmpValue);
+    console.log(`afer eval`, tmpValue);
+    return tmpValue;
+  }
+
+  getPreview(value) {
     // @ts-ignore
     try {
-      const tmpValue = value.indexOf("let x") < 0 ? `let __x = ${value}; __x;` : value;
-      console.log(`evaluating ${tmpValue}`);
-      return JSON.stringify((eval(fill(tmpValue, env))), null, 2);
+      console.log(`======> about to fill`, value);
+
+      // let tmpValue = this.evalBody(value);
+      // console.log(`afer initial eval`, tmpValue);
+
+      const tmpValue = fill(JSON.parse(value), ctx, env);
+      console.log(`after ctx fill`, tmpValue);
+
+      const result = JSON.stringify((tmpValue), null, 2);
+      console.log(`result ${JSON.stringify(result)}`);
+
+      return result;
     } catch (e) {
       console.error(e);
       return null;
