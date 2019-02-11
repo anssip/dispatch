@@ -5,7 +5,9 @@ A tool for REST API design, and for request testing and management.
 
 ## TODO:
 
-* Wire the body with RequestContainer
+* Context management
+* Evn management
+* OK: Wire the body with RequestContainer
 * 
 * Add Context (a container for templates)
 * Add Environment (a container for env variables)
