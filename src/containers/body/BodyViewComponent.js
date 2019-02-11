@@ -68,11 +68,7 @@ class BodyViewComponent extends React.Component {
           }}
           onBeforeChange={(editor, data, value) => {
             console.log("onBeforeChange");
-
-
-            // TODO: handle the evaluation outside of state. In the preview generation only.
-            this.setState({ value: `let x = ${value}; x;` });
-            
+            this.setState({ value });            
             setBody(request, this.state.value);
           }}
           onChange={(editor, data, value) => {
@@ -82,7 +78,8 @@ class BodyViewComponent extends React.Component {
         />
         <TextArea
           large={true}
-          defaultValue={this.getPreview(request)}
+          value={this.getPreview(this.state.value)}
+          defaultValue={this.getPreview(this.state.value)}
           fill={true}
           style={{ marginTop: "10px", height: "200px", width, maxWidth: width, minWidth: width }}
         />
@@ -94,11 +91,9 @@ class BodyViewComponent extends React.Component {
     const value = this.state.value || request.body;
     // @ts-ignore
     try {
-
-      if (value.indexOf("let x") < 0) {
-        return fill(value, env);
-      } 
-      return JSON.stringify((eval(fill(value, env))), null, 2);
+      const tmpValue = value.indexOf("let x") < 0 ? `let __x = ${value}; __x;` : value;
+      console.log(`evaluating ${tmpValue}`);
+      return JSON.stringify((eval(fill(tmpValue, env))), null, 2);
     } catch (e) {
       console.error(e);
       return null;
