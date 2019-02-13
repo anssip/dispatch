@@ -10,8 +10,12 @@ class ContextContainer extends Container {
     ctx: context
   };
 
-  getContext() {
+  getValue() {
     return this.state.ctx;
+  }
+
+  setValue(value) {
+    this.setState({ctx: value});
   }
 }
 

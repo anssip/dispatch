@@ -25,3 +25,7 @@ html, body { height:100%; margin:0; padding:0; }
   margin-bottom: 10px;
   padding-right: 10px;
 }
+
+.CodeMirror {
+  height: auto;
+}

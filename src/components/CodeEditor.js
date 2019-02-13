@@ -6,3 +6,8 @@ import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/midnight.css";
 require("codemirror/mode/javascript/javascript");
+
+const CodeEditor = props => 
+  <CodeMirror {...props} />;
+
+export default CodeEditor;

@@ -1,4 +1,4 @@
-const context = {
+const context = JSON.stringify({
   source: {
     name: "{{connectorName}}",
     config: {
@@ -17,7 +17,7 @@ const context = {
       "batch.max.rows": 100
     }
   }
-};
+});
 
 const environments = {
   default: {

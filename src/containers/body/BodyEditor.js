@@ -5,10 +5,7 @@ import requests from "../../models/mock-requests";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import connect from "unstated-connect2";
 import requestContainer from "../../models/RequestContainer";
-
-import "codemirror/lib/codemirror.css";
-import "codemirror/theme/midnight.css";
-require("codemirror/mode/javascript/javascript");
+import CodeEditor from "../../components/CodeEditor";
 
 const R = require("ramda");
 const jsStringify = require("javascript-stringify");
@@ -53,7 +50,7 @@ class BodyEditor extends React.Component {
 
     return (
       <Wrapper>
-        <CodeMirror
+        <CodeEditor
           value={request.body}
           options={{
             mode: "javascript",
