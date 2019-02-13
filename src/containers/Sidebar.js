@@ -20,7 +20,7 @@ const BottomBar = styled.div`
 const Sidebar = ({ container, addRequest }) =>
   <Card className='left-pane'>
     <Tabs id="sidebarTabs" onChange={_ => console.log('tab changed')} defaultSelectedTabId="requests">
-      <Tab id="requests" title="Requests" panel={<SidebarList container={container}/>} />
+      <Tab id="requests" title="Requests" panel={<SidebarList />} />
       <Tab id="context" title="Context" panel={<ContextView />} />
     </Tabs>
     <BottomBar>

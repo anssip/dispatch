@@ -18,6 +18,6 @@ const ContextView = ({ addContext }) =>
 export default connect({
   container,
   selector: ({ container }) => ({ 
-    addContext: R.bind(container.addContext, container)
+    // addContext: R.bind(container.addContext, container)
   })
 })(ContextView);
