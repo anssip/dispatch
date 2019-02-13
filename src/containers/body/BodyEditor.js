@@ -41,7 +41,7 @@ const env = {
 const Wrapper = styled.div`
 `;
 
-class BodyViewComponent extends React.Component {
+class BodyEditor extends React.Component {
   constructor(props) {
     super(props);
     const { request, setBody } = this.props;
@@ -117,4 +117,4 @@ export default connect({
     request: container.getSelected(),
     setBody: R.bind(container.setBody, container)
   })
-})(BodyViewComponent);
+})(BodyEditor);

@@ -2,7 +2,7 @@ import React from "react";
 import { FormGroup, Text, Classes, Card, ControlGroup, HTMLSelect, InputGroup, Button, Tabs, Tab } from "@blueprintjs/core";
 import styled from "styled-components";
 import { template } from "handlebars";
-import BodyViewComponent from "./BodyViewComponent";
+import BodyEditor from "./BodyEditor";
 
 
 const BodyWrapper = styled.div`
@@ -37,7 +37,7 @@ class BodyView extends React.Component {
         </FormGroup>
         <Divider>
           <BodyWrapper>
-            <BodyViewComponent paneWidth={this.props.paneWidth} contentType={this.state.contentType} />
+            <BodyEditor paneWidth={this.props.paneWidth} contentType={this.state.contentType} />
           </BodyWrapper>
         </Divider>
       </div>);

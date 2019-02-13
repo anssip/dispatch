@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { InputGroup } from "@blueprintjs/core";
-// import connect from 'unstated-connect2';
-// import requestContainer from '../models/RequestContainer';
+import connect from 'unstated-connect2';
+import requestContainer from '../models/RequestContainer';
 import Request from '../components/Request';
 
 const R = require('ramda');
@@ -11,7 +11,7 @@ const RequestWrapper = styled.div`
   cursor: pointer;
 `;
 
-const SidebarList = ({ container }) =>
+const SidebarList = ({ requests, select }) =>
   <div>
     <InputGroup
       className='search'
@@ -23,19 +23,21 @@ const SidebarList = ({ container }) =>
       small={true}
       value={''}
     />
-    {renderRequests(container)}
-  </div>
+    { renderRequests(requests, select) } </div>
 
-const renderRequests = container =>
-  container.getItems().map((r, i) =>
+const renderRequests = (requests, select) =>
+  requests.map((r, i) =>
     <RequestWrapper>
-      <Request handleClick={R.partial(R.bind(container.select, container), [i])} id={i} model={r} />
+      <Request handleClick={R.partial(select, [i])} id={i} model={r} />
     </RequestWrapper>
   );
 
 // @ts-ignore
-// export default connect({
-//   container: requestContainer
-// })(RequestList);
+export default connect({
+  container: requestContainer,
+   selector: ({ container }) => ({ 
+     requests: container.getRequests(),
+     select: R.bind(container.select, container)
+  })
 
-export default SidebarList;
+})(SidebarList);

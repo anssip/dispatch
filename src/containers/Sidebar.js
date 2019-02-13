@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Tab, Tabs, ButtonGroup, Button, Popover, Menu, MenuItem } from "@blueprintjs/core";
 import styled from "styled-components";
 import SidebarList from './SidebarList';
+import ContextView from './context/ContextView';
 import connect from 'unstated-connect2';
 import requestContainer from '../models/RequestContainer';
 
@@ -20,7 +21,7 @@ const Sidebar = ({ container, addRequest }) =>
   <Card className='left-pane'>
     <Tabs id="sidebarTabs" onChange={_ => console.log('tab changed')} defaultSelectedTabId="requests">
       <Tab id="requests" title="Requests" panel={<SidebarList container={container}/>} />
-      <Tab id="templates" title="Context" />
+      <Tab id="context" title="Context" panel={<ContextView />} />
     </Tabs>
     <BottomBar>
       <ButtonGroup minimal={false} fill={false}>

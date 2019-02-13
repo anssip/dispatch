@@ -7,7 +7,7 @@ import { identity } from 'rxjs';
 const R = require('ramda');
 
 class RequestContainer extends Container {
-  state = { requests: mockRequests, context: [] };
+  state = { requests: mockRequests };
 
   addRequest() {
     this.setState({ requests: [... R.map(this.cloneNonSelected, this.state.requests), this.createEmptyRequest()] });
