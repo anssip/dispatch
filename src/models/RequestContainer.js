@@ -20,6 +20,8 @@ class RequestContainer extends Container {
   getRequests() {
     return this.state.requests;
   }
+  getItems = R.bind(this.getRequests, this);
+
   getRequestCount() {
     return this.getRequests().length;
   }
