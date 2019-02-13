@@ -9,7 +9,7 @@ const R = require("ramda");
 const Wrapper = styled.div`
 `;
 
-const ContextView = ({ ctx }) =>
+const ContextEditor = ({ ctx }) =>
   <Wrapper>
     {JSON.stringify(ctx)}
   </Wrapper>;
@@ -21,4 +21,4 @@ export default connect({
     ctx: container.getContext()
     // addContext: R.bind(container.addContext, container)
   })
-})(ContextView);
+})(ContextEditor);
