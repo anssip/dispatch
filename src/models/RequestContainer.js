@@ -1,13 +1,13 @@
-import React from 'react';
-import { render } from 'react-dom';
-import { Provider, Subscribe, Container } from 'overstated';
-import mockRequests from './mock-requests';
-import { identity } from 'rxjs';
+import { Container } from 'overstated';
 
 const R = require('ramda');
 
 class RequestContainer extends Container {
-  state = { requests: mockRequests };
+  state = { requests: [] };
+
+  init(requests) {
+    this.setState({ requests });
+  }
 
   addRequest() {
     this.setState({ requests: [... R.map(this.cloneNonSelected, this.state.requests), this.createEmptyRequest()] });
@@ -78,4 +78,4 @@ class RequestContainer extends Container {
 }
 
 
-export default RequestContainer;
+export default new RequestContainer();

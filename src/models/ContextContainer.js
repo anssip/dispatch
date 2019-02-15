@@ -1,14 +1,9 @@
-import React from 'react'; 
-import { render } from 'react-dom'; 
-import { Provider, Subscribe, Container } from 'overstated'; 
-import { context } from './mock-context'; 
+import { Container } from 'overstated'; 
 
 const R = require('ramda');
 
 class ContextContainer extends Container {
-  state = {
-    ctx: context
-  };
+  state = { ctx: null };
 
   getValue() {
     return this.state.ctx;
@@ -19,4 +14,4 @@ class ContextContainer extends Container {
   }
 }
 
-export default ContextContainer;
+export default new ContextContainer();

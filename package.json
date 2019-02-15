@@ -36,6 +36,7 @@
     "concurrently": "^4.1.0",
     "electron": "^4.0.3",
     "electron-builder": "^20.38.5",
+    "jest": "^24.1.0",
     "prettier": "^1.16.3",
     "react-scripts": "^2.1.3",
     "wait-on": "^3.2.0"
@@ -51,6 +52,7 @@
     "json-templater": "^1.2.0",
     "jsonlint": "^1.6.3",
     "overstated": "^1.1.3",
+    "pify": "^4.0.1",
     "ramda": "^0.26.1",
     "react": "^16.7.0",
     "react-codemirror2": "^5.1.0",
