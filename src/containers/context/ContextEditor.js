@@ -1,5 +1,5 @@
 import React from "react";
-import { FormGroup, Text, Classes, Card, ControlGroup, HTMLSelect, InputGroup, Button, Tabs, Tab } from "@blueprintjs/core";
+import { Popover, Button, ButtonGroup, Drawer, Position } from "@blueprintjs/core";
 import styled from "styled-components";
 import connect from 'unstated-connect2';
 import container from "../../models/ContextContainer";
@@ -8,11 +8,43 @@ import jsonPrettify from "../../models/json-pretty";
 
 const R = require("ramda");
 
-const ContextEditor = ({ value, setValue }) => {
-  console.log(`rendering context ${value}`);
 
-  return <Wrapper>
-    <CodeEditor
+class ContextEditor extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { isOpen: false }
+  }
+  render() {
+    const { value, setValue } = this.props;
+    console.log(`rendering context ${value}`);
+
+    return <Wrapper>
+      <Toolbar>
+        <ButtonGroup style={{}} minimal={false} fill={false}>
+          <Button style={{ position: "absolute", top: 20, right: 0, backgroundColor: "#000" }} icon="fullscreen" small={true} onClick={R.bind(this.expand, this)} />
+        </ButtonGroup>
+      </Toolbar>
+
+      {this.renderEditor(value, setValue)}
+
+      <Drawer 
+        className="bp3-dark"
+        transitionName=""
+        usePortal={true}
+        transitionDuration={0}
+        size={Drawer.SIZE_STANDARD}
+        icon="info-sign"
+        onClose={R.bind(this.collapse, this)}
+        title="Context"
+        {...this.state}
+      >
+        {this.renderEditor(value, setValue)}
+      </Drawer>
+    </Wrapper>
+  }
+
+  renderEditor(value, setValue) {
+    return <CodeEditor
       value={jsonPrettify(value)}
       autoScroll={true}
       options={{
@@ -30,13 +62,22 @@ const ContextEditor = ({ value, setValue }) => {
       onChange={(editor, data, value) => {
         console.log("onChange");
       }}
-    />
+    />;
+  }
 
-  </Wrapper>;
-}
-
+  expand() {
+    this.setState({ isOpen: true });
+  }
+  collapse() {
+    this.setState({ isOpen: false });
+  }
+};
 
 const Wrapper = styled.div`
+`;
+
+const Toolbar = styled.div`
+  position: relative
 `;
 
 // @ts-ignore
