@@ -4,7 +4,7 @@ import styled from "styled-components";
 import SidebarList from './SidebarList';
 import ContextEditor from './context/ContextEditor';
 import connect from 'unstated-connect2';
-import requestContainer from '../models/RequestContainer';
+import requestContainer from '../../models/RequestContainer';
 
 // TODO: add this
 //import contextContainer from '../models/ContextContainer';

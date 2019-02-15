@@ -1,10 +1,9 @@
 import React from "react";
 import { ResizeSensor, TextArea, Intent, Divider, FormGroup, Text, Classes, Card, ControlGroup, HTMLSelect, InputGroup, Button, Tabs, Tab } from "@blueprintjs/core";
 import styled from "styled-components";
-import requests from "../../models/mock-requests";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import connect from "unstated-connect2";
-import requestContainer from "../../models/RequestContainer";
+import requestContainer from "../../../models/RequestContainer";
 import CodeEditor from "../../components/CodeEditor";
 
 const R = require("ramda");

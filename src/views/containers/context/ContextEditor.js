@@ -2,9 +2,9 @@ import React from "react";
 import { Popover, Button, ButtonGroup, Drawer, Position } from "@blueprintjs/core";
 import styled from "styled-components";
 import connect from 'unstated-connect2';
-import container from "../../models/ContextContainer";
+import container from "../../../models/ContextContainer";
 import CodeEditor from "../../components/CodeEditor";
-import jsonPrettify from "../../models/json-pretty";
+import jsonPrettify from "../../../models/json-pretty";
 
 const R = require("ramda");
 

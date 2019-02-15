@@ -4,7 +4,7 @@ import styled from "styled-components";
 import RequestViewComponent from "./RequestViewCompoent";
 import BodyView from "./body/BodyView";
 import connect from 'unstated-connect2';
-import requestContainer from '../models/RequestContainer';
+import requestContainer from '../../models/RequestContainer';
 import Input from "../components/Input";
 
 const R = require('ramda');

@@ -5,6 +5,8 @@ A tool for REST API design, and for request testing and management.
 
 ## TODO:
 
+* Saving of requests & config
+
 * Context management
 * Evn management
 * OK: Wire the body with RequestContainer

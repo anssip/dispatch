@@ -4,6 +4,7 @@ const BrowserWindow = electron.BrowserWindow;
 
 const path = require("path");
 const isDev = require("electron-is-dev");
+const menu = require("../src/controller/menu");
 
 let mainWindow;
 
@@ -13,7 +14,7 @@ require("update-electron-app")({
   updateInterval: "1 hour"
 });
 
-function createWindow() {
+const createWindow = () => {
   mainWindow = new BrowserWindow({ width: 900, height: 680 });
   mainWindow.loadURL(
     isDev
@@ -23,7 +24,14 @@ function createWindow() {
   mainWindow.on("closed", () => (mainWindow = null));
 }
 
-app.on("ready", createWindow);
+const createMenu = () => {
+  menu.createMenus(mainWindow);
+}
+
+app.on("ready", () => {
+  createWindow();
+  createMenu();
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -34,5 +42,10 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   if (mainWindow === null) {
     createWindow();
+    createMenu();
   }
+});
+
+electron.ipcMain.on('new-project', () => {
+  electron.dialog.showSaveDialog(mainWindow, { title: 'New Project' })
 });

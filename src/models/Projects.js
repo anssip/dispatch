@@ -11,6 +11,8 @@ import * as pify from 'pify';
 const electron = window.require('electron');
 const fs = electron.remote.require('fs');
 
+// TODO: Make this an unstated container which stores the currently open project file/path
+
 class Projects {
   async load(path) {
     console.log(`loading project file ${path} ${fs.readFile}`);
@@ -20,6 +22,10 @@ class Projects {
       requests: data.requests.map(r => ({ ...r, body: JSON.stringify(r.body) })),
       context: JSON.stringify(data.context)
     }
+  }
+
+  async save(path) {
+
   }
 
 }

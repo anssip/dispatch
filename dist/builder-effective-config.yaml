@@ -1,0 +1,12 @@
+directories:
+  output: dist
+  buildResources: assets
+files:
+  - filter:
+      - build/**/*
+extraMetadata:
+  main: build/electron.js
+publish:
+  provider: github
+extends: react-cra
+electronVersion: 4.0.3
