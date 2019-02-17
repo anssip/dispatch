@@ -19,6 +19,12 @@ A tool for REST API design, and for request testing and management.
   * Context references can be shown with a special icon (later).
   * All variables that come from the context references are shown in the body UI, with the possibility to fill values. The values can be also supplied by the defaul tcontext. The UI should thus show a table with columns: `variable` | `value-from-context` | `override`. The value could be a large JSON object, like a Kafka topic schema.
 
+
+### LATER
+
+* Mojave dark mode for the native dialogs
+
+
 ### IDEA
 
 * Perhaps this kind of syntax for using templates

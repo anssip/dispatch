@@ -6,8 +6,8 @@ const getTemplate = win => [
     submenu: [
       { 
         label: 'New Project...',
-        click: () => ipcMain.emit('new-project', 'woohoo')
-        // click: () => win.webContents.send('new-project', 'woohoo')
+        // click: () => ipcMain.emit('new-project', 'woohoo')
+        click: () => win.webContents.send('new-project', 'woohoo')
      },
      { role: "toggleDevTools" }
     ]

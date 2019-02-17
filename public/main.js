@@ -45,7 +45,3 @@ app.on("activate", () => {
     createMenu();
   }
 });
-
-electron.ipcMain.on('new-project', () => {
-  electron.dialog.showSaveDialog(mainWindow, { title: 'New Project' })
-});

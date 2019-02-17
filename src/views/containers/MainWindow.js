@@ -6,8 +6,6 @@ import './splitpane.css';
 import RequestView from './RequestView';
 import { ResizeSensor } from "@blueprintjs/core";
 
-// const ipc = window.require('electron').ipcRenderer;
-
 const R = require('ramda');
 
 const DetailPanel = styled.div`
@@ -45,4 +43,5 @@ class MainWindow extends React.Component {
 
 }
 
+// Export the main window React component
 export default MainWindow;
