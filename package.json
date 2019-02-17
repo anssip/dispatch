@@ -4,6 +4,7 @@
   "description": "A very talkative REST automation and testing tool for developers. The focus is on utilising templates for the requests to avoid duplication. Awesome Git integration and other features to make developers happy.",
   "main": "public/main.js",
   "scripts": {
+    "test": "./node_modules/.bin/mocha",
     "react-start": "react-scripts start",
     "react-build": "react-scripts build",
     "react-test": "react-scripts test --env=jsdom",
@@ -33,6 +34,7 @@
   },
   "homepage": "./",
   "devDependencies": {
+    "babel-polyfill": "^6.26.0",
     "chai": "^4.2.0",
     "concurrently": "^4.1.0",
     "electron": "^4.0.3",
@@ -43,6 +45,10 @@
     "wait-on": "^3.2.0"
   },
   "dependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/register": "^7.0.0",
     "@blueprintjs/core": "^3.13.0",
     "codemirror": "^5.43.0",
     "cross-env": "^5.2.0",
@@ -52,6 +58,7 @@
     "javascript-stringify": "^1.6.0",
     "json-templater": "^1.2.0",
     "jsonlint": "^1.6.3",
+    "nodemon": "^1.18.10",
     "overstated": "^1.1.3",
     "pify": "^4.0.1",
     "ramda": "^0.26.1",

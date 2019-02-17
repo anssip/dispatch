@@ -3,7 +3,10 @@ import { Container } from 'overstated';
 const R = require('ramda');
 
 class ContextContainer extends Container {
-  state = { ctx: null };
+  constructor() {
+    super();
+    this.state = { ctx: null };
+  }
 
   getValue() {
     return this.state.ctx;

@@ -3,7 +3,10 @@ import { Container } from 'overstated';
 const R = require('ramda');
 
 class RequestContainer extends Container {
-  state = { requests: [] };
+  constructor() {
+    super();
+    this.state = { requests: [] };
+  }
 
   init(requests) {
     this.setState({ requests });
@@ -20,7 +23,9 @@ class RequestContainer extends Container {
   getRequests() {
     return this.state.requests;
   }
-  getItems = R.bind(this.getRequests, this);
+  getItems() {
+    return this.getRequests();
+  }
 
   getRequestCount() {
     return this.getRequests().length;
@@ -71,10 +76,18 @@ class RequestContainer extends Container {
     newRequet[prop] = value;
     return this.replaceSelectedRequest(newRequet);
   }
-  setMethod = R.partial(R.bind(this.setProp, this), ['method']);
-  setName = R.partial(R.bind(this.setProp, this), ['name']);
-  setUrl = R.partial(R.bind(this.setProp, this), ['url']);
-  setBody = R.partial(R.bind(this.setProp, this), ['body']);
+  setMethod(req, value) {
+      return this.setProp('method', req, value);
+  } 
+  setName(req, value) {
+    return this.setProp('name', req, value);
+  }
+  setUrl(req, value) {
+    return this.setProp('url', req, value);
+  }
+  setBody(req, value) {
+    return this.setProp('body', req, value);
+  }
 }
 
 

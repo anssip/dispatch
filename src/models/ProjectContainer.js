@@ -1,12 +1,14 @@
-const requestContainer = require("./RequestContainer");
-const contextContainer = require("./ContextContainer");
-const fileUtil = require("./file_util");
-const { Container } = require("overstated");
+import requestContainer from "./RequestContainer";
+
+import contextContainer from "./ContextContainer";
+import fileUtil from"./file_util";
+import { Container } from "overstated";
+
 const { homedir } = require('os');
 const R = require('ramda');
 
 const APP_SETTINGS_DIR = `${homedir}/.dispatch`;
-const SETTINGS_FILE = `${APP_SETTINGS_DIR}/recent.json`;
+const SETTINGS_FILE = `${APP_SETTINGS_DIR}/settings.json`;
 
 // An unstated container which stores the currently open project file/path
 
@@ -17,20 +19,22 @@ class ProjectContainer extends Container {
     this.init();
   }
 
-  async loadRecentFiles() {
+  async loadSettings() {
     if (await fileUtil.fileExists(APP_SETTINGS_DIR)) {
+      console.log("App settings dir exists");
       const contents = await fileUtil.readFile(SETTINGS_FILE);
-      const files = JSON.parse(contents);
-      this.setState({ files });
+      const data = JSON.parse(contents);
+      this.setState(data);
+      return data;
     } else {
       await fileUtil.mkdir(APP_SETTINGS_DIR);
-      fileUtil.writeFile(SETTINGS_FILE, JSON.stringify({}));
-      
+      fileUtil.writeFile(SETTINGS_FILE, JSON.stringify({ files: [] }));
+      return [];
     }
   }
 
   async loadProject(path) {
-    console.log(`loading project file ${path}`);
+    console.log(`loading project file ${JSON.stringify(path)}`);
     const contents = await fileUtil.readFile(path);
     const data = JSON.parse(contents);
 
@@ -50,12 +54,12 @@ class ProjectContainer extends Container {
 
   getActive() {
     console.log('getActive');
-    if (this.isEmpty()) return {};
-    return R.find(R.prop('active'))(this.state.requests);
+    if (this.isEmpty()) return null;
+    return R.find(R.prop('active'))(this.state.files);
   }
 
   async init() {
-    await this.loadRecentFiles();
+    await this.loadSettings();
 
     const activeProjectFile = this.getActive();
     if (!activeProjectFile) return;
@@ -73,6 +77,6 @@ class ProjectContainer extends Container {
   }
 }
 
-// module.exports.projectContainer = new ProjectContainer();
+// module.exports = new ProjectContainer(); 
 
 export default new ProjectContainer();
