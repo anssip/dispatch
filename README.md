@@ -1,18 +1,18 @@
 # Dispatch
 
-A tool for REST API design, and for request testing and management.
+A tool for REST API design, and for request testing and management. This is a tool similar to Postman, Insomnia and Paw, but better geared towards developers. It supports templates for request bodies and these templates can be used as building blocks in the requests. It will include a strong Git/GitHub integration making it easy for teams to share the Dispatch projects.
 
 
 ## TODO:
 
+Dispatch is under development at the monent and is not ready for real use yet.
+
 * Saving of requests & config
 
 * Context management
-* Evn management
-* OK: Wire the body with RequestContainer
-* 
-* Add Context (a container for templates)
-* Add Environment (a container for env variables)
+* Env management
+* OK: Add Context (a container for templates)
+* Add Environments (a container for env variables)
 
 * Body JSON view to show request JSON which has references to the objects and variables defined in the context.
   * CTRL+SPACE opens a context picker which fills in the reference in format `{{ctx.foo.bar}}`
@@ -24,49 +24,4 @@ A tool for REST API design, and for request testing and management.
 
 * Mojave dark mode for the native dialogs
 
-
-### IDEA
-
-* Perhaps this kind of syntax for using templates
-
-``` javascript
-{
-    method: "post",
-    url: "http://localhost:8081/subjects/game_transaction/versions",
-    body: {
-      schema: JSON.stringify(fill(ctx.schemaTemplate.data, {
-        name: "game_transaction",
-        fields: [
-          { name: "id", type: "long" },
-          { name: "userId", type: "string" },
-          { name: "username", type: "string" },
-          { name: "minigamesType", type: "string" },
-          { name: "minigamesId", type: "long" },
-          { name: "tournamentTableId", type: "long" },
-          { name: "tableName", type: "string" },
-          { name: "tournamentName", type: "string" },
-          { name: "playGroupId", type: "string" },
-          { name: "internalRef", type: "string" },
-          { name: "stake", type: "float" },
-          { name: "win", type: "float" },
-          { name: "pot", type: "float" },
-          { name: "revenue", type: "float" },
-          { name: "started", type: "int" },
-          { name: "ended", type: "int" },
-          { name: "partnerId", type: "long" },
-          { name: "partnerName", type: "string" },
-          { name: "realRevenue", type: "float" },
-          { name: "bonusRevenue", type: "float" },
-          { name: "actualRevenue", type: "float" },
-          { name: "serviceTax", type: "float" }
-        ]
-      }))
-    },
-    headers: ctx.schemaTemplate,
-    bodyType: 'json'
-  }
-``` 
-
-* A request preview view is needed, showing the fully rendered body
-
-* Code editor with json-templater token highlighting
+This is a React & Electron app.
