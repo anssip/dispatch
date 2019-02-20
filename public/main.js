@@ -8,6 +8,11 @@ const menu = require("../src/controller/menu");
 
 let mainWindow;
 
+electron.ipcMain.on('recent-files', (event, files) => {
+  console.log(`Got recent file list with length ${files.length}`);
+  throw Error(`Got recent file list with length ${files.length}`);
+});  
+
 // @ts-ignore
 require("update-electron-app")({
   repo: "kitze/react-electron-example",
@@ -15,7 +20,10 @@ require("update-electron-app")({
 });
 
 const createWindow = () => {
-  mainWindow = new BrowserWindow({ width: 900, height: 680 });
+  mainWindow = new BrowserWindow({
+    width: 900, 
+    height: 680
+  });
   mainWindow.loadURL(
     isDev
       ? "http://localhost:3000"

@@ -1,4 +1,4 @@
-const { app, Menu, ipcMain } = require('electron');
+const { app, Menu, ipcMain, ipcRenderer } = require('electron');
 
 const getTemplate = win => [
   {
@@ -14,7 +14,7 @@ const getTemplate = win => [
   }
 ];
 
-const createMenus = (win) => {
+const createMenus = win => {
   console.log("Initializing menus");
   const menu = Menu.buildFromTemplate(getTemplate(win));
   Menu.setApplicationMenu(menu)
@@ -23,3 +23,4 @@ const createMenus = (win) => {
 module.exports = {
   createMenus
 };
+
