@@ -45,6 +45,6 @@ export default connect({
   container: requestContainer,
   selector: ({ container }) => ({
     container,
-    addRequest: R.bind(container.addRequest, container)
+    addRequest: R.bind(container.addNewRequest, container)
   })
 })( Sidebar );

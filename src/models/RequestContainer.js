@@ -12,9 +12,14 @@ class RequestContainer extends Container {
     this.setState({ requests });
   }
 
-  addRequest() {
-    this.setState({ requests: [... R.map(this.cloneNonSelected, this.state.requests), this.createEmptyRequest()] });
+  addNewRequest() {
+    this.addRequest(this.createEmptyRequest());
   }
+
+  addRequest(request) {
+    this.setState({ requests: [... R.map(this.cloneNonSelected, this.state.requests), request] });
+  }
+
   replaceSelectedRequest(replaceWith) {
     return this.setState({ 
       requests: R.map( R.when(R.prop('selected'), R.partial(R.identity, [replaceWith])), this.state.requests)

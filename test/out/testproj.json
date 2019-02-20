@@ -7,7 +7,8 @@
       "headers": {},
       "body": {
         "req1_config": "{{ctx.source.config}}"
-      }
+      },
+      "selected": false
     },
     {
       "name": "Create foobar sink",
@@ -15,7 +16,9 @@
       "url": "https://localhost:8000/connectors/gt-sink",
       "body": {
         "anotherConfig": "{{ctx.source.config}}",
-        "numFoos": { "foo": 100 }
+        "numFoos": {
+          "foo": 100
+        }
       }
     }
   ],
