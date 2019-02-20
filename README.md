@@ -9,7 +9,12 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 ### TODO
 
-* Saving of requests & config
+* Application menu
+  - save & save as
+  - New Project... should ask to save the current first, with OK and Cancel options
+  - Open...
+  - Recent files in the menu, with the possibility to open em
+
 
 * Context management
 * Env management
