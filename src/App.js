@@ -3,13 +3,15 @@ import React, { Component } from 'react';
 import './App.css';
 import MainWindow from './views/containers/MainWindow';
 import { Provider } from 'overstated';
-import { ProjectContainer } from "./models/ProjectContainer";
+import ProjectContainer from "./models/ProjectContainer";
 import fileUtil from "./models/file_util";
 import ApplicationController from "./controller";
 
 const { ipcRenderer} = window.require("electron");
+const { homedir } = window.require('os');
 
-const projectContainer = new ProjectContainer(fileUtil);
+console.log(`homedir ${homedir()}`);
+const projectContainer = new ProjectContainer(fileUtil, homedir);
 const controller = new ApplicationController(projectContainer);
 
 const recentFiles = projectContainer.getFiles();

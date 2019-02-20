@@ -9,7 +9,11 @@ class RequestContainer extends Container {
   }
 
   init(requests) {
-    this.setState({ requests });
+    this.setState({ requests: requests || [] });
+  }
+
+  reset() {
+    this.setState({ requests: [] });
   }
 
   addNewRequest() {
@@ -17,7 +21,7 @@ class RequestContainer extends Container {
   }
 
   addRequest(request) {
-    this.setState({ requests: [... R.map(this.cloneNonSelected, this.state.requests), request] });
+    this.setState({ requests: [... R.map(this.cloneNonSelected, this.state.requests || []), request] });
   }
 
   replaceSelectedRequest(replaceWith) {

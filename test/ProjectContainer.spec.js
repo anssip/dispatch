@@ -1,4 +1,4 @@
-import { ProjectContainer, SETTINGS_FILE } from "../src/models/ProjectContainer";
+import ProjectContainer from "../src/models/ProjectContainer";
 import fileUtil from "../src/models/file_util";
 const {
   expect
@@ -44,7 +44,7 @@ describe("project container", () => {
     expect(result.requests.length).to.be.equal(expected.requests.length);
     expect(result.context.source.name).to.be.equal(expected.context.source.name);
 
-    const settingsData = await fileUtil.readFile(SETTINGS_FILE);
+    const settingsData = await fileUtil.readFile(projectContainer.SETTINGS_FILE);
     const settings = JSON.parse(settingsData);
 
     expect(settings.files.length).to.be.greaterThan(0);

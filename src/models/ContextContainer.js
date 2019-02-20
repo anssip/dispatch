@@ -15,6 +15,10 @@ class ContextContainer extends Container {
   setValue(value) {
     this.setState({ctx: value});
   }
+
+  reset() {
+    this.setState({ ctx: null });
+  }
 }
 
 export default new ContextContainer();

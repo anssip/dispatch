@@ -4,14 +4,9 @@ const BrowserWindow = electron.BrowserWindow;
 
 const path = require("path");
 const isDev = require("electron-is-dev");
-const menu = require("../src/controller/menu");
+const MenuBuilder = require("../src/controller/MenuBuilder");
 
 let mainWindow;
-
-electron.ipcMain.on('recent-files', (event, files) => {
-  console.log(`Got recent file list with length ${files.length}`);
-  throw Error(`Got recent file list with length ${files.length}`);
-});  
 
 // @ts-ignore
 require("update-electron-app")({
@@ -33,7 +28,7 @@ const createWindow = () => {
 }
 
 const createMenu = () => {
-  menu.createMenus(mainWindow);
+  new MenuBuilder(mainWindow).createMenus();
 }
 
 app.on("ready", () => {
