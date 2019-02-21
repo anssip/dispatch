@@ -14,9 +14,13 @@ console.log(`homedir ${homedir()}`);
 const projectContainer = new ProjectContainer(fileUtil, homedir);
 const controller = new ApplicationController(projectContainer);
 
-const recentFiles = projectContainer.getFiles();
-console.log(`sending recent files of length ${recentFiles.length}`);
-ipcRenderer.send('recent-files', recentFiles);
+const initProject = async () => {
+  await projectContainer.init();
+  const recentFiles = projectContainer.getFiles();
+  console.log(`sending recent files of length ${recentFiles.length}`);
+  ipcRenderer.send('recent-files', recentFiles);  
+};
+initProject();
 
 // TODO: emit the files using IPC and catch em in main.js/menu.js
 

@@ -9,10 +9,11 @@ const TEMP_PROJECT_PATH = path.join(process.cwd(), "test", "out", "testproj.json
 describe("project container", () => {
   let projectContainer;
   // runs before all tests in this block
-  before(function () {
+  before(async function () {
     fileUtil.setFs(require("fs"));
-    fileUtil.unlink(TEMP_PROJECT_PATH);
-    projectContainer = new ProjectContainer(fileUtil);
+    await fileUtil.unlink(TEMP_PROJECT_PATH);
+    projectContainer = new ProjectContainer(fileUtil, require('os').homedir);
+    await projectContainer.init();
   });
 
   describe("load recent files", () => {
@@ -21,6 +22,12 @@ describe("project container", () => {
       const settings = await projectContainer.loadSettings();
       console.log(`got settings`, settings);
       expect(settings.files.length).to.be.greaterThan(0);
+    });
+    it("Should automatically load the recent files when created", async () => {
+      expect(projectContainer).to.not.be.undefined;
+      const files = await projectContainer.getFiles();
+      console.log(`got recent files`, files);
+      expect(files.length).to.be.greaterThan(0);
     });
   });
 

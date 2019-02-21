@@ -13,7 +13,6 @@ class ProjectContainer extends Container {
 
     this.fileUtil = fileUtil;
     this.state = { recentIsActive: true, files: [] };
-    this.init();
   }
 
   async init() {
@@ -22,7 +21,7 @@ class ProjectContainer extends Container {
     const activeProjectFile = this.getActive();
     if (!activeProjectFile) return;
     
-    const project = this.loadProject(activeProjectFile);
+    const project = await this.loadProject(activeProjectFile);
     requestContainer.init(project.requests);
     contextContainer.setValue(project.context);
   }
@@ -40,15 +39,21 @@ class ProjectContainer extends Container {
     return data;
   }
 
+
   async loadProject(path) {
     console.log(`loading project file ${JSON.stringify(path)}`);
-    const contents = await this.fileUtil.readFile(path);
-    const data = JSON.parse(contents);
-
-    return {
-      requests: data.requests.map(r => ({ ...r, body: JSON.stringify(r.body) })),
-      context: JSON.stringify(data.context)
-    };
+    try {
+      const contents = await this.fileUtil.readFile(path);
+      const data = JSON.parse(contents);
+  
+      return {
+        requests: data.requests.map(r => ({ ...r, body: JSON.stringify(r.body) })),
+        context: JSON.stringify(data.context)
+      };
+    } catch (err) {
+      // the project file does not exist
+      return { requests: [], context: null };
+    }
   }
 
   getFiles() {
