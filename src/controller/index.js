@@ -16,6 +16,15 @@ class ApplicationController {
     ipcRenderer.on('new-project', () => {
       this.projectContainer.newProject();
     });
+
+    ipcRenderer.on('open-project', (event, filename) => {
+      const opened = this.projectContainer.openProject(filename);
+      if (opened) {
+        event.sender.send("recent-files", { filename, recentFiles: this.projectContainer.getFiles() });
+      } else {
+        // TODO: dispatch error and handle it in the MainWindow and show an error flash
+      }
+    });
   }
 
   askFile() {
@@ -33,7 +42,7 @@ class ApplicationController {
         console.error(err);
       }
       console.log("sending back saved filename");
-      event.sender.send("project-saved", filename);
+      event.sender.send("recent-files", { filename, recentFiles: this.projectContainer.getFiles() });
     }
   }
 

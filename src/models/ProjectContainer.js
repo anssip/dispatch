@@ -22,8 +22,8 @@ class ProjectContainer extends Container {
     if (!activeProjectFile) return;
     
     const project = await this.loadProject(activeProjectFile);
-    requestContainer.init(project.requests);
-    contextContainer.setValue(project.context);
+    requestContainer.init(project ? project.requests : []);
+    contextContainer.setValue(project ? project.context : null);
   }
 
   async loadSettings() {
@@ -52,7 +52,7 @@ class ProjectContainer extends Container {
       };
     } catch (err) {
       // the project file does not exist
-      return { requests: [], context: null };
+      return null;
     }
   }
 
@@ -84,6 +84,16 @@ class ProjectContainer extends Container {
     console.log(`We have ${files.length} recent files`);
     console.log(`Saving settings to ${this.SETTINGS_FILE}`);
     await this.fileUtil.writeFile(this.SETTINGS_FILE, JSON.stringify({ files }));
+  }
+
+  async openProject(path) {
+    const project = await this.loadProject(path);
+    if (project) {
+      requestContainer.init(project.requests);
+      contextContainer.setValue(project.context);
+      return true;  
+    }
+    return false;
   }
 
   saveActiveProject() {

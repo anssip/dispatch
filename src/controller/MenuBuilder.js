@@ -5,13 +5,10 @@ class MenuBuilder {
   constructor(window) {
     this.window = window;
 
-    ipcMain.on('recent-files', (event, files) => {
-      console.log(`Got recent file list with length ${files.length}`);
-      this.createMenus(files);
-    });
-    ipcMain.on('project-saved', (event, filename) => {
+    ipcMain.on('recent-files', (event, data) => {
       // TODO: change the title of the main window
-      this.window.setTitle(this.getTitle(filename));
+      this.window.setTitle(this.getTitle(data.filename));
+      this.createMenus(data.recentFiles);
     });
   }
 
@@ -23,7 +20,7 @@ class MenuBuilder {
     const recentFilesItem = recentFiles.length > 0 ?
       { 
         label: "Open Recent",
-        submenu: recentFiles.map(f => ({ label: f, click: () => console.log(`clicked ${f}`)  }))
+        submenu: recentFiles.map(f => ({ label: f, click: () => this.window.webContents.send('open-project', f) }))
       } : null;
 
     const newProjectItem = {

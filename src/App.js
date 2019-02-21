@@ -17,8 +17,9 @@ const controller = new ApplicationController(projectContainer);
 const initProject = async () => {
   await projectContainer.init();
   const recentFiles = projectContainer.getFiles();
+  const filename = projectContainer.getActive();
   console.log(`sending recent files of length ${recentFiles.length}`);
-  ipcRenderer.send('recent-files', recentFiles);  
+  ipcRenderer.send('recent-files', { filename, recentFiles });  
 };
 initProject();
 
