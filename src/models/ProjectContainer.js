@@ -84,6 +84,7 @@ class ProjectContainer extends Container {
     console.log(`We have ${files.length} recent files`);
     console.log(`Saving settings to ${this.SETTINGS_FILE}`);
     await this.fileUtil.writeFile(this.SETTINGS_FILE, JSON.stringify({ files }));
+    return files;
   }
 
   async openProject(path) {
@@ -91,9 +92,9 @@ class ProjectContainer extends Container {
     if (project) {
       requestContainer.init(project.requests);
       contextContainer.setValue(project.context);
-      return true;  
+      return this.updateMostRecent(path);
     }
-    return false;
+    return null;
   }
 
   saveActiveProject() {
@@ -105,10 +106,12 @@ class ProjectContainer extends Container {
   updateMostRecent(path) {
     const files = R.uniq(R.prepend(path, this.state.files));
     this.setState({ files });
+    console.log(`updateMostRecent(): returning recent files ${files}`);
     return files;
   }
 
   getProjectFileData() {
+    // TODO: Preserve requests & contexts when stringifying
     return JSON.stringify({
       requests: requestContainer.getRequests(),
       context: contextContainer.getValue()

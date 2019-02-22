@@ -6,9 +6,13 @@ class MenuBuilder {
     this.window = window;
 
     ipcMain.on('recent-files', (event, data) => {
-      // TODO: change the title of the main window
-      this.window.setTitle(this.getTitle(data.filename));
-      this.createMenus(data.recentFiles);
+      console.log("MenuBuilder recent-files");
+      if (data.filename) {
+        this.window.setTitle(this.getTitle(data.filename));
+      }
+      if (data.recentFiles && data.recentFiles.length > 0) {
+        this.createMenus(data.recentFiles);
+      }
     });
   }
 
@@ -46,7 +50,7 @@ class MenuBuilder {
   };
 
   createMenus(files) {
-    console.log("Initializing menus");
+    console.log(`Initializing menus. Recent files ${JSON.stringify(files)}`);
     const menu = Menu.buildFromTemplate(this.getTemplate(files));
     Menu.setApplicationMenu(menu)
   }

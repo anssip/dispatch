@@ -5,22 +5,25 @@ class ApplicationController {
   constructor(projectContainer) {
     this.projectContainer = projectContainer;
 
-    ipcRenderer.on('save-project', () => {
-      this.saveActive();
+    ipcRenderer.on('save-project', async event => {
+      await this.saveActive();
+      event.sender.send("recent-files", { recentFiles: this.projectContainer.getFiles() });
     });
 
     ipcRenderer.on('save-project-as', event => {
       this.askFileAndSaveProject(event);
     });
 
-    ipcRenderer.on('new-project', () => {
+    ipcRenderer.on('new-project', event => {
       this.projectContainer.newProject();
     });
 
-    ipcRenderer.on('open-project', (event, filename) => {
-      const opened = this.projectContainer.openProject(filename);
-      if (opened) {
-        event.sender.send("recent-files", { filename, recentFiles: this.projectContainer.getFiles() });
+    ipcRenderer.on('open-project', async (event, filename) => {
+      console.log('ApplicationController: open-project');
+      const recentFiles = await this.projectContainer.openProject(filename);
+      if (recentFiles) {
+        console.log(`sending recent files ${recentFiles}`);
+        event.sender.send("recent-files", { filename, recentFiles });
       } else {
         // TODO: dispatch error and handle it in the MainWindow and show an error flash
       }
@@ -37,12 +40,12 @@ class ApplicationController {
     const filename =  this.askFile();
     if (filename) {
       try {
-        await this.projectContainer.saveProject(filename);
+        const recentFiles = await this.projectContainer.saveProject(filename);
+        event.sender.send("recent-files", { filename, recentFiles });
       } catch (err) {
         console.error(err);
       }
       console.log("sending back saved filename");
-      event.sender.send("recent-files", { filename, recentFiles: this.projectContainer.getFiles() });
     }
   }
 
