@@ -10,10 +10,11 @@ Dispatch is under development at the monent and is not ready for real use yet.
 ### TODO
 
 * Application menu
-  - Recent files in the menu
-  - save & save as
-  - New Project... should ask to save the current first, with OK and Cancel options
   - Open...
+  - keyboard shortcuts
+  - automatic saving
+  - saving when opening a new project or closing the current project
+  - name editing does not work properly in the body editor
   
 
 * Context management

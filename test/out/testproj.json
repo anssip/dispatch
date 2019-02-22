@@ -1,6 +1,13 @@
 {
   "requests": [
     {
+      "name": "testproj posting",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-sink",
+      "body": "{\"anotherConfig\":\"{{ctx.source.config}}\",\"numFoosh\":{\"foo\":100}}",
+      "selected": false
+    },
+    {
       "name": "testproj getting",
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-source",
@@ -9,11 +16,11 @@
       "selected": false
     },
     {
-      "name": "testproj posting",
-      "method": "POST",
-      "url": "https://localhost:8000/connectors/gt-sink",
-      "body": "{\"anotherConfig\":\"{{ctx.source.config}}\",\"numFoos\":{\"foo\":100}}",
-      "selected": true
+      "method": "GET",
+      "name": "request-newreq",
+      "url": "http://echo.dispatch.rest",
+      "selected": true,
+      "body": "{ goddam: \"bar\" }"
     }
   ],
   "context": "{\"source\":{\"name\":\"{{connectorName}}\",\"config\":{\"connector.class\":\"io.confluent.connect.jdbc.JdbcSourceConnector\",\"key.converter\":\"io.confluent.connect.avro.AvroConverter\",\"key.converter.schema.registry.url\":\"http://localhost:8081\",\"value.converter\":\"org.apache.kafka.connect.json.JsonConverter\",\"value.converter.schemas.enable\":\"false\",\"connection.url\":\"{{jdbcUrl}}\",\"table.whitelist\":\"{{tableName}}\",\"mode\":\"timestamp\",\"timestamp.column.name\":\"{{timestampColumn}}\",\"validate.non.null\":\"false\",\"topic.prefix\":\"{{topicPrefix}}\",\"table.types\":\"VIEW\",\"batch.max.rows\":100}}}"

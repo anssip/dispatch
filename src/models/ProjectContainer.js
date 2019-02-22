@@ -47,8 +47,8 @@ class ProjectContainer extends Container {
       const data = JSON.parse(contents);
   
       return {
-        requests: data.requests.map(r => ({ ...r, body: JSON.stringify(r.body) })),
-        context: JSON.stringify(data.context)
+        requests: data.requests,
+        context: data.context
       };
     } catch (err) {
       // the project file does not exist
@@ -97,6 +97,7 @@ class ProjectContainer extends Container {
     return null;
   }
 
+  // TODO: autosaving and saving when opening a new project or closing the active project!
   saveActiveProject() {
     const active = this.getActive();
     if (!active) throw new Error("Active project not set");
@@ -111,7 +112,6 @@ class ProjectContainer extends Container {
   }
 
   getProjectFileData() {
-    // TODO: Preserve requests & contexts when stringifying
     return JSON.stringify({
       requests: requestContainer.getRequests(),
       context: contextContainer.getValue()
