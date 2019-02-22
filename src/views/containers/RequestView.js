@@ -5,10 +5,10 @@ import RequestViewComponent from "./RequestViewCompoent";
 import BodyView from "./body/BodyView";
 import connect from 'unstated-connect2';
 import requestContainer from '../../models/RequestContainer';
-import Input from "../components/Input";
+import { Input, wellBehavingInput } from "../components/Input";
 
 const R = require('ramda');
-
+const UrlInput = wellBehavingInput();
 const METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
 
 const TabContainer = styled.div`
@@ -51,7 +51,8 @@ class RequestView extends React.Component {
           <Card style={{ height: "100%" }}>
             <ControlGroup fill={true}>
               <HTMLSelect value={request.method} onChange={onMethodChange} options={METHODS} className={Classes.FIXED} />
-              <Input value={request.url} onChange={onUrlChange} />
+              <UrlInput value={request.url} onChange={onUrlChange} />
+              {/* <Input value={request.url} onChange={onUrlChange} /> */}
               <Button icon="arrow-right" className={Classes.FIXED} />
             </ControlGroup>
             <NameWrapper>
