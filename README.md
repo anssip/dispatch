@@ -16,6 +16,7 @@ Dispatch is under development at the monent and is not ready for real use yet.
   - saving when opening a new project or closing the current project
   - name editing does not work properly in the body editor
   
+* TODO: implement my own EditableText in the style of the Input component
 
 * Context management
 * Env management

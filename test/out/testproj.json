@@ -8,7 +8,7 @@
       "selected": false
     },
     {
-      "name": "testproj getting",
+      "name": "testproj gettingdfe",
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-source",
       "headers": {},

@@ -28,7 +28,7 @@ const NameWrapper = styled.h2`
 class RequestView extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { paneWidth: 0, prevReq: {} };
+    this.state = { paneWidth: 0, prevReq: {}, name: null };
     this.prevRequest = {};
   }
 
@@ -43,11 +43,8 @@ class RequestView extends React.Component {
         R.prop('value'),
         R.prop('currentTarget'));
 
-      const onUrlChange = R.partial(setUrl, [request]);
-      
-      const onNameChange = R.compose(R.bind(this.setState, this), R.objOf("name"));
-      const onNameConfirm = () => setName(request, this.state.name);
-
+      const onUrlChange = R.partial(setUrl, [request]);      
+      const onNameChange = R.partial(setName, [request]);
 
       return (
         <MainPane>
@@ -58,7 +55,8 @@ class RequestView extends React.Component {
               <Button icon="arrow-right" className={Classes.FIXED} />
             </ControlGroup>
             <NameWrapper>
-              <EditableText value={this.state.name || request.name} onChange={onNameChange} onConfirm={onNameConfirm} />
+              {/* TODO: implement my own EditableText in the style of the Input component */}
+              <EditableText value={request.name} onChange={onNameChange} />
             </NameWrapper>
 
             <TabContainer>
