@@ -5,10 +5,12 @@ import RequestViewComponent from "./RequestViewCompoent";
 import BodyView from "./body/BodyView";
 import connect from 'unstated-connect2';
 import requestContainer from '../../models/RequestContainer';
-import { Input, wellBehavingInput } from "../components/Input";
+import wellBehavingInput from "../components/Input";
 
 const R = require('ramda');
-const UrlInput = wellBehavingInput();
+const UrlInput = wellBehavingInput(props => <input {...props} />, R.compose(R.prop("value"), R.prop("target")));
+const NameInput = wellBehavingInput(props => <EditableText {...props} />, R.identity);
+
 const METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
 
 const TabContainer = styled.div`
@@ -57,7 +59,7 @@ class RequestView extends React.Component {
             </ControlGroup>
             <NameWrapper>
               {/* TODO: implement my own EditableText in the style of the Input component */}
-              <EditableText value={request.name} onChange={onNameChange} />
+              <NameInput value={request.name} onChange={onNameChange} />
             </NameWrapper>
 
             <TabContainer>

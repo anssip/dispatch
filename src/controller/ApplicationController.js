@@ -18,7 +18,11 @@ class ApplicationController {
       this.projectContainer.newProject();
     });
 
-    ipcRenderer.on('open-project', async (event, filename) => {
+    ipcRenderer.on('open-project', event => {
+      this.openProject(event);
+    });
+
+    ipcRenderer.on('open-recent', async (event, filename) => {
       console.log('ApplicationController: open-project');
       const recentFiles = await this.projectContainer.openProject(filename);
       if (recentFiles) {
@@ -30,14 +34,16 @@ class ApplicationController {
     });
   }
 
-  askFile() {
-    const filename =  remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'New Project' });
-    console.log(`Selected filename ${filename}`);
-    return filename;
+  showOpenDialog() {
+    return remote.dialog.showOpenDialog(remote.getCurrentWindow(), { title: 'Open Project' });
+  }
+
+  showSaveDialog() {
+    return remote.dialog.showSaveDialog(remote.getCurrentWindow(), { title: 'New Project' });
   }
 
   async askFileAndSaveProject(event) {
-    const filename =  this.askFile();
+    const filename =  this.showSaveDialog();
     if (filename) {
       try {
         const recentFiles = await this.projectContainer.saveProject(filename);
@@ -45,7 +51,19 @@ class ApplicationController {
       } catch (err) {
         console.error(err);
       }
-      console.log("sending back saved filename");
+    }
+  }
+
+  async openProject(event) {
+    const filenames =  this.showOpenDialog();
+    console.log(`Opened file ${filenames}`);
+    if (filenames && filenames.length >= 0) {
+      try {
+        const recentFiles = await this.projectContainer.openProject(filenames[0]);
+        event.sender.send("recent-files", { filename: filenames[0], recentFiles });
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 

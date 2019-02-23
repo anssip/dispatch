@@ -5,7 +5,7 @@ import MainWindow from './views/containers/MainWindow';
 import { Provider } from 'overstated';
 import ProjectContainer from "./models/ProjectContainer";
 import fileUtil from "./models/file_util";
-import ApplicationController from "./controller";
+import ApplicationController from "./controller/ApplicationController";
 
 const { ipcRenderer} = window.require("electron");
 const { homedir } = window.require('os');

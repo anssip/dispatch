@@ -41,7 +41,7 @@ class ProjectContainer extends Container {
 
 
   async loadProject(path) {
-    console.log(`loading project file ${JSON.stringify(path)}`);
+    console.log(`loading project file ${path}`);
     try {
       const contents = await this.fileUtil.readFile(path);
       const data = JSON.parse(contents);

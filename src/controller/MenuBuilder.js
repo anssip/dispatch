@@ -22,31 +22,38 @@ class MenuBuilder {
 
   getTemplate(recentFiles = []) {
     const recentFilesItem = recentFiles.length > 0 ?
-      { 
+      {
         label: "Open Recent",
-        submenu: recentFiles.map(f => ({ label: f, click: () => this.window.webContents.send('open-project', f) }))
+        submenu: recentFiles.map(f => ({ label: f, click: () => this.window.webContents.send('open-recent', f) }))
       } : null;
 
-    const newProjectItem = {
-      label: 'New Project',
-      // click: () => ipcMain.emit('new-project', 'woohoo')
-      click: () => this.window.webContents.send('new-project')
-    };
+    const firstItems = [
+      {
+        label: 'New Project',
+        accelerator: 'CommandOrControl+N',
+        click: () => this.window.webContents.send('new-project')
+      },
+      {
+        label: 'Open...',
+        accelerator: 'CommandOrControl+O',
+        click: () => this.window.webContents.send('open-project')
+      }
+    ];
     const restItems = [
       {
         label: 'Save',
-        // click: () => ipcMain.emit('new-project', 'woohoo')
+        accelerator: 'CommandOrControl+S',
         click: () => this.window.webContents.send('save-project')
       },
       {
         label: 'Save As...',
-        // click: () => ipcMain.emit('new-project', 'woohoo')
+        accelerator: 'CommandOrControl+Shift+S',
         click: () => this.window.webContents.send('save-project-as')
       },
       { role: "toggleDevTools" }
     ];
-    const items = recentFilesItem ? [ newProjectItem, recentFilesItem, ...restItems ] : [ newProjectItem, ...restItems ] ;
-    return [ { label: 'File', submenu: items } ] 
+    const items = recentFilesItem ? [...firstItems, recentFilesItem, ...restItems] : [...firstItems, ...restItems];
+    return [{ label: 'File', submenu: items }]
   };
 
   createMenus(files) {
