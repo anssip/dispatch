@@ -5,7 +5,7 @@ const R = require('ramda');
 class ContextContainer extends Container {
   constructor() {
     super();
-    this.state = { ctx: null };
+    this.state = { isModified: false, ctx: null };
   }
 
   getValue() {
@@ -13,11 +13,23 @@ class ContextContainer extends Container {
   }
 
   setValue(value) {
-    this.setState({ctx: value});
+    this.setState({ isModified: true, ctx: value});
+  }
+
+  init(value) {
+    this.setState({ isModified: false, ctx: value});
   }
 
   reset() {
-    this.setState({ ctx: null });
+    this.setState({ isModified: false, ctx: null });
+  }
+
+  isModified() {
+    return this.state.isModified;
+  }
+
+  setModified(isModified) {
+    this.setState({ isModified });
   }
 }
 

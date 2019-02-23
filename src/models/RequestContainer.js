@@ -1,19 +1,28 @@
 import { Container } from 'overstated';
 
 const R = require('ramda');
+const object = require("json-templater").object;
 
 class RequestContainer extends Container {
   constructor() {
     super();
-    this.state = { requests: [] };
+    this.state = { isModified: false, requests: [] };
   }
 
   init(requests) {
-    this.setState({ requests: requests || [] });
+    this.setState({ isModified: false, requests: requests || [] });
   }
 
   reset() {
-    this.setState({ requests: [] });
+    this.setState({ isModified: false, requests: [] });
+  }
+
+  setModified(isModified) {
+    this.setState({ isModified });
+  }
+
+  isModified() {
+    return this.state.isModified;
   }
 
   addNewRequest() {
@@ -21,11 +30,12 @@ class RequestContainer extends Container {
   }
 
   addRequest(request) {
-    this.setState({ requests: [... R.map(this.cloneNonSelected, this.state.requests || []), request] });
+    this.setState({ isModified: true, requests: [... R.map(this.cloneNonSelected, this.state.requests || []), request] });
   }
 
   replaceSelectedRequest(replaceWith) {
     return this.setState({ 
+      isModified: true,
       requests: R.map( R.when(R.prop('selected'), R.partial(R.identity, [replaceWith])), this.state.requests)
     });
   }
@@ -96,6 +106,37 @@ class RequestContainer extends Container {
   }
   setBody(req, value) {
     return this.setProp('body', req, value);
+  }
+
+  getPreview(ctx, env, value) {
+    const evalObject = value => {
+      let tmpValue = `let __x = ${value}; __x;`;
+      console.log(`about to eval`, tmpValue);
+      tmpValue = eval(tmpValue);
+      console.log(`afer eval`, tmpValue);
+      return tmpValue;
+    }
+    const fill = (tmpl, ...rest) => [{ctx : evalObject(ctx)}, ...rest, env].reduce((acc, curr) => object(acc, curr), tmpl);
+
+
+    // @ts-ignore
+    try {
+      console.log(`======> about to fill`, value);
+
+      let tmpValue = evalObject(value);
+      console.log(`afer initial eval`, tmpValue);
+
+      tmpValue = fill(tmpValue);
+      console.log(`after ctx fill`, tmpValue);
+
+      const result = JSON.stringify(tmpValue, null, 2);
+      console.log(`result ${JSON.stringify(result)}`);
+
+      return result;
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
   }
 }
 

@@ -21,9 +21,9 @@ class ProjectContainer extends Container {
     const activeProjectFile = this.getActive();
     if (!activeProjectFile) return;
     
-    const project = await this.loadProject(activeProjectFile);
+    const project = await this.load(activeProjectFile);
     requestContainer.init(project ? project.requests : []);
-    contextContainer.setValue(project ? project.context : null);
+    contextContainer.init(project ? project.context : null);
   }
 
   async loadSettings() {
@@ -40,7 +40,7 @@ class ProjectContainer extends Container {
   }
 
 
-  async loadProject(path) {
+  async load(path) {
     console.log(`loading project file ${path}`);
     try {
       const contents = await this.fileUtil.readFile(path);
@@ -70,43 +70,43 @@ class ProjectContainer extends Container {
 
   setActive(path) {
     this.updateMostRecent(path);
-    this.setState({ recentIsActive: true });
   }
 
   closeActive() {
     this.setState({ recentIsActive: false });
   }
 
-  async saveProject(path) {
+  async save(path) {
     console.log(`Saving projet to path ${path}`);
     await this.fileUtil.writeFile(path, this.getProjectFileData());
     const files = this.updateMostRecent(path);
     console.log(`We have ${files.length} recent files`);
     console.log(`Saving settings to ${this.SETTINGS_FILE}`);
     await this.fileUtil.writeFile(this.SETTINGS_FILE, JSON.stringify({ files }));
+    requestContainer.setModified(false);
+    contextContainer.setModified(false);
     return files;
   }
 
-  async openProject(path) {
-    const project = await this.loadProject(path);
+  async open(path) {
+    const project = await this.load(path);
     if (project) {
       requestContainer.init(project.requests);
-      contextContainer.setValue(project.context);
+      contextContainer.init(project.context);
       return this.updateMostRecent(path);
     }
     return null;
   }
 
-  // TODO: autosaving and saving when opening a new project or closing the active project!
   saveActiveProject() {
     const active = this.getActive();
     if (!active) throw new Error("Active project not set");
-    return this.saveProject(active);
+    return this.save(active);
   }
 
   updateMostRecent(path) {
     const files = R.uniq(R.prepend(path, this.state.files));
-    this.setState({ files });
+    this.setState({ recentIsActive: true, files });
     console.log(`updateMostRecent(): returning recent files ${files}`);
     return files;
   }
@@ -130,6 +130,10 @@ class ProjectContainer extends Container {
 
   setContext(context) {
     return contextContainer.setValue(context);
+  }
+
+  isModified() {
+    return requestContainer.isModified() || contextContainer.isModified();
   }
 }
 

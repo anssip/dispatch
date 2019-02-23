@@ -37,7 +37,7 @@ class BodyView extends React.Component {
         </FormGroup>
         <Divider>
           <BodyWrapper>
-            <BodyEditor paneWidth={this.props.paneWidth} contentType={this.state.contentType} />
+            <BodyEditor paneWidth={this.props.paneWidth} paneHeight={this.props.paneHeight} contentType={this.state.contentType} />
           </BodyWrapper>
         </Divider>
       </div>);

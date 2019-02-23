@@ -9,14 +9,14 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 ### TODO
 
+* BodyEditor improvements
+* Request sending and response viewing logic
+
 * Application menu
-  - Open...
-  - keyboard shortcuts
-  - automatic saving
-  - saving when opening a new project or closing the current project
-  - name editing does not work properly in the body editor
-  
-* TODO: implement my own EditableText in the style of the Input component
+  - OK: Open...
+  - OK: keyboard shortcuts
+  - OK: saving when opening a new project or closing the current project
+  - OK: name editing does not work properly in the body editor
 
 * Context management
 * Env management

@@ -7,7 +7,22 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/theme/midnight.css";
 require("codemirror/mode/javascript/javascript");
 
-const CodeEditor = props => 
-  <CodeMirror {...props} />;
+
+class CodeEditor extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    console.log(`CodeEditor:: paneHeight ${this.props.paneHeight}px`);
+    return <CodeMirror editorDidMount={editor => { this.instance = editor }} {...this.props} />
+  }
+
+  componentDidUpdate() {
+    const height = `${this.props.paneHeight - 250}px`;
+    // console.log(`CodeEditor, setting size to ${height}`);
+    this.instance.setSize('100%', height);
+  }  
+}
 
 export default CodeEditor;

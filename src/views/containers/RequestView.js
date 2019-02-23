@@ -30,16 +30,14 @@ const NameWrapper = styled.h2`
 class RequestView extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { paneWidth: 0, prevReq: {}, name: null };
+    this.state = { prevReq: {}, name: null };
     this.prevRequest = {};
   }
 
   render() {
-    const { container, request, paneWidth, setMethod, setName, setUrl } = this.props;
+    const { request, paneWidth, paneHeight, setMethod, setName, setUrl } = this.props;
 
     if (request) {
-      console.log(`${request.method}`);
-
       const onMethodChange = R.compose(
         R.partial(setMethod, [request]),
         R.prop('value'),
@@ -50,7 +48,7 @@ class RequestView extends React.Component {
 
       return (
         <MainPane>
-          <Card style={{ height: "100%" }}>
+          <Card style={{ margin: 0, paddingBottom: 0, height: "100%" }}>
             <ControlGroup fill={true}>
               <HTMLSelect value={request.method} onChange={onMethodChange} options={METHODS} className={Classes.FIXED} />
               <UrlInput value={request.url} onChange={onUrlChange} />
@@ -64,7 +62,7 @@ class RequestView extends React.Component {
 
             <TabContainer>
               <Tabs id="mainTabs" onChange={_ => console.log('request tab changed')} defaultSelectedTabId="body">
-                <Tab id="body" title="Body" panel={<RequestViewComponent component={<BodyView paneWidth={paneWidth} />} />} />
+                <Tab id="body" title="Body" panel={<RequestViewComponent component={<BodyView paneWidth={paneWidth} paneHeight={paneHeight} />} />} />
                 <Tab id="query" title="Query" />
                 <Tab id="headers" title="Headers" />
                 <Tab id="auth" title="Auth" />
@@ -81,8 +79,9 @@ class RequestView extends React.Component {
 // @ts-ignore
 export default connect({
   container: requestContainer,
-  selector: ({ container }) => ({
-    container,
+  selector: ({ container, paneWidth, paneHeight }) => ({
+    paneWidth,
+    paneHeight,
     request: container.getSelected(),
     setMethod: R.bind(container.setMethod, container),
     setName: R.bind(container.setName, container),

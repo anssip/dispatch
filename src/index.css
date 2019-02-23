@@ -26,10 +26,42 @@ html, body { height:100%; margin:0; padding:0; }
   padding-right: 10px;
 }
 
-.CodeMirror {
-  height: auto;
-}
 
 .bp3-drawer {
   left: 0;
 }
+
+.react-codemirror2 {
+  margin-top: 0;
+  height: 100%;
+  position: relative;
+}
+
+.CodeMirror {
+  margin: 0;
+  padding: 0;
+}
+
+.CodeMirror-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* .react-codemirror2 {
+  flex: 1 1 auto;
+  margin-top: 0;
+  height: 100%;
+  position: relative;
+}
+
+.CodeMirror {
+  position:absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  min-height: 100;
+ } */
