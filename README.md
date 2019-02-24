@@ -9,6 +9,13 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 ### TODO
 
+* Deletion of requests
+* envs is a list of environment objects. Each environment object has
+  - name
+  - list of environment variables. Each env variable has name & value
+   
+
+
 * BodyEditor improvements
 * Request sending and response viewing logic
 

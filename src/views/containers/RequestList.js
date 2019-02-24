@@ -11,7 +11,7 @@ const RequestWrapper = styled.div`
   cursor: pointer;
 `;
 
-const SidebarList = ({ requests, select }) =>
+const RequestList = ({ requests, select }) =>
   <div>
     <InputGroup
       className='search'
@@ -40,4 +40,4 @@ export default connect({
      select: R.bind(container.select, container)
   })
 
-})(SidebarList);
+})(RequestList);
