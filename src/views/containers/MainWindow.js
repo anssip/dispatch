@@ -25,25 +25,28 @@ class MainWindow extends React.Component {
 
     return (
       <ResizeSensor onResize={entries => this.handleWrapperResize(entries)} >
-      <SplitPane className="bp3-dark" split="vertical" minSize={200} defaultSize={270}>
-        <Sidebar />
+        <SplitPane className="bp3-dark" split="vertical" minSize={200} defaultSize={270}>
+          <Sidebar />
 
-        <SplitPane className="bp3-dark" split="horizontal" primary="second" minSize={200} defaultSize={200}>
-
-          <RequestView paneWidth={this.state.paneWidth} paneHeight={this.state.contentHeight - this.state.paneHeight} />
-
-          <ResizeSensor onResize={entries => this.handleResize(entries)} >
-            <TextArea
-              large={true}
-              value={getPreview(ctx, {}, request.body)}
-              defaultValue={getPreview(ctx, {}, request.body)}
-              fill={true}
-              style={{ margin: 0, width: "100%" }}
-            />
-          </ResizeSensor>
+          <SplitPane className="bp3-dark" split="vertical" primary="second" defaultSize={270}>
+            <SplitPane className="bp3-dark" split="horizontal" primary="second" minSize={200} defaultSize={200}>
+              <RequestView paneWidth={this.state.paneWidth} paneHeight={this.state.contentHeight - this.state.paneHeight} />
+              <ResizeSensor onResize={entries => this.handleResize(entries)} >
+                <TextArea
+                  large={true}
+                  value={getPreview(ctx, {}, request.body)}
+                  defaultValue={getPreview(ctx, {}, request.body)}
+                  fill={true}
+                  style={{ margin: 0, width: "100%" }}
+                />
+              </ResizeSensor>
+            </SplitPane>
+            <Card>
+              Response pane
+            </Card>
+          </SplitPane>
 
         </SplitPane>
-      </SplitPane>
       </ResizeSensor>
     );
   }
