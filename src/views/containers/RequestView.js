@@ -8,7 +8,7 @@ import requestContainer from '../../models/RequestContainer';
 import wellBehavingInput from "../components/Input";
 
 const R = require('ramda');
-const UrlInput = wellBehavingInput(props => <input {...props} />, R.compose(R.prop("value"), R.prop("target")));
+const UrlInput = wellBehavingInput(props => <input className="bp3-input" {...props} />, R.compose(R.prop("value"), R.prop("target")));
 const NameInput = wellBehavingInput(props => <EditableText {...props} />, R.identity);
 
 const METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
@@ -56,7 +56,6 @@ class RequestView extends React.Component {
               <Button icon="arrow-right" className={Classes.FIXED} />
             </ControlGroup>
             <NameWrapper>
-              {/* TODO: implement my own EditableText in the style of the Input component */}
               <NameInput value={request.name} onChange={onNameChange} />
             </NameWrapper>
 

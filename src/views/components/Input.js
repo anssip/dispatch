@@ -21,7 +21,7 @@ const wellBehavingInput = (InputComponent, mapValue) => {
     }
   
     render() {
-     return <InputComponent className="bp3-input" {...this.props} {...this.state} onChange={R.bind(this.onChange, this)} />;
+     return <InputComponent {...this.props} {...this.state} onChange={R.bind(this.onChange, this)} />;
     }
   };
 }
