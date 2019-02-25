@@ -1,8 +1,6 @@
 import ProjectContainer from "../src/models/ProjectContainer";
 import fileUtil from "../src/models/file_util";
-const {
-  expect
-} = require("chai");
+const { expect } = require("chai"); 
 const path = require("path");
 const TEMP_PROJECT_PATH = path.join(process.cwd(), "test", "out", "testproj.json")
 
@@ -42,7 +40,7 @@ describe("project container", () => {
     });
     projectContainer.setContext(expected.context);
 
-    await projectContainer.saveProject(TEMP_PROJECT_PATH);
+    await projectContainer.save(TEMP_PROJECT_PATH);
 
     // verify saved files
     const resultData = await fileUtil.readFile(TEMP_PROJECT_PATH);

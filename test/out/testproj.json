@@ -1,27 +1,45 @@
 {
   "requests": [
     {
-      "name": "testproj posting",
-      "method": "POST",
-      "url": "https://localhost:8000/connectors/gt-sink",
-      "body": "{\n  anotherConfig: \"{{ctx.source.config}}\",\n  numFoosh:{foo:100}\n}",
-      "selected": true
-    },
-    {
-      "name": "testproj gettingdfe",
+      "name": "Create test source",
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-source",
       "headers": {},
-      "body": "{\"req1_config\":\"{{ctx.source.config}}\"}",
+      "body": {
+        "req1_config": "{{ctx.source.config}}"
+      },
       "selected": false
     },
     {
-      "method": "GET",
-      "name": "request-newreq",
-      "url": "http://echo.dispatch.rest",
-      "selected": false,
-      "body": "{ goddam: \"bar\" }"
+      "name": "Create foobar sink",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-sink",
+      "body": {
+        "anotherConfig": "{{ctx.source.config}}",
+        "numFoos": {
+          "foo": 100
+        }
+      }
     }
   ],
-  "context": "{\"source\":{\"name\":\"{{connectorName}}\",\"config\":{\"connector.class\":\"io.confluent.connect.jdbc.JdbcSourceConnector\",\"key.converter\":\"io.confluent.connect.avro.AvroConverter\",\"key.converter.schema.registry.url\":\"http://localhost:8081\",\"value.converter\":\"org.apache.kafka.connect.json.JsonConverter\",\"value.converter.schemas.enable\":\"false\",\"connection.url\":\"{{jdbcUrl}}\",\"table.whitelist\":\"{{tableName}}\",\"mode\":\"timestamp\",\"timestamp.column.name\":\"{{timestampColumn}}\",\"validate.non.null\":\"false\",\"topic.prefix\":\"{{topicPrefix}}\",\"table.types\":\"VIEW\",\"batch.max.rows\":100}}}"
+  "context": {
+    "source": {
+      "name": "{{connectorName}}",
+      "config": {
+        "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+        "key.converter": "io.confluent.connect.avro.AvroConverter",
+        "key.converter.schema.registry.url": "http://localhost:8081",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable": "false",
+        "connection.url": "{{jdbcUrl}}",
+        "table.whitelist": "{{tableName}}",
+        "mode": "timestamp",
+        "timestamp.column.name": "{{timestampColumn}}",
+        "validate.non.null": "false",
+        "topic.prefix": "{{topicPrefix}}",
+        "table.types": "VIEW",
+        "batch.max.rows": 100
+      }
+    }
+  }
 }

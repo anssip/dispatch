@@ -1,6 +1,5 @@
 const { ipcRenderer, remote } = window.require('electron');
 
-
 class ApplicationController {
   constructor(projectContainer) {
     this.projectContainer = projectContainer;

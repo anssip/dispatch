@@ -24,6 +24,7 @@ class MainWindow extends React.Component {
     // console.log(`MainWindow:: contentHeight/paneHeight ${this.state.contentHeight}/${this.state.paneHeight}`);
 
     return (
+      request ?
       <ResizeSensor onResize={entries => this.handleWrapperResize(entries)} >
         <SplitPane className="bp3-dark" split="vertical" minSize={200} defaultSize={270}>
           <Sidebar />
@@ -48,6 +49,8 @@ class MainWindow extends React.Component {
 
         </SplitPane>
       </ResizeSensor>
+      :
+      <Card>Open a project first!</Card>
     );
   }
   handleResize(entries) {
