@@ -84,20 +84,30 @@ class ContextContainer extends Container {
     return R.find(R.propEq('name', name))(env.variables || []);
   } 
 
-  setVariable(name, value) {
+  replaceEnv(env) {
+    const envs = this.state.envs.map(e => e.name == env.name ? env : e);
+    this.setState({ isModified: true, envs });
+    return envs; 
+  }
+
+  addNewVariable(name, value) {
     const env = this.getSelectedEnv();
     if (! env) throw new Error("Environment not selected");
-    
-    // TODO: use R.compose 
-    const newVars = R.map(R.clone, env.variables).map(r => r.name == name ? { name: value } : r);
+    env.variables = [ ...env.variables, { name, value } ];
+    return this.replaceEnv(env);
+  }
 
+  setVariable(index, name, value) {
+    const env = this.getSelectedEnv();
+    if (! env) throw new Error("Environment not selected");
+    if (index > env.variables.length) throw new Error(`Invalid index for a new env variable: ${index}`);
+    
+    const newVars = R.map(R.clone, env.variables).map((v, i) => i == index ? { name, value } : v);
     const newEnv = { 
       name: env.name, 
       variables: newVars 
     };
-    const newEnvs = this.state.envs.map(e => e.name == env.name ? newEnv : e);
-    this.setState({ isModified: true, envs: newEnvs });
-    return newEnv;
+    return this.replaceEnv(newEnv);
   }
 
 }

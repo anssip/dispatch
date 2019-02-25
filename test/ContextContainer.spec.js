@@ -34,4 +34,12 @@ describe("ContextContainer", () => {
     expect(envs[1].name).to.be.eq("prod");
   });
 
+  it("Should add a new env variable", () => {
+
+  });
+
+  it("Should modify an env variable", () => {
+
+  });
+
 });
