@@ -81,6 +81,26 @@ class ContextContainer extends Container {
     this.addEnvironment(this.createEmptyEnvironment());
   }
 
+  findVariable(env, name) {
+    return R.find(R.propEq('name', name))(env.variables || []);
+  } 
+
+  setVariable(name, value) {
+    const env = this.getSelectedEnv();
+    if (! env) throw new Error("Environment not selected");
+    
+    // TODO: use R.compose 
+    const newVars = R.map(R.clone, env.variables).map(r => r.name == name ? { name: value } : r);
+
+    const newEnv = { 
+      name: env.name, 
+      variables: newVars 
+    };
+    const newEnvs = this.state.envs.map(e => e.name == env.name ? newEnv : e);
+    this.setState({ isModified: true, envs: newEnvs });
+    return newEnv;
+  }
+
 }
 
 export default new ContextContainer();
