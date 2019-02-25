@@ -47,6 +47,7 @@ class ContextContainer extends Container {
     this.setState({ 
       envs: newEnvs.map((r, i) => i === index ? env : r)
     });
+    return this;
   }
 
   getEnvs() {
@@ -97,6 +98,12 @@ class ContextContainer extends Container {
     return this.replaceEnv(env);
   }
 
+  getVariable(index) {
+    const env = this.getSelectedEnv();
+    if (! env) throw new Error("Environment not selected");
+    return env.variables[index];
+  }
+
   setVariable(index, name, value) {
     const env = this.getSelectedEnv();
     if (! env) throw new Error("Environment not selected");
@@ -105,6 +112,7 @@ class ContextContainer extends Container {
     const newVars = R.map(R.clone, env.variables).map((v, i) => i == index ? { name, value } : v);
     const newEnv = { 
       name: env.name, 
+      selected: true,
       variables: newVars 
     };
     return this.replaceEnv(newEnv);

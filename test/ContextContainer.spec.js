@@ -1,5 +1,6 @@
 import container from "../src/models/ContextContainer";
 const { expect } = require("chai"); 
+const R = require("ramda");
 
 describe("ContextContainer", () => {
   const testEnvs = [
@@ -17,7 +18,7 @@ describe("ContextContainer", () => {
       variables: [
         { name: "appName", value: "Dispatch.prod" },
         { name: "author", value: "Anssi J. Piirainen" },
-        { name: "authorEmail", value: "anssi@dispatch.rest" },
+        { name: "authorCity", value: "Espoo" },
         { name: "www", value: "https://dispatch.rest/docs" }
       ]
     }
@@ -34,11 +35,24 @@ describe("ContextContainer", () => {
     expect(envs[1].name).to.be.eq("prod");
   });
 
-  it("Should add a new env variable", () => {
-
+  it("Adding a variable should throw and error when no env has been selected", () => {
+    expect(R.bind(container.addNewVariable, container)).to.throw(Error, "Environment not selected");
   });
 
-  it("Should modify an env variable", () => {
+  it("Should add a new variable", () => {
+    container.selectEnv(0).addNewVariable("added", "variable");
+    const v = container.getVariable(4);
+    expect(v.name).to.be.eq("added");
+    expect(v.value).to.be.eq("variable");
+    expect(container.getSelectedEnv().variables.length).to.be.eq(5);
+  });
+
+  it("Should modify an existring variable", () => {
+    container.selectEnv(1).setVariable(2, "authorHomeTown", "Kuopio");
+    expect(container.getSelectedEnv().variables.length).to.be.eq(4);
+    const v = container.getVariable(2);
+    expect(v.name).to.be.eq("authorHomeTown");
+    expect(v.value).to.be.eq("Kuopio");
 
   });
 
