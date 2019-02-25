@@ -3,6 +3,7 @@ import { Card, Tab, Tabs, ButtonGroup, Button, Popover, Menu, MenuItem } from "@
 import styled from "styled-components";
 import RequestList from './RequestList';
 import ContextEditor from './context/ContextEditor';
+import EnvironmentEditor from './EnvironmentEditor';
 import connect from 'unstated-connect2';
 import requestContainer from '../../models/RequestContainer';
 import contextContainer from '../../models/ContextContainer';
@@ -35,7 +36,7 @@ class Sidebar extends React.Component {
       <Tabs id="sidebarTabs" onChange={tab => this.changeTab(tab)} renderActiveTabPanelOnly={true} selectedTabId={this.state.tab} >
         <Tab id="requests" title="Requests" panel={<RequestList />} />
         <Tab id="context" title="Context" panel={<ContextEditor />} />
-        <Tab id="env" title="Environment" panel={<input />} />
+        <Tab id="env" title="Environment" panel={<EnvironmentEditor />} />
       </Tabs>
       
       
