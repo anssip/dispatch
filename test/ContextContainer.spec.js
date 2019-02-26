@@ -24,7 +24,7 @@ describe("ContextContainer", () => {
     }
   ];
 
-  before(() => {
+  beforeEach(() => {
     container.init({}, testEnvs);
   });
 
@@ -48,12 +48,19 @@ describe("ContextContainer", () => {
   });
 
   it("Should modify an existring variable", () => {
-    container.selectEnv(1).setVariable(2, "authorHomeTown", "Kuopio");
+    container.selectEnv(1).setVariable(2, { name: "authorHomeTown", value: "Kuopio" });
     expect(container.getSelectedEnv().variables.length).to.be.eq(4);
     const v = container.getVariable(2);
     expect(v.name).to.be.eq("authorHomeTown");
     expect(v.value).to.be.eq("Kuopio");
+  });
 
+  it("Should modify only the variable value", () => {
+    container.selectEnv(1).setVariable(2, { value: "Helsinki" });
+    expect(container.getSelectedEnv().variables.length).to.be.eq(4);
+    const v = container.getVariable(2);
+    expect(v.name).to.be.eq("authorCity");
+    expect(v.value).to.be.eq("Helsinki");
   });
 
 });

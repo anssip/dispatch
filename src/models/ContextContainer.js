@@ -104,12 +104,12 @@ class ContextContainer extends Container {
     return env.variables[index];
   }
 
-  setVariable(index, name, value) {
+  setVariable(index, props) {
     const env = this.getSelectedEnv();
     if (! env) throw new Error("Environment not selected");
     if (index > env.variables.length) throw new Error(`Invalid index for a new env variable: ${index}`);
     
-    const newVars = R.map(R.clone, env.variables).map((v, i) => i == index ? { name, value } : v);
+    const newVars = R.map(R.clone, env.variables).map((v, i) => i == index ? { ...v, ...props } : v);
     const newEnv = { 
       name: env.name, 
       selected: true,
