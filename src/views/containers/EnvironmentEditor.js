@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { InputGroup } from "@blueprintjs/core";
+import { Intent } from "@blueprintjs/core";
 import connect from 'unstated-connect2';
 import contextContainer from '../../models/ContextContainer';
 
-import { Column, Table, ColumnHeaderCell } from "@blueprintjs/table";
+import { Column, Table, ColumnHeaderCell, EditableCell } from "@blueprintjs/table";
+import { variables } from "electron-log";
 
 const R = require('ramda');
 
@@ -15,40 +16,57 @@ class EnvironmentEditor extends React.Component {
   
   // https://github.com/palantir/blueprint/blob/develop/packages/docs-app/src/examples/table-examples/tableEditableExample.tsx
   render() {
-    const { environment, environment: { variables = [] } } = this.props;
+    const { container, environment, environment: { variables = [] } } = this.props;
+    console.log("EnvironmentEditor", variables);
+    const cellRenderer = R.partial(R.bind(this.renderCell, this), [container, variables]);
 
     return (
-    <Table numRows={variables.length + 1}>
-      <Column columnHeaderCellRenderer={ this.renderColumnHeader }/>
-      <Column columnHeaderCellRenderer={ this.renderColumnHeader }/>
+    <Table numRows={variables.length}>
+      <Column cellRenderer={cellRenderer} columnHeaderCellRenderer={ this.renderColumnHeader }/>
+      <Column cellRenderer={cellRenderer} columnHeaderCellRenderer={ this.renderColumnHeader }/>
+      {/* <Column cellRenderer={(row, col) => this.renderCell(container, variables, row, col)} columnHeaderCellRenderer={ this.renderColumnHeader }/>
+      <Column cellRenderer={(row, col) => this.renderCell(container, variables, row, col)} columnHeaderCellRenderer={ this.renderColumnHeader }/> */}
     </Table>);
   }
 
   renderColumnHeader = index => {
     return <ColumnHeaderCell name={['Name', 'Value'][index]}  />;
-  };
+  }
 
-  renderColumnCell = (row, col) => {
-    /*
-       const dataKey = TableEditableExample.dataKey(rowIndex, columnIndex);
-        const value = this.state.sparseCellData[dataKey];
-        return (
-            <EditableCell
-                value={value == null ? "" : value}
-                intent={this.state.sparseCellIntent[dataKey]}
-                onCancel={this.cellValidator(rowIndex, columnIndex)}
-                onChange={this.cellValidator(rowIndex, columnIndex)}
-                onConfirm={this.cellSetter(rowIndex, columnIndex)}
-            />
-        );
-    */
-  };
+  renderCell(container, variables, row, col) {
+    const {name, value} = variables[row];
+    const cellValue = col == 0 ? name : value;
+    return (
+      <EditableCell
+          value={cellValue == null ? "" : cellValue}
+          onCancel={this.cellValidator(container, row, col)}
+          onChange={this.cellValidator(container, row, col)}
+          // onConfirm={this.cellSetter(container, rowIndex, columnIndex)}
+      />
+    )
+  }
 
+  isValidValue(value) {
+    // TODO: fix this
+    return value.indexOf('_') < 0;
+  }
+
+  cellValidator(container, rowIndex, columnIndex) {
+    return value => {
+        const intent = this.isValidValue(value) ? null : Intent.DANGER;
+        // @ts-ignore
+        this.setState( { [`intent_${rowIndex}_${columnIndex}`]: intent } );
+
+        const varProp = columnIndex == 0 ? "name" : "value";
+        container.setVariable(rowIndex, { [varProp]: value });
+    };
+  } 
 }
 
 export default connect({
   container: contextContainer,
    selector: ({ container }) => ({ 
+     container,
      environment: container.getSelectedEnv()
   })
 

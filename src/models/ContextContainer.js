@@ -3,9 +3,9 @@ import { Container } from 'overstated';
 const R = require('ramda');
 
 class ContextContainer extends Container {
-  constructor(ctx = {}, envs = []) {
+  constructor(ctx = {}, envs) {
     super();
-    this.state = { isModified: false, ctx, envs };
+    this.state = { isModified: false, ctx, envs: envs || { name: 'Default', variables: [] } };
   }
 
   init(ctx, envs) {
