@@ -22,8 +22,10 @@ class ProjectContainer extends Container {
     if (!activeProjectFile) return;
     
     const project = await this.load(activeProjectFile);
-    requestContainer.init(project ? project.requests : []);
-    contextContainer.init(project ? project.context : null);
+    if (project) {
+      requestContainer.init(project.requests);
+      contextContainer.init(project.context, project.envs);  
+    }
   }
 
   async loadSettings() {
@@ -44,12 +46,7 @@ class ProjectContainer extends Container {
     console.log(`loading project file ${path}`);
     try {
       const contents = await this.fileUtil.readFile(path);
-      const data = JSON.parse(contents);
-  
-      return {
-        requests: data.requests,
-        context: data.context
-      };
+      return JSON.parse(contents);
     } catch (err) {
       // the project file does not exist
       return null;
@@ -66,7 +63,8 @@ class ProjectContainer extends Container {
 
   getActive() {
     if (! this.state.recentIsActive) return null;
-    return this.state.files[0]; }
+    return this.state.files[0]; 
+  }
 
   setActive(path) {
     this.updateMostRecent(path);

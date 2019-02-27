@@ -84,7 +84,8 @@ class RequestContainer extends Container {
   getSelected() {
     console.log('getSelected');
     if (this.isEmpty()) return {};
-    return R.find(R.prop('selected'))(this.state.requests);
+    return R.find(R.prop('selected'))(this.state.requests) || {};
+    // return selected || this.state.requests[0];
   }
   setProp(prop, req, value) {
     const newRequet = R.clone(req);

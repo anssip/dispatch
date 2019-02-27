@@ -37,7 +37,7 @@ class RequestView extends React.Component {
   render() {
     const { request, paneWidth, paneHeight, setMethod, setName, setUrl } = this.props;
 
-    if (request) {
+    if (request && request.name) {
       const onMethodChange = R.compose(
         R.partial(setMethod, [request]),
         R.prop('value'),

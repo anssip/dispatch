@@ -9,7 +9,7 @@ class ContextContainer extends Container {
   }
 
   init(ctx, envs) {
-    this.setState({ isModified: false, ctx, envs});
+    this.setState({ isModified: false, ctx: ctx || {}, envs: envs || {} });
   }
 
   getValue() {
@@ -57,7 +57,8 @@ class ContextContainer extends Container {
   getSelectedEnv() {
     console.log('getSelected');
     if (this.getEnvs().length === 0) return {};
-    return R.find(R.prop('selected'))(this.getEnvs());
+    const selected = R.find(R.prop('selected'))(this.getEnvs());
+    return selected || this.getEnvs()[0];
   }
 
   getNamePlaceholder() {
