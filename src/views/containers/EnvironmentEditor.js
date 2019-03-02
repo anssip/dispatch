@@ -16,8 +16,9 @@ class EnvironmentEditor extends React.Component {
   
   // https://github.com/palantir/blueprint/blob/develop/packages/docs-app/src/examples/table-examples/tableEditableExample.tsx
   render() {
+    console.log("EnvironmentEditor", this.props);
     const { container, environment, environment: { variables = [] } } = this.props;
-    console.log("EnvironmentEditor", variables);
+    
     const cellRenderer = R.partial(R.bind(this.renderCell, this), [container, variables]);
 
     return (

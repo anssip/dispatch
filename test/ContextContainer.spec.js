@@ -35,10 +35,6 @@ describe("ContextContainer", () => {
     expect(envs[1].name).to.be.eq("prod");
   });
 
-  it("Adding a variable should throw and error when no env has been selected", () => {
-    expect(R.bind(container.addNewVariable, container)).to.throw(Error, "Environment not selected");
-  });
-
   it("Should add a new variable", () => {
     container.selectEnv(0).addNewVariable("added", "variable");
     const v = container.getVariable(4);

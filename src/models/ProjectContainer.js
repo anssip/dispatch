@@ -90,7 +90,7 @@ class ProjectContainer extends Container {
     const project = await this.load(path);
     if (project) {
       requestContainer.init(project.requests);
-      contextContainer.init(project.context);
+      contextContainer.init(project.context, project.envs);
       return this.updateMostRecent(path);
     }
     return null;
@@ -112,7 +112,8 @@ class ProjectContainer extends Container {
   getProjectFileData() {
     return JSON.stringify({
       requests: requestContainer.getRequests(),
-      context: contextContainer.getValue()
+      context: contextContainer.getValue(),
+      envs: contextContainer.getEnvs()
     }, null, 2);
   }
 

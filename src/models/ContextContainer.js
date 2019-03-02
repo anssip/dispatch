@@ -5,11 +5,11 @@ const R = require('ramda');
 class ContextContainer extends Container {
   constructor(ctx = {}, envs) {
     super();
-    this.state = { isModified: false, ctx, envs: envs || { name: 'Default', variables: [] } };
+    this.state = { isModified: false, ctx, envs: envs || [this.createEmptyEnvironment()] };
   }
 
   init(ctx, envs) {
-    this.setState({ isModified: false, ctx: ctx || {}, envs: envs || {} });
+    this.setState({ isModified: false, ctx: ctx || {}, envs: envs || [this.createEmptyEnvironment()] });
   }
 
   getValue() {
@@ -55,13 +55,14 @@ class ContextContainer extends Container {
   }
 
   getSelectedEnv() {
-    console.log('getSelected');
-    if (this.getEnvs().length === 0) return {};
+    console.log('getSelected', this.getEnvs());
+    if (this.getEnvs().length === 0) return this.createEmptyEnvironment();
     const selected = R.find(R.prop('selected'))(this.getEnvs());
     return selected || this.getEnvs()[0];
   }
 
   getNamePlaceholder() {
+    if (! (this.state && this.state.envs)) return 'Default';
     // @ts-ignore
     const oldWithNum = this.state.envs.reverse().find(r => r.name.indexOf('environment-') >= 0);
     return oldWithNum ? `request-${Number(oldWithNum.name.split('environment-')[1]) + 1}` : 'environment-0';
@@ -70,7 +71,7 @@ class ContextContainer extends Container {
   createEmptyEnvironment() {
     return {
       name: this.getNamePlaceholder(),
-      variables: []
+      variables: [ { name: '', value: ''} ]
     };
   }
 

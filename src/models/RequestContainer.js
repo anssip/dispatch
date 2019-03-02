@@ -9,8 +9,12 @@ class RequestContainer extends Container {
     this.state = { isModified: false, requests: [] };
   }
 
+  mapRequests(requests) {
+    return (requests || []).map(r => typeof r.body === "string" ? r : { ...r, body: JSON.stringify(r.body) } );
+  }
+
   init(requests) {
-    this.setState({ isModified: false, requests: requests || [] });
+    this.setState({ isModified: false, requests: this.mapRequests(requests) });
   }
 
   reset() {
