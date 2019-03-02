@@ -1,7 +1,7 @@
 import React from "react";
 const R = require("ramda");
 
-const wellBehavingInput = (InputComponent, mapValue) => {
+const withValueChangeDetection = (InputComponent, mapValue) => {
   return class extends React.Component {
     constructor(props, ...args) {
       super(props, ...args);
@@ -26,4 +26,4 @@ const wellBehavingInput = (InputComponent, mapValue) => {
   };
 }
 
-export default wellBehavingInput;
+export default withValueChangeDetection;

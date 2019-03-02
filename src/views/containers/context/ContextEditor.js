@@ -8,7 +8,6 @@ import jsonPrettify from "../../../models/json-pretty";
 
 const R = require("ramda");
 
-
 class ContextEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -73,12 +72,6 @@ class ContextEditor extends React.Component {
   }
 };
 
-const Wrapper = styled.div`
-`;
-
-const Toolbar = styled.div`
-  position: relative
-`;
 
 // @ts-ignore
 export default connect({
@@ -89,3 +82,10 @@ export default connect({
     // addContext: R.bind(container.addContext, container)
   })
 })(ContextEditor);
+
+const Wrapper = styled.div`
+`;
+
+const Toolbar = styled.div`
+  position: relative
+`;

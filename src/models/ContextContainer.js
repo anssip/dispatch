@@ -5,7 +5,7 @@ const R = require('ramda');
 class ContextContainer extends Container {
   constructor(ctx = {}, envs) {
     super();
-    this.state = { isModified: false, ctx, envs: envs || [this.createEmptyEnvironment()] };
+    this.state = { isModified: false, ctx: ctx || {}, envs: envs || [this.createEmptyEnvironment()] };
   }
 
   init(ctx, envs) {
@@ -65,7 +65,7 @@ class ContextContainer extends Container {
     if (! (this.state && this.state.envs)) return 'Default';
     // @ts-ignore
     const oldWithNum = this.state.envs.reverse().find(r => r.name.indexOf('environment-') >= 0);
-    return oldWithNum ? `request-${Number(oldWithNum.name.split('environment-')[1]) + 1}` : 'environment-0';
+    return oldWithNum ? `environment-${Number(oldWithNum.name.split('environment-')[1]) + 1}` : 'environment-0';
   }
   
   createEmptyEnvironment() {
@@ -76,7 +76,7 @@ class ContextContainer extends Container {
   }
 
   addEnvironment(env) {
-    this.setState({ isModified: true, envs: [... R.map(this.cloneNonSelected, this.state.envs || []), env] });
+    this.setState({ isModified: true, envs: [... R.map(this.cloneNonSelected, this.state.envs || []), {...env, selected: true}] });
   }
 
   addNewEnvironment() {
@@ -87,8 +87,8 @@ class ContextContainer extends Container {
     return R.find(R.propEq('name', name))(env.variables || []);
   } 
 
-  replaceEnv(env) {
-    const envs = this.state.envs.map(e => e.name == env.name ? env : e);
+  replaceEnv(env, name) {
+    const envs = this.state.envs.map(e => e.name == (name || env.name) ? env : e);
     this.setState({ isModified: true, envs });
     return envs; 
   }
@@ -118,6 +118,13 @@ class ContextContainer extends Container {
       variables: newVars 
     };
     return this.replaceEnv(newEnv);
+  }
+
+  setEnvironmentName(name) {
+    console.log(`setEnvironmentName: ${name}`);
+    const env = this.getSelectedEnv();
+    if (! env) throw new Error("Environment not selected");
+    return this.replaceEnv({ ...R.clone(env), name }, env.name);
   }
 
 }

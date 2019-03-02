@@ -59,4 +59,10 @@ describe("ContextContainer", () => {
     expect(v.value).to.be.eq("Helsinki");
   });
 
+  it("Should update environtment name", () => {
+    const newEnvs = container.selectEnv(1).setEnvironmentName("stage");
+    expect(newEnvs[0].name).to.be.eq("test");
+    expect(newEnvs[1].name).to.be.eq("stage");
+  });
+
 });

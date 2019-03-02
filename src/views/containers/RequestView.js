@@ -5,11 +5,13 @@ import RequestViewComponent from "./RequestViewCompoent";
 import BodyView from "./body/BodyView";
 import connect from 'unstated-connect2';
 import requestContainer from '../../models/RequestContainer';
-import wellBehavingInput from "../components/Input";
+import withValueChangeDetection from "../components/Input";
 
 const R = require('ramda');
-const UrlInput = wellBehavingInput(props => <input className="bp3-input" {...props} />, R.compose(R.prop("value"), R.prop("target")));
-const NameInput = wellBehavingInput(props => <EditableText {...props} />, R.identity);
+const UrlInput = withValueChangeDetection(props => <input className="bp3-input" {...props} />, R.compose(R.prop("value"), R.prop("target")));
+const NameInput = withValueChangeDetection(props => <EditableText {...props} />, R.identity);
+
+// const NameInput = React.memo(props => <EditableText {...props} />);
 
 const METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
 

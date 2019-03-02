@@ -21,7 +21,8 @@ class Sidebar extends React.Component {
     this.state = { tab: "requests" }
   }
   render() {
-    const { add } = this.props;
+    const { add, selectEnv, addEnv, environments } = this.props;
+    console.log('Sidebar: environments', environments);
 
     const addClicked = () => {
       if (this.state.tab === "context") {
@@ -36,7 +37,7 @@ class Sidebar extends React.Component {
       <Tabs id="sidebarTabs" onChange={tab => this.changeTab(tab)} renderActiveTabPanelOnly={true} selectedTabId={this.state.tab} >
         <Tab id="requests" title="Requests" panel={<RequestList />} />
         <Tab id="context" title="Context" panel={<ContextEditor />} />
-        <Tab id="env" title="Environment" panel={<EnvironmentEditor />} />
+        <Tab id="env" title="Variables" panel={<EnvironmentEditor />} />
       </Tabs>
       
       
@@ -44,7 +45,7 @@ class Sidebar extends React.Component {
       <BottomBar>
         <ButtonGroup minimal={false} fill={false}>
           <Button icon="add" onClick={addClicked}>Add</Button>
-          <Popover content={<EnvMenu />} >
+          <Popover content={<EnvMenu items={environments} add={addEnv} select={selectEnv}  />} >
             <Button rightIcon='caret-up' icon='eye-open' text='Environment' />
           </Popover>
         </ButtonGroup>
@@ -61,9 +62,8 @@ class Sidebar extends React.Component {
 
 const EnvMenu = props =>
   <Menu>
-    <MenuItem text='default' />
-    <MenuItem text='staging' />
-    <MenuItem text='production' />
+    {props.items.map((e, i) => <MenuItem text={e.name} onClick={R.partial(props.select, [i])}/>)}
+    <MenuItem text='Add new environment' onClick={props.add} />
   </Menu>;
 
 // @ts-ignore
@@ -72,7 +72,10 @@ export default connect({
   selector: ({ containers }) => ({
     add: {
       requests: R.bind(containers[0].addNewRequest, containers[0]),
-      env: R.bind(containers[1].addNewEnvironment, containers[1])
-    }
+      env: R.partial(R.bind(containers[1].addNewVariable, containers[1]), ['',''])
+    },
+    selectEnv: R.bind(containers[1].selectEnv, containers[1]),
+    addEnv: R.bind(containers[1].addNewEnvironment, containers[1]),
+    environments: containers[1].getEnvs()
   })
 })(Sidebar);

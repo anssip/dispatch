@@ -4,7 +4,7 @@ const prettify = jsonText => {
     return JSON.stringify(JSON.parse(jsonText), null, JSON_SPACE)
   } catch (e) {
     console.error(e);
-    return jsonText;
+    return '';
   }
 };
 
