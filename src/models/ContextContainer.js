@@ -1,4 +1,5 @@
 import { Container } from 'overstated'; 
+import { getPublishConfigsForUpdateInfo } from 'app-builder-lib/out/publish/PublishManager';
 
 const R = require('ramda');
 
@@ -58,11 +59,11 @@ class ContextContainer extends Container {
     return this.state.selectEnv;
   }
 
-  getNamePlaceholder() {
+  getNamePlaceholder(prefix = 'environment-') {
     if (! (this.state && this.state.envs)) return 'Default';
     // @ts-ignore
-    const oldWithNum = this.state.envs.reverse().find(r => r.name.indexOf('environment-') >= 0);
-    return oldWithNum ? `environment-${Number(oldWithNum.name.split('environment-')[1]) + 1}` : 'environment-0';
+    const oldWithNum = this.state.envs.reverse().find(r => r.name.indexOf(prefix) >= 0);
+    return oldWithNum ? prefix + Number(oldWithNum.name.split(prefix)[1]) + 1 : `${prefix}-0`;
   }
 
   addNewEnvironment(name = this.getNamePlaceholder()) {
@@ -71,20 +72,45 @@ class ContextContainer extends Container {
     return newVariables;
   }
 
-  setVariable(env, name, value) {
-    const variable = R.find(R.propEq("name", name), this.getVariables());
-    const newVariables = variable ? 
-      this.getVariables().map(v => v.name == name ? { name: variable.name, values: variable.values.map(v => v.env == env ? { env, value} : v) } : v) : 
+  addOrUpdateVariable(env, existingVar, name, value) {
+    const newVariables = existingVar ? 
+      this.getVariables().map(v => v.name == name ? 
+        { 
+          name: existingVar.name, 
+          values: existingVar.values.find(v => v.env == env) ? existingVar.values.map(v => v.env == env ? { env, value } : v) : [ ...existingVar.values, { env, value } ]
+        } : v) : 
       [ ...this.getVariables(), this.createNewVariable(env, name, value) ];
 
     this.setState({ isModified: true, vars: newVariables })
     return newVariables;
   }
 
-  addEmptyVariable(name) {
+  setVariable(env, name, value) {
     const variable = R.find(R.propEq("name", name), this.getVariables());
-    if (variable) return variable;
-    const newVariables = [ ...this.getVariables(), { name, values: []}];
+    return this.addOrUpdateVariable(env, variable, name, value);
+  }
+
+  setVariableAt(env, i, props) {
+    const existingVar = this.getVariables()[i];
+    if (! existingVar) return null;
+
+    console.log(`setVariableAt() updating variable at index ${i}: ${JSON.stringify(existingVar)}`);
+
+    // TODO: remove duplication with addOrUpdateVariable()
+    const newVariables = this.getVariables().map((v, index) => index == i ? 
+      { 
+        name: props.name || existingVar.name, 
+        values: existingVar.values.find(v => v.env == env) ? existingVar.values.map(v => v.env == env ? { env, value: props.value || v.value } : v) : [ ...existingVar.values, { env, value: props.value } ]
+      } : v );
+    this.setState({ isModified: true, vars: newVariables })
+    return newVariables;
+  }
+
+  addEmptyVariable(name = '') {
+    // const variable = R.find(R.propEq("name", name), this.getVariables());
+    // if (variable) return variable;
+    const newVar = { name, values: []};
+    const newVariables = [ ...this.getVariables(), newVar];
     this.setState({ isModified: true, vars: newVariables });
     return newVariables;
   }
@@ -97,7 +123,7 @@ class ContextContainer extends Container {
     return this.state.vars;
   }
 
-  getVariable(env, name) {
+  getVariableByName(env, name) {
     const variable = R.find(R.propEq("name", name), this.getVariables());
     if (! variable) return null;
     const value = R.find(R.propEq("env", env), variable.values);

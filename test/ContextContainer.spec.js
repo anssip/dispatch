@@ -59,14 +59,14 @@ describe("ContextContainer", () => {
 
   it("Should add a new variable", () => {
     const newVars = container.setVariable("prod", "added", "variable");
-    const v = container.getVariable("prod", "added");
+    const v = container.getVariableByName("prod", "added");
     expect(v).to.be.eq("variable");
   });
 
   it("Should modify an existring variable", () => {
     const newVars = container.setVariable("prod", "author", "Kuopio");
     console.log(JSON.stringify(newVars));
-    const v = container.getVariable("prod", "author");
+    const v = container.getVariableByName("prod", "author");
     console.log(v);
     expect(v).to.be.eq("Kuopio");
   });
@@ -80,9 +80,17 @@ describe("ContextContainer", () => {
     expect(envs[1]).to.be.eq("stage");
   });
 
-  it("should add a new environment", () => {
-    const newVars = container.addNewEnvironment("local");
+  it("should add an empty variable", () => {
+    let newVars = container.addEmptyVariable();
     console.log(JSON.stringify(newVars, null, 2));
+
+    const pos = newVars.length - 1;
+    newVars = container.setVariableAt("prod", pos, { name: 'foobar', value: "now" });
+    console.log(JSON.stringify(newVars, null, 2));
+    expect(newVars[pos].name).to.be.eq("foobar");
+    expect(newVars[pos].values.length).to.be.eq(1);
+    expect(newVars[pos].values[0].env).to.be.eq("prod");
+    expect(newVars[pos].values[0].value).to.be.eq("now");
   });
 
 });
