@@ -5,6 +5,7 @@ import connect from 'unstated-connect2';
 import contextContainer from '../../models/ContextContainer';
 import withValueChangeDetection from "../components/Input";
 import { Column, Table, ColumnHeaderCell, EditableCell } from "@blueprintjs/table";
+import { ColumnHeader } from "@blueprintjs/table/lib/esm/headers/columnHeader";
 
 const R = require('ramda');
 
@@ -22,30 +23,31 @@ class EnvironmentEditor extends React.Component {
     console.log("EnvironmentEditor", this.props);
     const { container, environments, variables, setName } = this.props;
 
-    const varNameCellRenderer = R.partial(R.bind(this.renderVariableNameCell, this), [container, variables]);
+    const varNameCellRenderer = R.partial(R.bind(this.renderVariableNameCell, this), [container, environments, variables]);
     const cellRenderer = R.partial(R.bind(this.renderCell, this), [container]);
+    const headerRenderer = R.partial(R.bind(this.renderEnvColumnHeader, this), [environments]);
 
     return (
       <Wrapper>
-        <Table numRows={variables.length} columnWidths={[ 110, 180 ]}>
-          <Column cellRenderer={(varNameCellRenderer)} columnHeaderCellRenderer={this.renderColumnHeader} />
-          {environments.map(e => <Column cellRenderer={R.partial(cellRenderer, [e])} columnHeaderCellRenderer={this.renderColumnHeader} />)}
-
-          {/* <Column cellRenderer={(cellRenderer)} columnHeaderCellRenderer={this.renderColumnHeader} />
-          <Column cellRenderer={cellRenderer} columnHeaderCellRenderer={this.renderColumnHeader} /> */}
+        <Table numRows={variables.length} >
+          {/* <Column key={0} cellRenderer={(varNameCellRenderer)} columnHeaderCellRenderer={R.bind(this.renderVariableColumnHeader, this)} /> */}
+          {environments.map((e, i) => <Column key={i+1} cellRenderer={R.partial(cellRenderer, [e])} columnHeaderCellRenderer={headerRenderer} />)}
+          
         </Table>
       </Wrapper>);
   }
 
-  renderColumnHeader = index => {
-    return <ColumnHeaderCell name={['Name', 'Value'][index]} />;
+  renderVariableColumnHeader = col => <ColumnHeaderCell name="Name" />;
+
+  renderEnvColumnHeader = (environments, col) => {
+    return <ColumnHeaderCell name={environments[col]} />;
   }
 
-  renderVariableNameCell(container, variables, row, col) {
-    const name = variables[row];
+  renderVariableNameCell(container, environments, variables, row, col) {
+    const value = variables[row];
     return (
       <EditableCell
-        value={name}
+        value={value}
         onCancel={this.cellValidator(container, row, col)}
         onChange={this.cellValidator(container, row, col)}
       // onConfirm={this.cellSetter(container, rowIndex, columnIndex)}
@@ -54,12 +56,11 @@ class EnvironmentEditor extends React.Component {
   }
 
   renderCell(container, env, row, col) {
-    const cellValue = env.variables.length < row ? null : env.variables[row];
-
+    const value = container.getVariableAt(env, row);
     return (
       <EditableCell
-        intent={this.isValidValue(cellValue) ? null : Intent.DANGER}
-        value={cellValue == null ? "" : cellValue}
+        intent={this.isValidValue(value) ? null : Intent.DANGER}
+        value={value == null ? "" : value}
         onCancel={this.cellValidator(container, row, col)}
         onChange={this.cellValidator(container, row, col)}
       // onConfirm={this.cellSetter(container, rowIndex, columnIndex)}
@@ -89,7 +90,7 @@ export default connect({
   selector: ({ container }) => ({
     container,
     environments: container.getEnvs(),
-    variables: container.getAllVariables(),
+    variables: container.getVariables(),
     setName: R.bind(container.setEnvironmentName, container)
   })
 

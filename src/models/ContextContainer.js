@@ -1,5 +1,4 @@
 import { Container } from 'overstated'; 
-import { getPublishConfigsForUpdateInfo } from 'app-builder-lib/out/publish/PublishManager';
 
 const R = require('ramda');
 
@@ -50,6 +49,9 @@ class ContextContainer extends Container {
     return R.uniq(R.map(R.prop("env"), allValues));
   }
 
+  /*
+   * Gets all variables from the specified env.
+   */
   getEnvironment(env) {    
     // TODO: maybe convert to Ramda
     return this.getVariables().map(v => ({ name: v.name, value: v.values.find(v => v.env == env).value }));
@@ -104,6 +106,13 @@ class ContextContainer extends Container {
       } : v );
     this.setState({ isModified: true, vars: newVariables })
     return newVariables;
+  }
+
+  getVariableAt(env, i) {
+    const variable = this.getVariables()[i];
+    if (! variable) return null;
+    const value = R.find(R.propEq("env", env), variable.values);
+    return value ? R.find(R.propEq("env", env), variable.values).value : null;
   }
 
   addEmptyVariable(name = '') {

@@ -24,7 +24,7 @@ class ProjectContainer extends Container {
     const project = await this.load(activeProjectFile);
     if (project) {
       requestContainer.init(project.requests);
-      contextContainer.init(project.context, project.envs);  
+      contextContainer.init(project.context, project.vars);  
     }
   }
 
@@ -90,7 +90,7 @@ class ProjectContainer extends Container {
     const project = await this.load(path);
     if (project) {
       requestContainer.init(project.requests);
-      contextContainer.init(project.context, project.envs);
+      contextContainer.init(project.context, project.vars);
       return this.updateMostRecent(path);
     }
     return null;

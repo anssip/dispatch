@@ -93,4 +93,16 @@ describe("ContextContainer", () => {
     expect(newVars[pos].values[0].value).to.be.eq("now");
   });
 
+  it("should get variable value using index", () => {
+    const value = container.getVariableAt("prod", 1);
+    console.log(value);
+    expect(value).to.be.eq("Anssi Piirainen");
+  })
+
+  it("should return null if var not found", () => {
+    const value = container.getVariableAt("stage", 1);
+    console.log(value);
+    expect(value).to.be.null;
+  })
+
 });
