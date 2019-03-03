@@ -3,13 +3,18 @@ import { Container } from 'overstated';
 const R = require('ramda');
 
 class ContextContainer extends Container {
-  constructor(ctx = {}, envs) {
+  constructor(ctx = {}, vars) {
     super();
-    this.state = { isModified: false, ctx: ctx || {}, envs: envs || [this.createEmptyEnvironment()] };
+    this.state = { isModified: false, ctx: ctx || {}, vars: vars || [], selectedEnv: null };
   }
 
-  init(ctx, envs) {
-    this.setState({ isModified: false, ctx: ctx || {}, envs: envs || [this.createEmptyEnvironment()] });
+  init(ctx, vars) {
+    this.setState({ 
+      isModified: false, 
+      ctx: ctx || {}, 
+      vars: vars || [], 
+      selectedEnv: null 
+    });
   }
 
   getValue() {
@@ -32,33 +37,25 @@ class ContextContainer extends Container {
     this.setState({ isModified });
   }
 
-  cloneNonSelected(env) {
-    if (! env) throw new Error('Environment not specified');
-    const newEnv = R.clone(env);
-    newEnv.selected = false;
-    return newEnv;
-  }
 
-  selectEnv(index) {
-    console.log(`selecting environment ${index}`);
-    const env = this.cloneNonSelected(this.state.envs[index]);
-    env.selected = true;
-    const newEnvs = R.map(this.cloneNonSelected, this.state.envs);
-    this.setState({ 
-      envs: newEnvs.map((r, i) => i === index ? env : r)
-    });
+  selectEnv(selectedEnv) {
+    console.log(`selecting environment ${selectedEnv}`);
+    this.setState({ isModified: true, selectedEnv });
     return this;
   }
 
   getEnvs() {
-    return this.state.envs;
+    const allValues = R.flatten(R.map(R.prop("values"), this.state.vars));
+    return R.uniq(R.map(R.prop("env"), allValues));
+  }
+
+  getEnvironment(env) {    
+    // TODO: maybe convert to Ramda
+    return this.getVariables().map(v => ({ name: v.name, value: v.values.find(v => v.env == env).value }));
   }
 
   getSelectedEnv() {
-    console.log('getSelected', this.getEnvs());
-    if (this.getEnvs().length === 0) return this.createEmptyEnvironment();
-    const selected = R.find(R.prop('selected'))(this.getEnvs());
-    return selected || this.getEnvs()[0];
+    return this.state.selectEnv;
   }
 
   getNamePlaceholder() {
@@ -67,66 +64,54 @@ class ContextContainer extends Container {
     const oldWithNum = this.state.envs.reverse().find(r => r.name.indexOf('environment-') >= 0);
     return oldWithNum ? `environment-${Number(oldWithNum.name.split('environment-')[1]) + 1}` : 'environment-0';
   }
-  
-  createEmptyEnvironment() {
-    return {
-      name: this.getNamePlaceholder(),
-      variables: [ { name: '', value: ''} ]
-    };
+
+  addNewEnvironment(name = this.getNamePlaceholder()) {
+    const newVariables = this.getVariables().map(v => ({ ...v, values: [ ...v.values, { env: name, value: null } ] }));
+    this.setState({ isModified: true, vars: newVariables })
+    return newVariables;
   }
 
-  addEnvironment(env) {
-    this.setState({ isModified: true, envs: [... R.map(this.cloneNonSelected, this.state.envs || []), {...env, selected: true}] });
+  setVariable(env, name, value) {
+    const variable = R.find(R.propEq("name", name), this.getVariables());
+    const newVariables = variable ? 
+      this.getVariables().map(v => v.name == name ? { name: variable.name, values: variable.values.map(v => v.env == env ? { env, value} : v) } : v) : 
+      [ ...this.getVariables(), this.createNewVariable(env, name, value) ];
+
+    this.setState({ isModified: true, vars: newVariables })
+    return newVariables;
   }
 
-  addNewEnvironment() {
-    this.addEnvironment(this.createEmptyEnvironment());
+  addEmptyVariable(name) {
+    const variable = R.find(R.propEq("name", name), this.getVariables());
+    if (variable) return variable;
+    const newVariables = [ ...this.getVariables(), { name, values: []}];
+    this.setState({ isModified: true, vars: newVariables });
+    return newVariables;
   }
 
-  findVariable(env, name) {
-    return R.find(R.propEq('name', name))(env.variables || []);
-  } 
-
-  replaceEnv(env, name) {
-    const envs = this.state.envs.map(e => e.name == (name || env.name) ? env : e);
-    this.setState({ isModified: true, envs });
-    return envs; 
+  createNewVariable(env, name, value) {
+    return { name, values: [{ env, value }]};
   }
 
-  addNewVariable(name, value) {
-    const env = this.getSelectedEnv();
-    if (! env) throw new Error("Environment not selected");
-    env.variables = [ ...env.variables, { name, value } ];
-    return this.replaceEnv(env);
+  getVariables() {
+    return this.state.vars;
   }
 
-  getVariable(index) {
-    const env = this.getSelectedEnv();
-    if (! env) throw new Error("Environment not selected");
-    return env.variables[index];
+  getVariable(env, name) {
+    const variable = R.find(R.propEq("name", name), this.getVariables());
+    if (! variable) return null;
+    const value = R.find(R.propEq("env", env), variable.values);
+    if (! value) return null;
+    return value.value;
   }
 
-  setVariable(index, props) {
-    const env = this.getSelectedEnv();
-    if (! env) throw new Error("Environment not selected");
-    if (index > env.variables.length) throw new Error(`Invalid index for a new env variable: ${index}`);
-    
-    const newVars = R.map(R.clone, env.variables).map((v, i) => i == index ? { ...v, ...props } : v);
-    const newEnv = { 
-      name: env.name, 
-      selected: true,
-      variables: newVars 
-    };
-    return this.replaceEnv(newEnv);
-  }
-
-  setEnvironmentName(name) {
+  setEnvironmentName(oldName, name) {
     console.log(`setEnvironmentName: ${name}`);
-    const env = this.getSelectedEnv();
-    if (! env) throw new Error("Environment not selected");
-    return this.replaceEnv({ ...R.clone(env), name }, env.name);
+    // TODO: convert below to use R ??
+    const newVariables = this.getVariables().map(v => ({ ...v, values: [ v.values.map(v => v.env == oldName ? { ...v, env: name } : v) ] }));
+    this.setState({ isModified: true, vars: newVariables });
+    return newVariables;
   }
-
 }
 
 export default new ContextContainer();

@@ -7,15 +7,8 @@ import withValueChangeDetection from "../components/Input";
 import { Column, Table, ColumnHeaderCell, EditableCell } from "@blueprintjs/table";
 
 const R = require('ramda');
-const NameInput = withValueChangeDetection(props => <EditableText {...props} />, R.identity);
 
 const Wrapper = styled.div`
-`;
-
-const NameWrapper = styled.span`
-  margin: 10px;
-  text-align: left;
-  font-size: 14px;
 `;
 
 
@@ -27,23 +20,19 @@ class EnvironmentEditor extends React.Component {
   // https://github.com/palantir/blueprint/blob/develop/packages/docs-app/src/examples/table-examples/tableEditableExample.tsx
   render() {
     console.log("EnvironmentEditor", this.props);
-    const { container, environment, environment: { name, variables = [] }, setName } = this.props;
+    const { container, environments, variables, setName } = this.props;
 
-    const cellRenderer = R.partial(R.bind(this.renderCell, this), [container, variables]);
+    const varNameCellRenderer = R.partial(R.bind(this.renderVariableNameCell, this), [container, variables]);
+    const cellRenderer = R.partial(R.bind(this.renderCell, this), [container]);
 
     return (
       <Wrapper>
-        <Card style={{ border: 0, boxShadow: 'none', marginTop: 0 }}>
-          <Text tagName="span">Env: </Text> 
-          <NameWrapper>
-            <NameInput onChange={setName} value={name} />
-          </NameWrapper>
-        </Card>
         <Table numRows={variables.length} columnWidths={[ 110, 180 ]}>
-          <Column cellRenderer={(cellRenderer)} columnHeaderCellRenderer={this.renderColumnHeader} />
-          <Column cellRenderer={cellRenderer} columnHeaderCellRenderer={this.renderColumnHeader} />
-          {/* <Column cellRenderer={(row, col) => this.renderCell(container, variables, row, col)} columnHeaderCellRenderer={ this.renderColumnHeader }/>
-          <Column cellRenderer={(row, col) => this.renderCell(container, variables, row, col)} columnHeaderCellRenderer={ this.renderColumnHeader }/> */}
+          <Column cellRenderer={(varNameCellRenderer)} columnHeaderCellRenderer={this.renderColumnHeader} />
+          {environments.map(e => <Column cellRenderer={R.partial(cellRenderer, [e])} columnHeaderCellRenderer={this.renderColumnHeader} />)}
+
+          {/* <Column cellRenderer={(cellRenderer)} columnHeaderCellRenderer={this.renderColumnHeader} />
+          <Column cellRenderer={cellRenderer} columnHeaderCellRenderer={this.renderColumnHeader} /> */}
         </Table>
       </Wrapper>);
   }
@@ -52,9 +41,20 @@ class EnvironmentEditor extends React.Component {
     return <ColumnHeaderCell name={['Name', 'Value'][index]} />;
   }
 
-  renderCell(container, variables, row, col) {
-    const { name, value } = variables[row];
-    const cellValue = col == 0 ? name : value;
+  renderVariableNameCell(container, variables, row, col) {
+    const name = variables[row];
+    return (
+      <EditableCell
+        value={name}
+        onCancel={this.cellValidator(container, row, col)}
+        onChange={this.cellValidator(container, row, col)}
+      // onConfirm={this.cellSetter(container, rowIndex, columnIndex)}
+      />
+    )
+  }
+
+  renderCell(container, env, row, col) {
+    const cellValue = env.variables.length < row ? null : env.variables[row];
 
     return (
       <EditableCell
@@ -88,7 +88,8 @@ export default connect({
   container: contextContainer,
   selector: ({ container }) => ({
     container,
-    environment: container.getSelectedEnv(),
+    environments: container.getEnvs(),
+    variables: container.getAllVariables(),
     setName: R.bind(container.setEnvironmentName, container)
   })
 

@@ -62,7 +62,7 @@ class Sidebar extends React.Component {
 
 const EnvMenu = props =>
   <Menu>
-    {props.items.map((e, i) => <MenuItem text={e.name} onClick={R.partial(props.select, [i])}/>)}
+    {props.items.map((e, i) => <MenuItem text={e} onClick={R.partial(props.select, [i])}/>)}
     <MenuItem text='Add new environment' onClick={props.add} />
   </Menu>;
 
