@@ -7,4 +7,4 @@ A tool for REST API design, and for request testing and management. This is a to
 
 Dispatch is under development at the monent and is not ready for real use yet.
 
-![Screenshot](https://d.pr/i/TbIB1e)
+![Screenshot](https://www.dropbox.com/s/z0e9acrpsei551l/Screen%20Shot%202019-03-04%20at%2022.00.04.png?dl=0)
