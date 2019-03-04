@@ -8,3 +8,10 @@ A tool for REST API design, and for request testing and management. This is a to
 Dispatch is under development at the monent and is not ready for real use yet.
 
 ![Screenshot](https://i.imgur.com/7AHNyCT.png)
+
+## TODO
+
+next:
+
+  - env editor in expandable (Drawer component)
+  - saving of env variables
