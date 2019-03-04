@@ -61,8 +61,8 @@ class EnvironmentEditor extends React.Component {
       <EditableCell
         intent={this.isValidValue(value) ? null : Intent.DANGER}
         value={value == null ? "" : value}
-        onCancel={this.cellValidator(container, row, col)}
-        onChange={this.cellValidator(container, row, col)}
+        onCancel={this.cellValidator(container, env, row, col)}
+        onChange={this.cellValidator(container, env, row, col)}
       // onConfirm={this.cellSetter(container, rowIndex, columnIndex)}
       />
     )
@@ -72,15 +72,15 @@ class EnvironmentEditor extends React.Component {
     return true;
   }
 
-  cellValidator(container, rowIndex, columnIndex) {
+  cellValidator(container, env, rowIndex, columnIndex) {
     return value => {
-      console.log('cellValidator', value);
+      console.log(`cellValidator env: ${env}, row: ${rowIndex}, value: ${value}`);
 
       // Calling setState will make the cursor position jump to the end of the text input
       // this.setState({ [`intent_${rowIndex}_${columnIndex}`]: intent });
 
-      const varProp = columnIndex == 0 ? "name" : "value";
-      container.setVariable(rowIndex, { [varProp]: value });
+      const newVars = container.setVariableAt(env, rowIndex, {value});
+      console.log(`cellValidator. got new var after setting it: ${JSON.stringify(newVars, null, 2)}`)
     };
   }
 }
