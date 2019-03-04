@@ -5,7 +5,6 @@ import connect from 'unstated-connect2';
 import contextContainer from '../../models/ContextContainer';
 import withValueChangeDetection from "../components/Input";
 import { Column, Table, ColumnHeaderCell, EditableCell } from "@blueprintjs/table";
-import { ColumnHeader } from "@blueprintjs/table/lib/esm/headers/columnHeader";
 
 const R = require('ramda');
 
@@ -23,65 +22,56 @@ class EnvironmentEditor extends React.Component {
     console.log("EnvironmentEditor", this.props);
     const { container, environments, variables, setName } = this.props;
 
-    const varNameCellRenderer = R.partial(R.bind(this.renderVariableNameCell, this), [container, environments, variables]);
-    const cellRenderer = R.partial(R.bind(this.renderCell, this), [container]);
-    const headerRenderer = R.partial(R.bind(this.renderEnvColumnHeader, this), [environments]);
+    const renderCell = (env, row, col) => {
+      const value = container.getVariableAt(env, row);
+      return (
+        <EditableCell
+          intent={this.isValidValue(value) ? null : Intent.DANGER}
+          value={value == null ? "" : value}
+          onCancel={cellValidator(env, row)}
+          onChange={cellValidator(env, row)}
+        // onConfirm={this.cellSetter(container, rowIndex, columnIndex)}
+        />
+      )
+    };
+    const cellValidator = (env, rowIndex) => {
+      return value => container.setVariableAt(env, rowIndex, {value});
+    };
+    const renderVariableColumnHeader = col => <ColumnHeaderCell name="Name" />;
 
+    // TODO: make sure variable name updates work!
+    const renderVariableNameCell = (row, col) => {
+      const value = variables[row].name;
+      // console.error("renderVariableNameCell", value);
+      return (
+        <EditableCell
+          value={value}
+          onCancel={variableNameValidator(row, col)}
+          onChange={variableNameValidator(row, col)}
+        />
+      )
+    };
+    const variableNameValidator = (row, col) => {
+      return value => container.setVariableNameAt(row, value);
+    };
+
+    // TODO: implement environment name updates
+    const renderEnvColumnHeader = (col) => {
+      return <ColumnHeaderCell name={environments[col-1]} />;
+    }
+  
     return (
       <Wrapper>
         <Table numRows={variables.length} >
-          {/* <Column key={0} cellRenderer={(varNameCellRenderer)} columnHeaderCellRenderer={R.bind(this.renderVariableColumnHeader, this)} /> */}
-          {environments.map((e, i) => <Column key={i+1} cellRenderer={R.partial(cellRenderer, [e])} columnHeaderCellRenderer={headerRenderer} />)}
+          <Column key='vars' cellRenderer={renderVariableNameCell} columnHeaderCellRenderer={renderVariableColumnHeader} />
+          {environments.map((e, i) => <Column key={i+1} cellRenderer={R.partial(renderCell, [e])} columnHeaderCellRenderer={renderEnvColumnHeader} />)}
           
         </Table>
       </Wrapper>);
   }
 
-  renderVariableColumnHeader = col => <ColumnHeaderCell name="Name" />;
-
-  renderEnvColumnHeader = (environments, col) => {
-    return <ColumnHeaderCell name={environments[col]} />;
-  }
-
-  renderVariableNameCell(container, environments, variables, row, col) {
-    const value = variables[row];
-    return (
-      <EditableCell
-        value={value}
-        onCancel={this.cellValidator(container, row, col)}
-        onChange={this.cellValidator(container, row, col)}
-      // onConfirm={this.cellSetter(container, rowIndex, columnIndex)}
-      />
-    )
-  }
-
-  renderCell(container, env, row, col) {
-    const value = container.getVariableAt(env, row);
-    return (
-      <EditableCell
-        intent={this.isValidValue(value) ? null : Intent.DANGER}
-        value={value == null ? "" : value}
-        onCancel={this.cellValidator(container, env, row, col)}
-        onChange={this.cellValidator(container, env, row, col)}
-      // onConfirm={this.cellSetter(container, rowIndex, columnIndex)}
-      />
-    )
-  }
-
   isValidValue(value) {
     return true;
-  }
-
-  cellValidator(container, env, rowIndex, columnIndex) {
-    return value => {
-      console.log(`cellValidator env: ${env}, row: ${rowIndex}, value: ${value}`);
-
-      // Calling setState will make the cursor position jump to the end of the text input
-      // this.setState({ [`intent_${rowIndex}_${columnIndex}`]: intent });
-
-      const newVars = container.setVariableAt(env, rowIndex, {value});
-      console.log(`cellValidator. got new var after setting it: ${JSON.stringify(newVars, null, 2)}`)
-    };
   }
 }
 

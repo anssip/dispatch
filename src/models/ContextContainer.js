@@ -74,12 +74,15 @@ class ContextContainer extends Container {
     return newVariables;
   }
 
-  addOrUpdateVariable(env, existingVar, name, value) {
+  // TODO: utilize R.assoc
+  addOrUpdateVariable(existingVar, name, value, env) {
     const newVariables = existingVar ? 
       this.getVariables().map(v => v.name == name ? 
         { 
           name: existingVar.name, 
-          values: existingVar.values.find(v => v.env == env) ? existingVar.values.map(v => v.env == env ? { env, value } : v) : [ ...existingVar.values, { env, value } ]
+          values: existingVar.values.find(v => v.env == env) ? 
+            existingVar.values.map(v => v.env == env ? { env, value } : v) : 
+            [ ...existingVar.values, { env, value } ]
         } : v) : 
       [ ...this.getVariables(), this.createNewVariable(env, name, value) ];
 
@@ -89,10 +92,22 @@ class ContextContainer extends Container {
 
   setVariable(env, name, value) {
     const variable = R.find(R.propEq("name", name), this.getVariables());
-    return this.addOrUpdateVariable(env, variable, name, value);
+    return this.addOrUpdateVariable(variable, name, value, env);
+  }
+
+  /*
+   * Sets the name of the n:th variable.
+   */
+  setVariableNameAt(n, name) {
+    const variable = this.getVariables()[n];
+    if (! variable) return null;
+    const newVariables = R.map(R.ifElse(R.propEq("name", variable.name), R.assoc("name", name), R.identity), this.getVariables());
+    this.setState({ isModified: true, vars: newVariables });
+    return newVariables;
   }
 
   setVariableAt(env, i, props) {
+    const varProps = typeof props === "string" ? { value: props } : props;
     const existingVar = this.getVariables()[i];
     if (! existingVar) return null;
 
@@ -101,8 +116,8 @@ class ContextContainer extends Container {
     // TODO: remove duplication with addOrUpdateVariable()
     const newVariables = this.getVariables().map((v, index) => index == i ? 
       { 
-        name: props.name || existingVar.name, 
-        values: existingVar.values.find(v => v.env == env) ? existingVar.values.map(v => v.env == env ? { env, value: props.value || v.value } : v) : [ ...existingVar.values, { env, value: props.value } ]
+        name: varProps.name || existingVar.name, 
+        values: existingVar.values.find(v => v.env == env) ? existingVar.values.map(v => v.env == env ? { env, value: varProps.value || v.value } : v) : [ ...existingVar.values, { env, value: varProps.value } ]
       } : v );
     this.setState({ isModified: true, vars: newVariables })
     return newVariables;
