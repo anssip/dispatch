@@ -65,7 +65,7 @@ describe("ContextContainer", () => {
 
   it("Should modify an existring variable", () => {
     const newVars = container.setVariable("prod", "author", "Kuopio");
-    console.log(JSON.stringify(newVars));
+    console.log(JSON.stringify(newVars, null, 2));
     const v = container.getVariableByName("prod", "author");
     console.log(v);
     expect(v).to.be.eq("Kuopio");
@@ -73,7 +73,7 @@ describe("ContextContainer", () => {
 
   it("Should update a variable name in all envs", () => {
     const newVars = container.setVariableNameAt(1, "authorName" );
-    console.log(JSON.stringify(newVars));
+    console.log(JSON.stringify(newVars, null, 2));
     expect(newVars[1].name).to.be.eq("authorName");
     // other vars should keep their orig values
     expect(newVars[0].name).to.be.eq("appName");
@@ -82,7 +82,7 @@ describe("ContextContainer", () => {
 
   it("Should update environtment name", () => {
     const newVars = container.setEnvironmentName("prod", "stage");
-    console.log(JSON.stringify(newVars));
+    console.log(JSON.stringify(newVars, null, 2));
     const envs = container.getEnvs();
     expect(envs.length).to.be.eq(2);
     expect(envs[0]).to.be.eq("test");

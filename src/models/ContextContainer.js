@@ -155,13 +155,18 @@ class ContextContainer extends Container {
     return value.value;
   }
 
-  setEnvironmentName(oldName, name) {
-    console.log(`setEnvironmentName: ${name}`);
+  setEnvironmentName(prevName, name) {
+    // TODO: make sure we are not causing env name collisions
     // TODO: convert below to use R ??
-    const newVariables = this.getVariables().map(v => ({ ...v, values: [ v.values.map(v => v.env == oldName ? { ...v, env: name } : v) ] }));
+    const newVariables = this.getVariables().map(v => 
+      (
+        { 
+          name: v.name, 
+          values: v.values.map((v, i) => v.env == prevName ? { ...v, env: name } : v) 
+        }
+      ));
     this.setState({ isModified: true, vars: newVariables });
     return newVariables;
   }
 }
-
 export default new ContextContainer();

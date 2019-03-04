@@ -4,7 +4,7 @@ import { Intent, EditableText, Text, ControlGroup, Card } from "@blueprintjs/cor
 import connect from 'unstated-connect2';
 import contextContainer from '../../models/ContextContainer';
 import withValueChangeDetection from "../components/Input";
-import { Column, Table, ColumnHeaderCell, EditableCell } from "@blueprintjs/table";
+import { Column, Table, ColumnHeaderCell, EditableCell, EditableName } from "@blueprintjs/table";
 
 const R = require('ramda');
 
@@ -55,16 +55,32 @@ class EnvironmentEditor extends React.Component {
       return value => container.setVariableNameAt(row, value);
     };
 
+    const nameEditor = (name, index) => {
+      console.log(`nameEditor() index == ${index}, name == ${name}`);
+      return (
+      <EditableName 
+        index={index} 
+        name={name}
+        onCancel={envNameValidator}
+        onChange={envNameValidator}
+      />);
+    };
+
+    const envNameValidator = (name, index) => {
+      console.log(`envNameValidator() index == ${index}, name == ${name}`);
+      container.setEnvironmentName(environments[index-1], name);
+    };
+
     // TODO: implement environment name updates
-    const renderEnvColumnHeader = (col) => {
-      return <ColumnHeaderCell name={environments[col-1]} />;
+    const renderEnvColumnHeader = (env, index) => {
+      return <ColumnHeaderCell name={env} nameRenderer={nameEditor} />;
     }
   
     return (
       <Wrapper>
-        <Table numRows={variables.length} >
+        <Table numRows={variables.length}>
           <Column key='vars' cellRenderer={renderVariableNameCell} columnHeaderCellRenderer={renderVariableColumnHeader} />
-          {environments.map((e, i) => <Column key={i+1} cellRenderer={R.partial(renderCell, [e])} columnHeaderCellRenderer={renderEnvColumnHeader} />)}
+          {environments.map((e, i) => <Column key={i+1} cellRenderer={R.partial(renderCell, [e])} columnHeaderCellRenderer={R.partial(renderEnvColumnHeader, [e])} />)}
           
         </Table>
       </Wrapper>);
