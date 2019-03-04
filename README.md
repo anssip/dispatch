@@ -7,37 +7,4 @@ A tool for REST API design, and for request testing and management. This is a to
 
 Dispatch is under development at the monent and is not ready for real use yet.
 
-### TODO
-
-* Deletion of requests
-* envs is a list of environment objects. Each environment object has
-  - name
-  - list of environment variables. Each env variable has name & value
-   
-
-
-* BodyEditor improvements
-* Request sending and response viewing logic
-
-* Application menu
-  - OK: Open...
-  - OK: keyboard shortcuts
-  - OK: saving when opening a new project or closing the current project
-  - OK: name editing does not work properly in the body editor
-
-* Context management
-* Env management
-* OK: Add Context (a container for templates)
-* Add Environments (a container for env variables)
-
-* Body JSON view to show request JSON which has references to the objects and variables defined in the context.
-  * CTRL+SPACE opens a context picker which fills in the reference in format `{{ctx.foo.bar}}`
-  * Context references can be shown with a special icon (later).
-  * All variables that come from the context references are shown in the body UI, with the possibility to fill values. The values can be also supplied by the defaul tcontext. The UI should thus show a table with columns: `variable` | `value-from-context` | `override`. The value could be a large JSON object, like a Kafka topic schema.
-
-
-### LATER
-
-* Mojave dark mode for the native dialogs
-
-This is a React & Electron app.
+https://d.pr/i/TbIB1e

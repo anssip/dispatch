@@ -40,7 +40,6 @@ class Sidebar extends React.Component {
         <Tab id="env" title="Variables" panel={<EnvironmentEditor />} />
       </Tabs>
       
-      
       {/* Move the add button to the RequestList and to the EnvironmentEditor?? */}
       <BottomBar>
         <ButtonGroup minimal={false} fill={false}>
@@ -50,7 +49,6 @@ class Sidebar extends React.Component {
           </Popover>
         </ButtonGroup>
       </BottomBar>
-
     </Card>;
   }
 
@@ -62,7 +60,7 @@ class Sidebar extends React.Component {
 
 const EnvMenu = props =>
   <Menu>
-    {props.items.map((e, i) => <MenuItem text={e.name} onClick={R.partial(props.select, [i])}/>)}
+    {props.items.map((e, i) => <MenuItem text={e} onClick={R.partial(props.select, [i])}/>)}
     <MenuItem text='Add new environment' onClick={props.add} />
   </Menu>;
 
@@ -72,7 +70,7 @@ export default connect({
   selector: ({ containers }) => ({
     add: {
       requests: R.bind(containers[0].addNewRequest, containers[0]),
-      env: R.partial(R.bind(containers[1].addNewVariable, containers[1]), ['',''])
+      env: R.bind(containers[1].addEmptyVariable, containers[1])
     },
     selectEnv: R.bind(containers[1].selectEnv, containers[1]),
     addEnv: R.bind(containers[1].addNewEnvironment, containers[1]),

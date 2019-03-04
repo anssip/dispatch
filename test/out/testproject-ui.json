@@ -43,57 +43,38 @@
       }
     }
   },
-  "envs": [
+  "vars": [
     {
-      "name": "test",
-      "selected": true,
-      "variables": [
-        {
-          "name": "appName",
-          "value": "DispatchApp"
-        },
-        {
-          "name": "author",
-          "value": "Anssi Piirainen"
-        },
-        {
-          "name": "authorsAwesomeEmail",
-          "value": "anssip@gmail.com"
-        },
-        {
-          "name": "www",
-          "value": "https://dispatch.rest"
-        },
-        {
-          "name": "github",
-          "value": "https://github.com/anssip/dispatch"
-        }
+      "name": "appName",
+      "values": [
+        { "env": "test", "value": "Dispatch" },
+        { "env": "prod", "value": "Dispatch" }
       ]
     },
     {
-      "name": "production",
-      "selected": true,
-      "variables": [
-        {
-          "name": "appName",
-          "value": "DispatchApp"
-        },
-        {
-          "name": "author",
-          "value": "Anssi Piirainen"
-        },
-        {
-          "name": "authorsAwesomeEmail",
-          "value": "anssip@gmail.com"
-        },
-        {
-          "name": "www",
-          "value": "https://dispatch.rest"
-        },
-        {
-          "name": "github",
-          "value": "https://github.com/anssip/dispatch"
-        }
+      "name": "author",
+      "values": [
+        { "env": "test", "value": "Anssi" },
+        { "env": "prod", "value": "Anssi Piirainen" }
+      ]
+    },
+    {
+      "name": "email",
+      "values": [
+        { "env": "test", "value": "api@iki.fi" },
+        { "env": "prod", "value": "anssi@dispatch.rest" }
+      ]
+    },
+    {
+      "name": "version",
+      "values": [
+        { "env": "prod", "value": "1.0" }
+      ]
+    },
+    {
+      "name": "license",
+      "values": [
+        { "env": "prod", "value": "GPL" }
       ]
     }
   ]
