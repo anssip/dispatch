@@ -114,4 +114,8 @@ describe("ContextContainer", () => {
     expect(value).to.be.null;
   })
 
+  it("should add a new environment", () => {
+    const newVars = container.addNewEnvironment();
+    console.log(`New vars: ${JSON.stringify(newVars)}`);
+  });
 });

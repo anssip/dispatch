@@ -18,11 +18,7 @@ class ContextEditor extends React.Component {
     console.log(`rendering context ${value}`);
 
     return <Wrapper>
-      <Toolbar>
-        <ButtonGroup style={{}} minimal={false} fill={false}>
-          <Button style={{ position: "absolute", top: 20, right: 0, backgroundColor: "#000" }} icon="fullscreen" small={true} onClick={R.bind(this.expand, this)} />
-        </ButtonGroup>
-      </Toolbar>
+      <Button style={{ zIndex: 10, position: "absolute", top: 70, right: 5, backgroundColor: "#000" }} icon="fullscreen" small={true} onClick={R.bind(this.expand, this)} />
 
       {this.renderEditor(value, setValue)}
 
@@ -84,8 +80,4 @@ export default connect({
 })(ContextEditor);
 
 const Wrapper = styled.div`
-`;
-
-const Toolbar = styled.div`
-  position: relative
 `;
