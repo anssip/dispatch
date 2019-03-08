@@ -6,7 +6,7 @@ const R = require('ramda');
 class ContextContainer extends Container {
   constructor(ctx = {}, vars) {
     super();
-    this.state = { isModified: false, ctx: ctx || {}, vars: vars || [], selectedEnv: null, selectedVariable: -1 };
+    this.state = { isModified: false, ctx: ctx || {}, vars: vars || [], selectedEnv: -1, selectedVariable: -1 };
   }
 
   init(ctx, vars) {
@@ -14,7 +14,7 @@ class ContextContainer extends Container {
       isModified: false, 
       ctx: ctx || {}, 
       vars: vars || [], 
-      selectedEnv: null,
+      selectedEnv: -1,
       selectedVariable: -1
     });
   }
@@ -29,6 +29,7 @@ class ContextContainer extends Container {
   }
 
   setValue(value) {
+    console.log(`ContextEditor setValue ${value}`);
     this.setState({ ctx: value});
   }
 
@@ -49,11 +50,6 @@ class ContextContainer extends Container {
     console.log(`selecting environment ${selectedEnv}`);
     this.setState({ selectedEnv });
     return this;
-  }
-
-  getSelectedEnv() {
-    console.log(`getSelectedEnv ${this.state.selectedEnv}`);
-    return this.state.selectedEnv;
   }
 
   getSelectedEnvName() {
@@ -80,11 +76,25 @@ class ContextContainer extends Container {
   /*
    * Gets all variables from the specified env.
    */
-  getEnvironment(env) {    
-    // TODO: maybe convert to Ramda
-    return this.getVariables().map(v => ({ name: v.name, value: v.values.find(v => v.env == env).value }));
+  getEnvironment(index) {    
+    const env = this.getEnvs()[index];
+    console.log(`getEnvironment '${env}'`);
+    if (! env) return {};
+
+    const getVar = v => {
+      const value = v.values.find(v => v.env == env);
+      if (! value) return {};
+      return { [v.name]: value.value };
+    };
+    return this.getVariables().reduce((acc, curr) => ({ ...acc, ...getVar(curr) }), {});
   }
 
+  getSelectedEnvironment() {
+    const envIndex = this.state.selectedEnv >= 0 ? 
+      this.state.selectedEnv :
+      (this.getEnvs().length > 0 ? 0 : -1);
+    return envIndex >= 0 ? this.getEnvironment(envIndex) : {}; 
+  }
 
   getNamePlaceholder(prefix = 'environment-') {
     if (! (this.state && this.state.envs)) return 'Default';

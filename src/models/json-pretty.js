@@ -3,8 +3,7 @@ const prettify = jsonText => {
   try {
     return JSON.stringify(JSON.parse(jsonText), null, JSON_SPACE)
   } catch (e) {
-    console.error(e);
-    return '';
+    return jsonText;
   }
 };
 

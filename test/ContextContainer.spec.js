@@ -43,6 +43,12 @@ describe("ContextContainer", () => {
     container.init({}, testVars);
   });
 
+  it("Should return the specified env as an object/dictionalry", () => {
+    const dict = container.getEnvironment(1);
+    expect(dict.appName).to.be.eq("Dispatch");
+    expect(dict.author).to.be.eq("Anssi Piirainen");
+  });
+
   it("Should return the environmets", () => {
     const envs = container.getEnvs();
     console.log(envs);

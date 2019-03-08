@@ -117,12 +117,10 @@ class RequestContainer extends Container {
   getPreview(ctx, env, value) {
     const evalObject = value => {
       let tmpValue = `let __x = ${value}; __x;`;
-      console.log(`about to eval`, tmpValue);
       tmpValue = eval(tmpValue);
-      console.log(`afer eval`, tmpValue);
       return tmpValue;
     }
-    const fill = (tmpl, ...rest) => [{ctx : evalObject(ctx)}, ...rest, env].reduce((acc, curr) => object(acc, curr), tmpl);
+    const fill = (tmpl, ...rest) => [evalObject(ctx), ...rest, env].reduce((acc, curr) => object(acc, curr), tmpl);
 
 
     // @ts-ignore
@@ -141,7 +139,7 @@ class RequestContainer extends Container {
       return result;
     } catch (e) {
       // console.error(e);
-      return null;
+      return '';
     }
   }
 }

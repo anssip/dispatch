@@ -18,7 +18,7 @@ class MainWindow extends React.Component {
   }
 
   render() {
-    const { ctx, request, getContext, getPreview } = this.props;
+    const { ctx, getEnv, request, getContext, getPreview } = this.props;
     const paneWidth = this.state.paneWidth;
     const paneHeight = this.state.paneHeight;
     // console.log(`MainWindow:: contentHeight/paneHeight ${this.state.contentHeight}/${this.state.paneHeight}`);
@@ -35,7 +35,7 @@ class MainWindow extends React.Component {
               <ResizeSensor onResize={entries => this.handleResize(entries)} >
                 <TextArea
                   large={true}
-                  value={getPreview(ctx, {}, request.body)}
+                  value={getPreview(ctx, getEnv(), request.body)}
                   defaultValue={getPreview(ctx, {}, request.body)}
                   fill={true}
                   style={{ margin: 0, width: "100%" }}
@@ -67,6 +67,7 @@ export default connect({
   selector: ({ containers }) => ({
     request: containers[0].getSelected(),
     getPreview: R.bind(containers[0].getPreview, containers[0]),
-    ctx: containers[1].getValue()
+    ctx: containers[1].getValue(),
+    getEnv: R.bind(containers[1].getSelectedEnvironment, containers[1])
   })
 })(MainWindow);

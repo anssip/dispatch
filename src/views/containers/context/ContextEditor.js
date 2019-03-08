@@ -40,7 +40,8 @@ class ContextEditor extends React.Component {
 
   renderEditor(value, setValue) {
     return <CodeEditor
-      value={jsonPrettify(value)}
+    // TODO: separate button & menu item to trigger prerrify
+      value={value}
       autoScroll={true}
       options={{
         mode: "javascript",
