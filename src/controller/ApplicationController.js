@@ -22,7 +22,9 @@ class ApplicationController {
     });
 
     ipcRenderer.on('open-recent', async (event, filename) => {
-      console.log('ApplicationController: open-project');
+      console.log(`ApplicationController: open-project ${projectContainer.isModified()}`);
+      if (! await this.saveCurrentChanges()) return;
+
       const recentFiles = await this.projectContainer.open(filename);
       if (recentFiles) {
         console.log(`sending recent files ${recentFiles}`);

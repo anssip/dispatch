@@ -65,6 +65,7 @@
     }
   },
   "envs": [
-    null
+    "test",
+    "prod"
   ]
 }

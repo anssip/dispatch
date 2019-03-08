@@ -117,5 +117,12 @@ describe("ContextContainer", () => {
   it("should add a new environment", () => {
     const newVars = container.addNewEnvironment();
     console.log(`New vars: ${JSON.stringify(newVars)}`);
+    expect(newVars[0].values.length).to.be.eq(3);
   });
+
+  it("should delete a variable", () => {
+    const newVars = container.addNewEnvironment();
+    console.log(`New vars: ${JSON.stringify(newVars)}`);
+  });
+  
 });

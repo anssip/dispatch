@@ -9,6 +9,11 @@ class RequestContainer extends Container {
     this.state = { isModified: false, requests: [] };
   }
 
+  // @ts-ignore
+  setState(state, cb) {
+    super.setState({ isModified: true, ...state }, cb);
+  }
+
   mapRequests(requests) {
     return (requests || []).map(r => typeof r.body === "string" ? r : { ...r, body: JSON.stringify(r.body) } );
   }
@@ -34,7 +39,7 @@ class RequestContainer extends Container {
   }
 
   addRequest(request) {
-    this.setState({ isModified: true, requests: [... R.map(this.cloneNonSelected, this.state.requests || []), request] });
+    this.setState({ requests: [... R.map(this.cloneNonSelected, this.state.requests || []), request] });
   }
 
   replaceSelectedRequest(replaceWith) {
@@ -125,13 +130,13 @@ class RequestContainer extends Container {
       console.log(`======> about to fill`, value);
 
       let tmpValue = evalObject(value);
-      console.log(`afer initial eval`, tmpValue);
+      // console.log(`afer initial eval`, tmpValue);
 
       tmpValue = fill(tmpValue);
-      console.log(`after ctx fill`, tmpValue);
+      // console.log(`after ctx fill`, tmpValue);
 
       const result = JSON.stringify(tmpValue, null, 2);
-      console.log(`result ${JSON.stringify(result)}`);
+      // console.log(`result ${JSON.stringify(result)}`);
 
       return result;
     } catch (e) {

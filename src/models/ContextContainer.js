@@ -1,11 +1,12 @@
 import { Container } from 'overstated'; 
+import { SourceMapGenerator } from 'source-map';
 
 const R = require('ramda');
 
 class ContextContainer extends Container {
   constructor(ctx = {}, vars) {
     super();
-    this.state = { isModified: false, ctx: ctx || {}, vars: vars || [], selectedEnv: null };
+    this.state = { isModified: false, ctx: ctx || {}, vars: vars || [], selectedEnv: null, selectedVariable: -1 };
   }
 
   init(ctx, vars) {
@@ -13,8 +14,14 @@ class ContextContainer extends Container {
       isModified: false, 
       ctx: ctx || {}, 
       vars: vars || [], 
-      selectedEnv: null 
+      selectedEnv: null,
+      selectedVariable: -1
     });
+  }
+
+  // @ts-ignore
+  setState(state, cb) {
+    super.setState({ isModified: true, ...state }, cb);
   }
 
   getValue() {
@@ -22,7 +29,7 @@ class ContextContainer extends Container {
   }
 
   setValue(value) {
-    this.setState({ isModified: true, ctx: value});
+    this.setState({ ctx: value});
   }
 
   reset() {
@@ -40,8 +47,16 @@ class ContextContainer extends Container {
 
   selectEnv(selectedEnv) {
     console.log(`selecting environment ${selectedEnv}`);
-    this.setState({ isModified: true, selectedEnv });
+    this.setState({ selectedEnv });
     return this;
+  }
+
+  selectVariable(selectedVariable) {
+    this.setState({ selectedVariable });
+  }
+
+  getSelectedVariable() {
+    return this.state.selectedVariable;
   }
 
   getEnvs() {
@@ -119,7 +134,7 @@ class ContextContainer extends Container {
         name: varProps.name || existingVar.name, 
         values: existingVar.values.find(v => v.env == env) ? existingVar.values.map(v => v.env == env ? { env, value: varProps.value || v.value } : v) : [ ...existingVar.values, { env, value: varProps.value } ]
       } : v );
-    this.setState({ isModified: true, vars: newVariables })
+    this.setState({ vars: newVariables })
     return newVariables;
   }
 
@@ -130,12 +145,23 @@ class ContextContainer extends Container {
     return value ? R.find(R.propEq("env", env), variable.values).value : null;
   }
 
+  deleteVariableAt(i) {
+    const newVariables = R.remove(i, 1, this.getVariables());
+    this.setState({ vars: newVariables});
+    return newVariables;
+  }
+
+  deleteSelectedVariable() {
+    if (this.getSelectedVariable() < 0) return;
+    return this.deleteVariableAt(this.getSelectedVariable());
+  }
+
   addEmptyVariable(name = '') {
     // const variable = R.find(R.propEq("name", name), this.getVariables());
     // if (variable) return variable;
     const newVar = { name, values: []};
     const newVariables = [ ...this.getVariables(), newVar];
-    this.setState({ isModified: true, vars: newVariables });
+    this.setState({ vars: newVariables });
     return newVariables;
   }
 
@@ -165,7 +191,7 @@ class ContextContainer extends Container {
           values: v.values.map((v, i) => v.env == prevName ? { ...v, env: name } : v) 
         }
       ));
-    this.setState({ isModified: true, vars: newVariables });
+    this.setState({ vars: newVariables });
     return newVariables;
   }
 }

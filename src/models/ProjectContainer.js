@@ -132,7 +132,9 @@ class ProjectContainer extends Container {
   }
 
   isModified() {
-    return requestContainer.isModified() || contextContainer.isModified();
+    const isModified = requestContainer.isModified() || contextContainer.isModified();
+    console.log(`ProjectContainer: isModified ? ${isModified}`);
+    return isModified;
   }
 }
 

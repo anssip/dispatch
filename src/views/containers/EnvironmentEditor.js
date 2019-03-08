@@ -5,10 +5,13 @@ import connect from 'unstated-connect2';
 import contextContainer from '../../models/ContextContainer';
 import withValueChangeDetection from "../components/Input";
 import { Column, Table, ColumnHeaderCell, EditableCell, EditableName } from "@blueprintjs/table";
+import { ERANGE } from "constants";
 
 const R = require('ramda');
 const Wrapper = styled.div`
 `;
+
+// TODO: Change this to a function component!
 
 class EnvironmentEditor extends React.Component {
   constructor(props) {
@@ -17,7 +20,7 @@ class EnvironmentEditor extends React.Component {
 
   render() {
     console.log("EnvironmentEditor", this.props);
-    const { container, environments, variables, addEnvironment } = this.props;
+    const { container, environments, variables, addEnvironment, addVariable, selectVariable, deleteVariable } = this.props;
 
     const renderCell = (env, row, col) => {
       const value = container.getVariableAt(env, row);
@@ -39,7 +42,7 @@ class EnvironmentEditor extends React.Component {
       const value = variables[row].name;
       return (
         <EditableCell
-          value={value}
+          value={typeof value == "string" ? value : ""}
           onCancel={variableNameValidator(row, col)}
           onChange={variableNameValidator(row, col)}
         />
@@ -68,20 +71,29 @@ class EnvironmentEditor extends React.Component {
     const renderEnvColumnHeader = (env, index) => {
       return <ColumnHeaderCell name={env} nameRenderer={nameEditor} />;
     };
+
+    const onSelection = (regions) => {
+      if (regions.length == 0 || ! regions[0].rows) return;
+      selectVariable(regions[0].rows[0]);
+    }
   
     // console.log(`col widths ${JSON.stringify([ 100, ...environments.map(e => 10 * e.length, 20) ])}`);
     // TODO: enable enableColumnReorderin={true}
     return (
       <Wrapper>
-        <ButtonGroup className="bp3-vertical" style={{ zIndex: 10, position: "absolute", top: 70, right: 5, backgroundColor: "#000" }} minimal={false} fill={false}>
+        <ButtonGroup className="bp3-vertical" style={{ zIndex: 10, position: "absolute", top: 70, right: 5 }} minimal={false} fill={false}>
           <Button icon="fullscreen" small={true} onClick={R.bind(this.expand, this)} />
           <Button icon="add" onClick={addEnvironment} />
         </ButtonGroup>
 
-        <Table numRows={variables.length} columnWidths={[ 100, ...environments.map(e => 100) ]} >
+        <Table numRows={variables.length} columnWidths={[ 100, ...environments.map(e => 100) ]} onSelection={onSelection} >
           <Column key='vars' cellRenderer={renderVariableNameCell} columnHeaderCellRenderer={renderVariableColumnHeader} />
           {environments.map((e, i) => <Column key={i+1} cellRenderer={R.partial(renderCell, [e])} columnHeaderCellRenderer={R.partial(renderEnvColumnHeader, [e])} />)}
         </Table>
+        <ButtonGroup style={{ marginTop: 20 }}>
+          <Button icon="add" onClick={addVariable} />
+          <Button icon="delete" onClick={deleteVariable} />
+        </ButtonGroup>
       </Wrapper>);
   }
 
@@ -91,11 +103,6 @@ class EnvironmentEditor extends React.Component {
 
   expand() {
   }
-
-  addEnvironment() {
-
-  }
-
 }
 
 export default connect({
@@ -104,7 +111,10 @@ export default connect({
     container,
     environments: container.getEnvs(),
     variables: container.getVariables(),
-    addEnvironment: R.bind(container.addNewEnvironment, container)
+    addEnvironment: R.bind(container.addNewEnvironment, container),
+    addVariable: R.bind(container.addEmptyVariable, container),
+    deleteVariable: R.bind(container.deleteSelectedVariable, container),
+    selectVariable: R.bind(container.selectVariable, container)
   })
 
 })(EnvironmentEditor);
