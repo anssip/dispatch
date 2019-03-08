@@ -5,7 +5,9 @@ import RequestViewComponent from "./RequestViewCompoent";
 import BodyView from "./body/BodyView";
 import connect from 'unstated-connect2';
 import requestContainer from '../../models/RequestContainer';
+import contextContainer from '../../models/ContextContainer';
 import withValueChangeDetection from "../components/Input";
+import Dispatcher from "../../models/Dispatcher";
 
 const R = require('ramda');
 const UrlInput = withValueChangeDetection(props => <input className="bp3-input" {...props} />, R.compose(R.prop("value"), R.prop("target")));
@@ -37,7 +39,7 @@ class RequestView extends React.Component {
   }
 
   render() {
-    const { request, paneWidth, paneHeight, setMethod, setName, setUrl } = this.props;
+    const { request, paneWidth, paneHeight, setMethod, setName, setUrl, dispatchSelected } = this.props;
 
     if (request && request.name) {
       const onMethodChange = R.compose(
@@ -54,8 +56,8 @@ class RequestView extends React.Component {
             <ControlGroup fill={true}>
               <HTMLSelect value={request.method} onChange={onMethodChange} options={METHODS} className={Classes.FIXED} />
               <UrlInput value={request.url} onChange={onUrlChange} />
-              {/* <Input value={request.url} onChange={onUrlChange} /> */}
-              <Button icon="arrow-right" className={Classes.FIXED} />
+              
+              <Button icon="arrow-right" className={Classes.FIXED} onClick={dispatchSelected}/>
             </ControlGroup>
             <NameWrapper>
               <NameInput value={request.name} onChange={onNameChange} />
@@ -79,13 +81,14 @@ class RequestView extends React.Component {
 
 // @ts-ignore
 export default connect({
-  container: requestContainer,
-  selector: ({ container, paneWidth, paneHeight }) => ({
+  containers: [requestContainer, contextContainer],
+  selector: ({ containers, paneWidth, paneHeight }) => ({
     paneWidth,
     paneHeight,
-    request: container.getSelected(),
-    setMethod: R.bind(container.setMethod, container),
-    setName: R.bind(container.setName, container),
-    setUrl: R.bind(container.setUrl, container)
+    request: containers[0].getSelected(),
+    setMethod: R.bind(containers[0].setMethod, containers[0]),
+    setName: R.bind(containers[0].setName, containers[0]),
+    setUrl: R.bind(containers[0].setUrl, containers[0]),
+    dispatchSelected: R.partial((new Dispatcher(...containers)).dispatch, [containers[0].getSelected()])
   })
 })(RequestView);

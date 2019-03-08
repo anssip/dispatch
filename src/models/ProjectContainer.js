@@ -109,6 +109,7 @@ class ProjectContainer extends Container {
     return files;
   }
 
+  // TODO: delegate to requestContainer.getPersistedData() and contextContainer.getPersistedData()
   getProjectFileData() {
     return JSON.stringify({
       requests: requestContainer.getRequests(),
