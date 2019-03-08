@@ -113,7 +113,7 @@ class ProjectContainer extends Container {
     return JSON.stringify({
       requests: requestContainer.getRequests(),
       context: contextContainer.getValue(),
-      envs: contextContainer.getEnvs()
+      vars: contextContainer.getVariables()
     }, null, 2);
   }
 

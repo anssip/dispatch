@@ -27,21 +27,14 @@
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-source",
       "headers": {},
-      "body": {
-        "req1_config": "{{ctx.source.config}}"
-      },
+      "body": "{\"req1_config\":\"{{ctx.source.config}}\"}",
       "selected": false
     },
     {
       "name": "Create foobar sink",
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-sink",
-      "body": {
-        "anotherConfig": "{{ctx.source.config}}",
-        "numFoos": {
-          "foo": 100
-        }
-      }
+      "body": "{\"anotherConfig\":\"{{ctx.source.config}}\",\"numFoos\":{\"foo\":100}}"
     }
   ],
   "context": {
@@ -64,8 +57,24 @@
       }
     }
   },
-  "envs": [
-    "test",
-    "prod"
+  "vars": [
+    {
+      "name": "name",
+      "values": [
+        {
+          "env": "prod",
+          "value": "source"
+        }
+      ]
+    },
+    {
+      "name": "address",
+      "values": [
+        {
+          "env": "prod",
+          "value": "localhost"
+        }
+      ]
+    }
   ]
 }

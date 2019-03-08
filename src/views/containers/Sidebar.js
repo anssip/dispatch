@@ -21,7 +21,7 @@ class Sidebar extends React.Component {
     this.state = { tab: "requests" }
   }
   render() {
-    const { add, selectEnv, addEnv, environments } = this.props;
+    const { add, selectEnv, addEnv, environments, selectedEnv } = this.props;
     console.log('Sidebar: environments', environments);
 
     const addClicked = () => {
@@ -44,8 +44,8 @@ class Sidebar extends React.Component {
       <BottomBar>
         <ButtonGroup minimal={false} fill={false}>
           <Button icon="add" onClick={addClicked}>Add</Button>
-          <Popover content={<EnvMenu items={environments} add={addEnv} select={selectEnv}  />} >
-            <Button rightIcon='caret-up' icon='eye-open' text='Environment' />
+          <Popover content={<EnvMenu items={environments} add={addEnv} select={selectEnv} />} >
+            <Button rightIcon='caret-up' icon='eye-open' text={selectedEnv}  />
           </Popover>
         </ButtonGroup>
       </BottomBar>
@@ -60,7 +60,7 @@ class Sidebar extends React.Component {
 
 const EnvMenu = props =>
   <Menu>
-    {props.items.map((e, i) => <MenuItem text={e} onClick={R.partial(props.select, [i])}/>)}
+    {props.items.map((e, i) => <MenuItem text={typeof e == "string" ? e : ""} onClick={R.partial(props.select, [i])}/>)}
     <MenuItem text='Add new environment' onClick={props.add} />
   </Menu>;
 
@@ -73,6 +73,7 @@ export default connect({
       env: R.bind(containers[1].addEmptyVariable, containers[1])
     },
     selectEnv: R.bind(containers[1].selectEnv, containers[1]),
+    selectedEnv: containers[1].getSelectedEnv() || (containers[1].getEnvs() || []) > 0 && containers[1].getEnvs()[0],
     addEnv: R.bind(containers[1].addNewEnvironment, containers[1]),
     environments: containers[1].getEnvs()
   })

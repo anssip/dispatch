@@ -13,5 +13,6 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 next:
 
-  - env editor in expandable (Drawer component)
-  - saving of env variables
+  - environment selection
+  - request sending
+  - non JSON requests?
