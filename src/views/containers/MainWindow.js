@@ -26,7 +26,7 @@ class MainWindow extends React.Component {
     return (
       request ?
       <ResizeSensor onResize={entries => this.handleWrapperResize(entries)} >
-        <SplitPane className="bp3-dark" split="vertical" minSize={200} defaultSize={270}>
+        <SplitPane className="bp3-dark" split="vertical" minSize={200} defaultSize={350}>
           <Sidebar />
 
           <SplitPane className="bp3-dark" split="vertical" primary="second" defaultSize={270}>

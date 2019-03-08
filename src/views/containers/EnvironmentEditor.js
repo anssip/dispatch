@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { IconName, Intent, EditableText, Text, ControlGroup, Card, Button, ButtonGroup } from "@blueprintjs/core";
+import { IconName, Intent, EditableText, Text, ControlGroup, Card, Button, ButtonGroup, Drawer } from "@blueprintjs/core";
 import connect from 'unstated-connect2';
 import contextContainer from '../../models/ContextContainer';
 import withValueChangeDetection from "../components/Input";
@@ -11,11 +11,10 @@ const R = require('ramda');
 const Wrapper = styled.div`
 `;
 
-// TODO: Change this to a function component!
-
 class EnvironmentEditor extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { isOpen: false }
   }
 
   render() {
@@ -77,15 +76,8 @@ class EnvironmentEditor extends React.Component {
       selectVariable(regions[0].rows[0]);
     }
   
-    // console.log(`col widths ${JSON.stringify([ 100, ...environments.map(e => 10 * e.length, 20) ])}`);
-    // TODO: enable enableColumnReorderin={true}
-    return (
+    const renderVariables = () => (
       <Wrapper>
-        <ButtonGroup className="bp3-vertical" style={{ zIndex: 10, position: "absolute", top: 70, right: 5 }} minimal={false} fill={false}>
-          <Button icon="fullscreen" small={true} onClick={R.bind(this.expand, this)} />
-          <Button icon="add" onClick={addEnvironment} />
-        </ButtonGroup>
-
         <Table numRows={variables.length} columnWidths={[ 100, ...environments.map(e => 100) ]} onSelection={onSelection} >
           <Column key='vars' cellRenderer={renderVariableNameCell} columnHeaderCellRenderer={renderVariableColumnHeader} />
           {environments.map((e, i) => <Column key={i+1} cellRenderer={R.partial(renderCell, [e])} columnHeaderCellRenderer={R.partial(renderEnvColumnHeader, [e])} />)}
@@ -95,6 +87,32 @@ class EnvironmentEditor extends React.Component {
           <Button icon="delete" onClick={deleteVariable} />
         </ButtonGroup>
       </Wrapper>);
+
+    return (
+      <Wrapper>
+        <ButtonGroup className="bp3-vertical" style={{ zIndex: 10, position: "absolute", top: 70, right: 5 }} minimal={false} fill={false}>
+          <Button icon="fullscreen" small={true} onClick={R.bind(this.expand, this)} />
+          <Button icon="add" onClick={addEnvironment} />
+        </ButtonGroup>
+
+        {renderVariables()} 
+
+        <Drawer 
+          className="bp3-dark"
+          transitionName=""
+          usePortal={true}
+          transitionDuration={0}
+          size={Drawer.SIZE_LARGE}
+          icon="info-sign"
+          onClose={R.bind(this.collapse, this)}
+          title="Environment Variables"
+          {...this.state}
+        >
+          <Button icon="add" onClick={addEnvironment} style={{ zIndex: 10, position: "absolute", top: 45, right: 5 }} />
+          {renderVariables()}
+        </Drawer>
+
+      </Wrapper>);
   }
 
   isValidValue(value) {
@@ -102,6 +120,10 @@ class EnvironmentEditor extends React.Component {
   }
 
   expand() {
+    this.setState({ isOpen: true });
+  }
+  collapse() {
+    this.setState({ isOpen: false });
   }
 }
 
