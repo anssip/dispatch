@@ -13,6 +13,5 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 next:
 
-  - environment selection
   - request sending
   - non JSON requests?

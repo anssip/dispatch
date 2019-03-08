@@ -51,6 +51,19 @@ class ContextContainer extends Container {
     return this;
   }
 
+  getSelectedEnv() {
+    console.log(`getSelectedEnv ${this.state.selectedEnv}`);
+    return this.state.selectedEnv;
+  }
+
+  getSelectedEnvName() {
+    return this.state.selectedEnv >= 0 ? this.getEnvs()[this.state.selectedEnv] : '';
+  }
+
+  getFirstEnvName() {
+    return this.getEnvs().length > 0 ? this.getEnvs()[0] : null;
+  }
+
   selectVariable(selectedVariable) {
     this.setState({ selectedVariable });
   }
@@ -72,9 +85,6 @@ class ContextContainer extends Container {
     return this.getVariables().map(v => ({ name: v.name, value: v.values.find(v => v.env == env).value }));
   }
 
-  getSelectedEnv() {
-    return this.state.selectEnv;
-  }
 
   getNamePlaceholder(prefix = 'environment-') {
     if (! (this.state && this.state.envs)) return 'Default';

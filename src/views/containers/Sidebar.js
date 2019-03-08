@@ -22,7 +22,7 @@ class Sidebar extends React.Component {
   }
   render() {
     const { add, selectEnv, addEnv, environments, selectedEnv } = this.props;
-    console.log('Sidebar: environments', environments);
+    console.log(`Sidebar: selectedEnv: ${selectEnv}`);
 
     const addClicked = () => {
       if (this.state.tab === "context") {
@@ -73,7 +73,7 @@ export default connect({
       env: R.bind(containers[1].addEmptyVariable, containers[1])
     },
     selectEnv: R.bind(containers[1].selectEnv, containers[1]),
-    selectedEnv: containers[1].getSelectedEnv() || (containers[1].getEnvs() || []) > 0 && containers[1].getEnvs()[0],
+    selectedEnv: containers[1].getSelectedEnvName() || containers[1].getFirstEnvName(),
     addEnv: R.bind(containers[1].addNewEnvironment, containers[1]),
     environments: containers[1].getEnvs()
   })
