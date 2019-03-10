@@ -2,6 +2,7 @@ import React from "react";
 import { EditableText, Classes, Card, ControlGroup, HTMLSelect, InputGroup, Button, Tabs, Tab } from "@blueprintjs/core";
 import styled from "styled-components";
 import RequestViewComponent from "./RequestViewCompoent";
+import ItemList from "./ItemList";
 import BodyView from "./body/BodyView";
 import connect from 'unstated-connect2';
 import requestContainer from '../../models/RequestContainer';
@@ -12,24 +13,18 @@ import Dispatcher from "../../models/Dispatcher";
 const R = require('ramda');
 const UrlInput = withValueChangeDetection(props => <input className="bp3-input" {...props} />, R.compose(R.prop("value"), R.prop("target")));
 const NameInput = withValueChangeDetection(props => <EditableText {...props} />, R.identity);
-
-// const NameInput = React.memo(props => <EditableText {...props} />);
-
 const METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
 
 const TabContainer = styled.div`
   margin-top 20px;
 `;
-
 const MainPane = styled.div`
   height: 100%;
 `;
-
 const NameWrapper = styled.h2`
   margin-top: 10px;
   text-align: left;
 `;
-
 
 class RequestView extends React.Component {
   constructor(props) {
@@ -37,9 +32,24 @@ class RequestView extends React.Component {
     this.state = { prevReq: {}, name: null };
     this.prevRequest = {};
   }
-
   render() {
-    const { request, paneWidth, paneHeight, setMethod, setName, setUrl, dispatchSelected } = this.props;
+    const { 
+      request, 
+      paneWidth, 
+      paneHeight, 
+      setMethod, 
+      setName, 
+      setUrl, 
+      dispatchSelected,
+      addParam,
+      setParamName,
+      setParamValue,
+      deleteParam,
+      addHeader,
+      setHeaderName,
+      setHeaderValue,
+      deleteHeader
+    } = this.props;
 
     if (request && request.name) {
       const onMethodChange = R.compose(
@@ -62,9 +72,15 @@ class RequestView extends React.Component {
 
             <TabContainer>
               <Tabs id="mainTabs" onChange={_ => console.log('request tab changed')} defaultSelectedTabId="body">
-                <Tab id="body" title="Body" panel={<RequestViewComponent component={<BodyView paneWidth={paneWidth} paneHeight={paneHeight} />} />} />
-                <Tab id="query" title="Query" />
-                <Tab id="headers" title="Headers" />
+                <Tab id="body" title="Body" panel={<RequestViewComponent render={<BodyView paneWidth={paneWidth} paneHeight={paneHeight} />} />} />
+                <Tab id="query" title="Query" panel={<RequestViewComponent render={
+                    // @ts-ignore
+                  <ItemList items={request.params || []} add={addParam} delete={deleteParam} setName={setParamName} setValue={setParamValue} />} />} 
+                />
+                <Tab id="headers" title="Headers" panel={<RequestViewComponent render={
+                    // @ts-ignore
+                  <ItemList items={request.headers || []} add={addHeader} delete={deleteHeader} setName={setHeaderName} setValue={setHeaderValue} />} />} 
+                />
                 <Tab id="auth" title="Auth" />
               </Tabs>
             </TabContainer>
@@ -86,6 +102,14 @@ export default connect({
     setMethod: R.bind(containers[0].setMethod, containers[0]),
     setName: R.bind(containers[0].setName, containers[0]),
     setUrl: R.bind(containers[0].setUrl, containers[0]),
+    addParam: R.bind(containers[0].addParam, containers[0]),
+    setParamName: R.bind(containers[0].setParamName, containers[0]),
+    setParamValue: R.bind(containers[0].setParamValue, containers[0]),
+    deleteParam: R.bind(containers[0].deleteParam, containers[0]),
+    addHeader: R.bind(containers[0].addHeader, containers[0]),
+    setHeaderName: R.bind(containers[0].setHeaderName, containers[0]),
+    setHeaderValue: R.bind(containers[0].setHeaderValue, containers[0]),
+    deleteHeader: R.bind(containers[0].deleteHeader, containers[0]),
     dispatchSelected: R.partial((new Dispatcher(...containers)).dispatch, [containers[0].getSelected()])
   })
 })(RequestView);

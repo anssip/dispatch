@@ -14,7 +14,7 @@ const RequestViewComponent = props =>
   <TopDivider>
     <Divider />
     <DetailContainer>
-      {props.component}
+      {props.render}
     </DetailContainer>
   </TopDivider>
   ;

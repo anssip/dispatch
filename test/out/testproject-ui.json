@@ -11,8 +11,27 @@
       "name": "Create test source",
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-source",
-      "headers": {},
       "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
       "selected": false
     },
     {
