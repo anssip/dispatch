@@ -1,5 +1,4 @@
 import { Container } from 'overstated'; 
-import { SourceMapGenerator } from 'source-map';
 
 const R = require('ramda');
 
@@ -202,8 +201,6 @@ class ContextContainer extends Container {
   }
 
   setEnvironmentName(prevName, name) {
-    // TODO: make sure we are not causing env name collisions
-    // TODO: convert below to use R ??
     const newVariables = this.getVariables().map(v => 
       (
         { 

@@ -1,35 +1,6 @@
 {
   "requests": [
     {
-      "method": "POST",
-      "name": "request-0",
-      "url": "http://echo.dispatch.rest",
-      "selected": false,
-      "body": "Heippa homot!"
-    },
-    {
-      "name": "Create test source",
-      "method": "POST",
-      "url": "https://localhost:8000/connectors/gt-source",
-      "headers": {},
-      "body": "{req1_config:\"{{ctx.source.config}}\"}",
-      "selected": false
-    },
-    {
-      "name": "Create foobar sink",
-      "method": "POST",
-      "url": "https://localhost:8000/connectors/gt-sink",
-      "body": "{\n  anotherConfig: \"{{source.config}}\",\n  numFoos:{\"foo\":1001}\n}",
-      "selected": false
-    },
-    {
-      "method": "GET",
-      "name": "testX",
-      "url": "http://echo.dispatch.rest",
-      "selected": false,
-      "body": "{\n\tblob: \"blob1\"\n}"
-    },
-    {
       "name": "Create test source",
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-source",
@@ -71,72 +42,5 @@
       }
     }
   },
-  "vars": [
-    {
-      "name": "appName",
-      "values": [
-        {
-          "env": "test",
-          "value": "Dispatch"
-        },
-        {
-          "env": "prod",
-          "value": "Dispatch"
-        }
-      ]
-    },
-    {
-      "name": "author",
-      "values": [
-        {
-          "env": "test",
-          "value": "Anssi"
-        },
-        {
-          "env": "prod",
-          "value": "Anssi Piirainen"
-        }
-      ]
-    },
-    {
-      "name": "email",
-      "values": [
-        {
-          "env": "test",
-          "value": "api@iki.fi"
-        },
-        {
-          "env": "prod",
-          "value": "anssi@dispatch.rest"
-        }
-      ]
-    },
-    {
-      "name": "version",
-      "values": [
-        {
-          "env": "prod",
-          "value": "1.0"
-        }
-      ]
-    },
-    {
-      "name": "license",
-      "values": [
-        {
-          "env": "prod",
-          "value": "GPL"
-        }
-      ]
-    },
-    {
-      "name": "username",
-      "values": [
-        {
-          "env": "test",
-          "value": "anssi"
-        }
-      ]
-    }
-  ]
+  "vars": []
 }

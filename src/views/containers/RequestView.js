@@ -43,24 +43,21 @@ class RequestView extends React.Component {
 
     if (request && request.name) {
       const onMethodChange = R.compose(
-        R.partial(setMethod, [request]),
+        setMethod,
         R.prop('value'),
         R.prop('currentTarget'));
-
-      const onUrlChange = R.partial(setUrl, [request]);      
-      const onNameChange = R.partial(setName, [request]);
 
       return (
         <MainPane>
           <Card style={{ margin: 0, paddingBottom: 0, height: "100%" }}>
             <ControlGroup fill={true}>
               <HTMLSelect value={request.method} onChange={onMethodChange} options={METHODS} className={Classes.FIXED} />
-              <UrlInput value={request.url} onChange={onUrlChange} />
+              <UrlInput value={request.url} onChange={setUrl} />
               
               <Button icon="arrow-right" className={Classes.FIXED} onClick={dispatchSelected}/>
             </ControlGroup>
             <NameWrapper>
-              <NameInput value={request.name} onChange={onNameChange} />
+              <NameInput value={request.name} onChange={setName} />
             </NameWrapper>
 
             <TabContainer>

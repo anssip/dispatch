@@ -86,7 +86,7 @@ describe("ContextContainer", () => {
     expect(newVars[2].name).to.be.eq("email");
   });
 
-  it("Should update environtment name", () => {
+  it("Should update environment name", () => {
     const newVars = container.setEnvironmentName("prod", "stage");
     console.log(JSON.stringify(newVars, null, 2));
     const envs = container.getEnvs();

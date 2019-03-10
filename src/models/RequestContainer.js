@@ -83,12 +83,10 @@ class RequestContainer extends Container {
   }
   select(index) {
     console.log(`selecting request at ${index}`);
-    const req = this.cloneNonSelected(this.state.requests[index]);
-    req.selected = true;
-    const newRequests = R.map(this.cloneNonSelected, this.state.requests);
-    this.setState({ 
-      requests: newRequests.map((r, i) => i === index ? req : r)
-    });
+    const selectedLens = R.lensProp("selected");
+    const noneSelectedRequests = R.map(R.assoc("selected", false), this.state.requests);
+    const requests = R.over(R.lensIndex(index), R.set(selectedLens, true), noneSelectedRequests);
+    return this.setState({ requests });
   }
   getSelected() {
     console.log('getSelected');
@@ -96,22 +94,84 @@ class RequestContainer extends Container {
     return R.find(R.prop('selected'))(this.state.requests) || {};
     // return selected || this.state.requests[0];
   }
-  setProp(prop, req, value) {
-    const newRequet = R.clone(req);
-    newRequet[prop] = value;
-    return this.replaceSelectedRequest(newRequet);
+  setProp(prop, value) {
+    const newReq = R.assoc(prop, value, R.clone(this.getSelected()));
+    return this.replaceSelectedRequest(newReq);
   }
-  setMethod(req, value) {
-      return this.setProp('method', req, value);
+  setMethod(value) {
+      return this.setProp('method', value);
   } 
-  setName(req, value) {
-    return this.setProp('name', req, value);
+  setName(value) {
+    return this.setProp('name', value);
   }
-  setUrl(req, value) {
-    return this.setProp('url', req, value);
+  setUrl(value) {
+    return this.setProp('url', value);
   }
-  setBody(req, value) {
-    return this.setProp('body', req, value);
+  setBody(value) {
+    return this.setProp('body', value);
+  }
+
+  _addReqComponent(component = "headers") {
+    const req = this.getSelected();
+    if (! req) throw new Error("No request selected");
+
+    const newValues = R.append({ name: null, value: null }, req[component] || []);
+    const newReq = R.assoc(component, newValues, req);
+    this.replaceSelectedRequest(newReq);
+    return newReq;
+  }
+
+  _setCompProp(index, prop, value, component = "headers") {
+    const req = this.getSelected();
+    if (! req) throw new Error("No request selected");
+    if (! req[component] || req[component].length < index) return;
+
+    const newValues = R.over(R.lensIndex(index), R.assoc(prop, value), req[component]);
+    const newReq = R.assoc(component, newValues, req);
+    this.replaceSelectedRequest(newReq);
+    return newReq;
+  }
+
+  _deleteComp(index, component = "headers") {
+    const req = this.getSelected();
+    if (! req) return;
+    if (! req[component] || req[component].length < index) return;
+
+    const newReq = R.assoc(component, R.remove(index, 1, req[component]), req);
+    this.replaceSelectedRequest(newReq);
+    return newReq;
+  }
+
+  addHeader() {
+    return this._addReqComponent();
+  }
+
+  setHeaderName(index, name) {
+    return this._setCompProp(index, "name", name);
+  }
+
+  setHeaderValue(index, value) {
+    return this._setCompProp(index, "value", value);
+  }
+
+  deleteHeader(index) {
+    this._deleteComp(index);
+  }
+
+  addParam() {
+    return this._addReqComponent("params");
+  }
+
+  setParamName(index, name) {
+    return this._setCompProp(index, "name", name, "params");
+  }
+
+  setParamValue(index, value) {
+    return this._setCompProp(index, "value", value, "params");
+  }
+
+  deleteParam(index) {
+    this._deleteComp(index, "params");
   }
 
   getPreview(ctx, env, value) {
