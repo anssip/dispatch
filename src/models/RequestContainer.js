@@ -111,11 +111,11 @@ class RequestContainer extends Container {
     return this.setProp('body', value);
   }
 
-  _addReqComponent(component = "headers") {
+  _addReqComponent({component = "headers", name = null, value = null}) {
     const req = this.getSelected();
     if (! req) throw new Error("No request selected");
 
-    const newValues = R.append({ name: null, value: null }, req[component] || []);
+    const newValues = R.append({ name, value }, req[component] || []);
     const newReq = R.assoc(component, newValues, req);
     this.replaceSelectedRequest(newReq);
     return newReq;
@@ -125,6 +125,9 @@ class RequestContainer extends Container {
     const req = this.getSelected();
     if (! req) throw new Error("No request selected");
     if (! req[component] || req[component].length < index) return;
+    if (req[component].length <= index) {
+      return this._addReqComponent({ component, [prop]: value });
+    }
 
     const newValues = R.over(R.lensIndex(index), R.assoc(prop, value), req[component]);
     const newReq = R.assoc(component, newValues, req);
@@ -143,7 +146,7 @@ class RequestContainer extends Container {
   }
 
   addHeader() {
-    return this._addReqComponent();
+    return this._addReqComponent({});
   }
 
   setHeaderName(index, name) {
@@ -159,10 +162,11 @@ class RequestContainer extends Container {
   }
 
   addParam() {
-    return this._addReqComponent("params");
+    return this._addReqComponent({ component: "params" });
   }
 
   setParamName(index, name) {
+    console.log(`setParamName ${index}: `, name);
     return this._setCompProp(index, "name", name, "params");
   }
 

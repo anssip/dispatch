@@ -15,8 +15,8 @@ const withValueChangeDetection = (InputComponent, mapValue) => {
     }
   
     onChange(evt) {
+      console.log("Input: evt = ", evt);
       const value = mapValue(evt);
-      console.log(`Input: evt.target.value = ${value}`);
       this.setState({ value: value }, () => this.props.onChange(value));
     }
   

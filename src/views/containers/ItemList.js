@@ -5,23 +5,37 @@ import RequestComp from "../components/RequestComp";
 const R = require('ramda');
 
 
-const addItem = items => {
-
+const addItem = ref => {
+  console.log("addItem", ref);
+  if (ref.current) {
+    ref.current.focus();
+  }
 };
 
 function ItemList(props) {
-  const inputEl = useRef(null);
+  // const ref = useRef(null);
+  const nameRef = React.createRef();
+  const valueRef = React.createRef();
+
+  const { items, setName, setValue } = props;
 
   return <div>
-    {props.items.map((item, index) =>
+    {items.map((item, index) =>
       <RequestComp
+        ref={index == items.length-1 ? { nameRef, valueRef } : null }
         component={item}
         {...props}
-        setName={R.partial(props.setName, [index])}
-        setValue={R.partial(props.setValue, [index])}
+        setName={R.partial(setName, [index])}
+        setValue={R.partial(setValue, [index])}
       />)}
 
-    <RequestComp component={ { name: "Add parameter name", value: "Add parameter value" } } {...props} setName={props.add} setValue={props.add} />
+    {/* TODO: Don't use RequestComp for these dummy rows   */}
+    <RequestComp 
+      component={ { name: "Add parameter name", value: "Add parameter value" } } 
+      {...props} 
+      setName={val => addItem(nameRef)}
+      setValue={val => addItem(valueRef)}
+    />
   </div>
 };
 
