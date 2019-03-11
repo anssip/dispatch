@@ -21,6 +21,8 @@ const RequestComp = React.forwardRef((props, ref) => {
     <ControlGroup fill={true}>
       <Input forwardedRef={nameRef} value={component.name} onChange={setName} />
       <Input forwardedRef={valueRef} value={component.value} onChange={setValue} />
+
+      {/* // TODO: add a delete button */}
     </ControlGroup>
   </Wrapper>
 });
