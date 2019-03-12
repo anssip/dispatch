@@ -75,11 +75,11 @@ class RequestView extends React.Component {
                 <Tab id="body" title="Body" panel={<RequestViewComponent render={<BodyView paneWidth={paneWidth} paneHeight={paneHeight} />} />} />
                 <Tab id="query" title="Query" panel={<RequestViewComponent render={
                     // @ts-ignore
-                  <ItemList items={request.params || []} add={addParam} delete={deleteParam} setName={setParamName} setValue={setParamValue} />} />} 
+                  <ItemList items={request.params || []} add={addParam} del={deleteParam} setName={setParamName} setValue={setParamValue} />} />} 
                 />
                 <Tab id="headers" title="Headers" panel={<RequestViewComponent render={
                     // @ts-ignore
-                  <ItemList items={request.headers || []} add={addHeader} delete={deleteHeader} setName={setHeaderName} setValue={setHeaderValue} />} />} 
+                  <ItemList items={request.headers || []} add={addHeader} del={deleteHeader} setName={setHeaderName} setValue={setHeaderValue} />} />} 
                 />
                 <Tab id="auth" title="Auth" />
               </Tabs>

@@ -37,7 +37,7 @@ class ItemList extends React.PureComponent {
     }
   }
   render() {
-    const { items, setName, setValue, add } = this.props;
+    const { items, setName, setValue, del} = this.props;
     const placeholderProps = [
       { label: "Add parameter name", setter: setName, ref: this.nameRef },
       { label: "Add parameter value", setter: setValue, ref: this.valueRef }
@@ -50,6 +50,7 @@ class ItemList extends React.PureComponent {
           {...this.props}
           setName={value => this.setName(index, value)}
           setValue={value => this.setValue(index, value)}
+          del={R.partial(del, [index])}
         />)}
       <ControlGroup fill={true}>
         {placeholderProps.map(p => 
