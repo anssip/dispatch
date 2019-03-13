@@ -12,7 +12,14 @@ describe("RequestContainer", () => {
       "name": "request-0",
       "url": "http://echo.dispatch.rest",
       "selected": false,
-      "body": "Heippa homot!"
+      "body": "Heippa homot!",      
+      "auth": {
+        "selected": "basic",
+        "basic": {
+          "username": "anssi",
+          "password": "secret"
+        }
+      }
     },
     {
       "name": "Create test source",
@@ -100,6 +107,14 @@ describe("RequestContainer", () => {
     expect(req.params.length).to.be.eq(1);
     expect(req.params[0].name).to.be.eq("param2");
     expect(req.params[0].value).to.be.eq("value2");
+  });
+
+  describe("Auth", () => {
+    it("should add basic auth username", () => {
+      container.select(1);
+      const req = container.setAuthProp("basic", "username", "carlos");
+      print(req);
+    });
   });
 
 });

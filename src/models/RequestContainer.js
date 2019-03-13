@@ -13,35 +13,27 @@ class RequestContainer extends Container {
   setState(state, cb) {
     super.setState({ isModified: true, ...state }, cb);
   }
-
   mapRequests(requests) {
     return (requests || []).map(r => typeof r.body === "string" ? r : { ...r, body: JSON.stringify(r.body) } );
   }
-
   init(requests) {
     this.setState({ isModified: false, requests: this.mapRequests(requests) });
   }
-
   reset() {
     this.setState({ isModified: false, requests: [] });
   }
-
   setModified(isModified) {
     this.setState({ isModified });
   }
-
   isModified() {
     return this.state.isModified;
   }
-
   addNewRequest() {
     this.addRequest(this.createEmptyRequest());
   }
-
   addRequest(request) {
     this.setState({ requests: [... R.map(this.cloneNonSelected, this.state.requests || []), request] });
   }
-
   replaceSelectedRequest(replaceWith) {
     return this.setState({ 
       isModified: true,
@@ -54,7 +46,6 @@ class RequestContainer extends Container {
   getItems() {
     return this.getRequests();
   }
-
   getRequestCount() {
     return this.getRequests().length;
   }
@@ -110,7 +101,6 @@ class RequestContainer extends Container {
   setBody(value) {
     return this.setProp('body', value);
   }
-
   _addReqComponent({component = "headers", name = null, value = null}) {
     const req = this.getSelected();
     if (! req) throw new Error("No request selected");
@@ -120,7 +110,6 @@ class RequestContainer extends Container {
     this.replaceSelectedRequest(newReq);
     return newReq;
   }
-
   _setCompProp(index, prop, value, component = "headers") {
     const req = this.getSelected();
     if (! req) throw new Error("No request selected");
@@ -134,7 +123,6 @@ class RequestContainer extends Container {
     this.replaceSelectedRequest(newReq);
     return newReq;
   }
-
   _deleteComp(index, component = "headers") {
     const req = this.getSelected();
     if (! req) return;
@@ -144,40 +132,41 @@ class RequestContainer extends Container {
     this.replaceSelectedRequest(newReq);
     return newReq;
   }
-
   addHeader() {
     return this._addReqComponent({});
   }
-
   setHeaderName(index, name) {
     return this._setCompProp(index, "name", name);
   }
-
   setHeaderValue(index, value) {
     return this._setCompProp(index, "value", value);
   }
-
   deleteHeader(index) {
     this._deleteComp(index);
   }
-
   addParam() {
     return this._addReqComponent({ component: "params" });
   }
-
   setParamName(index, name) {
     console.log(`setParamName ${index}: `, name);
     return this._setCompProp(index, "name", name, "params");
   }
-
   setParamValue(index, value) {
     return this._setCompProp(index, "value", value, "params");
   }
-
   deleteParam(index) {
     this._deleteComp(index, "params");
   }
-
+  setAuthProp(authType, prop, value) {
+    const req = this.getSelected();
+    if (! req) return;
+    const authPropsForType = req.auth && req.auth[authType] || {};
+    const newAuth = R.assoc(authType, R.assoc(prop, value, authPropsForType), req.auth || {});
+    const newReq = R.assoc("auth", newAuth, req);
+    console.log(`setAuthProp: new request ${JSON.stringify(newReq)}`);
+    this.replaceSelectedRequest(newReq);
+    return newReq;
+  }
   getPreview(ctx, env, value) {
     const evalObject = value => {
       let tmpValue = `let __x = ${value}; __x;`;
@@ -185,21 +174,15 @@ class RequestContainer extends Container {
       return tmpValue;
     }
     const fill = (tmpl, ...rest) => [evalObject(ctx), ...rest, env].reduce((acc, curr) => object(acc, curr), tmpl);
-
-
     // @ts-ignore
     try {
       console.log(`======> about to fill`, value);
-
       let tmpValue = evalObject(value);
       // console.log(`afer initial eval`, tmpValue);
-
       tmpValue = fill(tmpValue);
       // console.log(`after ctx fill`, tmpValue);
-
       const result = JSON.stringify(tmpValue, null, 2);
       // console.log(`result ${JSON.stringify(result)}`);
-
       return result;
     } catch (e) {
       // console.error(e);

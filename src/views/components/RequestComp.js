@@ -21,9 +21,7 @@ const RequestComp = React.forwardRef((props, ref) => {
     <ControlGroup fill={true}>
       <Input forwardedRef={nameRef} value={component.name} onChange={setName} />
       <Input forwardedRef={valueRef} value={component.value} onChange={setValue} />
-      <Button icon="delete" minimal={true} style={{backgroundColor: "#293742"}} className={Classes.FIXED} onClick={del}/>
-
-      {/* // TODO: add a delete button */}
+      <Button icon="delete" style={{backgroundColor: "#293742"}} className={Classes.FIXED} onClick={del}/>
     </ControlGroup>
   </Wrapper>
 });

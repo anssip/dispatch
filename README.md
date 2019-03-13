@@ -13,9 +13,9 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 next:
 
-  - QueryView: List with params' name & nalue, and with env filling
-  - HeadersEditor: List with headers' name & nalue, and with env filling
-  - AuthView: later (?) or with basic auth to begin with
+  - Auth: Basic auth, Bearer token, later: OAuth 2
   - request sending
   - non JSON requests?
+  
+
   
