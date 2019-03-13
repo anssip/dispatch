@@ -17,7 +17,7 @@ describe("RequestContainer", () => {
         "selected": "basic",
         "basic": {
           "username": "anssi",
-          "password": "secret"
+          "password": "secretx"
         }
       }
     },
@@ -110,10 +110,35 @@ describe("RequestContainer", () => {
   });
 
   describe("Auth", () => {
-    it("should add basic auth username", () => {
+    it("should add basic auth username to a request without any existing auth", () => {
       container.select(1);
       const req = container.setAuthProp("basic", "username", "carlos");
       print(req);
+      expect(req.auth.basic.username).to.be.eq("carlos");
+      expect(req.auth.basic.password).to.be.undefined;
+    });
+    it("should update basic auth username", () => {
+      container.select(0);
+      const req = container.setAuthProp("basic", "username", "hank");
+      print(req);
+      expect(req.auth.basic.username).to.be.eq("hank");
+      expect(req.auth.basic.password).to.be.eq("secretx");
+    });
+    it("should add a second auth type", () => {
+      container.select(0);
+      const req = container.setAuthProp("bearer", "token", "123");
+      print(req);
+      expect(req.auth.basic.username).to.be.eq("anssi");
+      expect(req.auth.basic.password).to.be.eq("secretx");
+      expect(req.auth.bearer.token).to.be.eq("123");
+    });
+    it("should change the selected auth type", () => {
+      container.select(0);
+      const req = container.setAuthType("bearer");
+      expect(req.auth.basic.username).to.be.eq("anssi");
+      expect(req.auth.basic.password).to.be.eq("secretx");
+      expect(req.auth.selected).to.be.eq("bearer");
+
     });
   });
 

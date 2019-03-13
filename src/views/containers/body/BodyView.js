@@ -1,7 +1,6 @@
 import React from "react";
 import { FormGroup, Text, Classes, Card, ControlGroup, HTMLSelect, InputGroup, Button, Tabs, Tab } from "@blueprintjs/core";
 import styled from "styled-components";
-import { template } from "handlebars";
 import BodyEditor from "./BodyEditor";
 
 
@@ -24,7 +23,7 @@ class BodyView extends React.Component {
       <div>
         <FormGroup
           label="Type"
-          labelFor="templateSelect"
+          labelFor="contentTypeSelect"
           inline={true}
         >
           <HTMLSelect 

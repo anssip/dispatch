@@ -167,6 +167,19 @@ class RequestContainer extends Container {
     this.replaceSelectedRequest(newReq);
     return newReq;
   }
+  setAuthType(authType) {
+    const req = this.getSelected();
+    if (! req) return;
+    const newAuth = R.assoc("selected", authType, req.auth || {});
+    const newReq = R.assoc("auth", newAuth, req);
+    this.replaceSelectedRequest(newReq);
+    return newReq;
+  }
+  getAuthType() {
+    const req = this.getSelected();
+    if (! (req && req.auth)) return "none";
+    return req.auth.selected || "none";
+  }
   getPreview(ctx, env, value) {
     const evalObject = value => {
       let tmpValue = `let __x = ${value}; __x;`;

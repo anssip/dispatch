@@ -4,6 +4,7 @@ import styled from "styled-components";
 import RequestViewComponent from "./RequestViewCompoent";
 import ItemList from "./ItemList";
 import BodyView from "./body/BodyView";
+import AuthView from "./auth/AuthView";
 import connect from 'unstated-connect2';
 import requestContainer from '../../models/RequestContainer';
 import contextContainer from '../../models/ContextContainer';
@@ -81,7 +82,7 @@ class RequestView extends React.Component {
                     // @ts-ignore
                   <ItemList items={request.headers || []} add={addHeader} del={deleteHeader} setName={setHeaderName} setValue={setHeaderValue} />} />} 
                 />
-                <Tab id="auth" title="Auth" />
+                <Tab id="auth" title="Auth" panel={<RequestViewComponent render={<AuthView />} />} />
               </Tabs>
             </TabContainer>
           </Card>
