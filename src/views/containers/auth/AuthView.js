@@ -3,6 +3,7 @@ import { FormGroup, Text, Classes, Card, ControlGroup, HTMLSelect, InputGroup, B
 import styled from "styled-components";
 import connect from "unstated-connect2";
 import requestContainer from "../../../models/RequestContainer";
+import BasicAuthForm from "./BasicAuthForm";
 
 const R = require("ramda");
 const Wrapper = styled.div`
@@ -32,6 +33,7 @@ class AuthView extends React.PureComponent {
           />
         </FormGroup>
         <Wrapper>
+          <BasicAuthForm />
           {/* TODO: render a type specific view based on selected type */}
         </Wrapper>
       </div>);

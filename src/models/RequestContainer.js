@@ -180,6 +180,12 @@ class RequestContainer extends Container {
     if (! (req && req.auth)) return "none";
     return req.auth.selected || "none";
   }
+  getAuthProps(authType) {
+    const req = this.getSelected();
+    if (! req) return null;
+    if (! req.auth) return { [authType]: {} };
+    return req.auth[authType] || {};
+  }
   getPreview(ctx, env, value) {
     const evalObject = value => {
       let tmpValue = `let __x = ${value}; __x;`;
