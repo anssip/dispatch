@@ -13,6 +13,17 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 next:
 
+### OAuth2Form
+
+In OAuth 2.0, the term “grant type” refers to the way an application gets an access token.
+
+### Authorization code flow
+
+[What is the OAuth 2.0 Authorization Code Grant Type?](https://developer.okta.com/blog/2018/04/10/oauth-authorization-code-grant-type)
+
+
+
+
   - Auth: Basic auth, Bearer token, later: OAuth 2
   - request sending
   - non JSON requests?
