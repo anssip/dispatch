@@ -39,7 +39,14 @@
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-sink",
       "body": "{\n  anotherConfig: \"{{source.config}}\",\n  numFoos:{\"foo\":1001}\n}",
-      "selected": true
+      "selected": true,
+      "auth": {
+        "basic": {
+          "username": "anssssip",
+          "password": "asssldfjoiweqgeb"
+        },
+        "selected": "basic"
+      }
     },
     {
       "method": "GET",
