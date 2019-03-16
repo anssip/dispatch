@@ -50,7 +50,10 @@
           "clientSecret": "secret2",
           "authorizationUrl": "http://authme.org/auth",
           "accessTokenUrl": "http://authme.org/tokens",
-          "redirectUrl": "https://dispatch.rest/welcome"
+          "redirectUrl": "https://dispatch.rest/welcome",
+          "access_token": "e43890c9fbbf138f68b9dc8a485f424cef3ea583",
+          "token_type": "bearer",
+          "token_scope": ""
         },
         "selected": "oAuth2"
       }

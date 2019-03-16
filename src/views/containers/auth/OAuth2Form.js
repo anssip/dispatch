@@ -14,7 +14,7 @@ import connect from "unstated-connect2";
 import requestContainer from "../../../models/RequestContainer";
 import withValueChangeDetection from "../../components/Input";
 import createAuthWindow from "./oauth2/auth-window";
-import { get } from "http";
+import authService from "../../../models/oauth2";
 
 const R = require("ramda");
 const FormField = withValueChangeDetection(
@@ -28,12 +28,7 @@ const FormField = withValueChangeDetection(
 class OAuth2Form extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { tokens: null };
-  }
-  async getTokens() {
-    const tokens = await createAuthWindow();
-    console.log("Got tokens!", tokens);
-    this.setState({ tokens });
+    this.state = { error: null };
   }
 
   render() {
@@ -47,8 +42,52 @@ class OAuth2Form extends PureComponent {
       accessTokenUrl,
       setAccessTokenUrl,
       redirectUrl,
-      setRedirectUrl
+      setRedirectUrl,
+      access_token,
+      refresh_token,
+      token_type,
+      token_scope,
+      scope,
+      set_access_token,
+      set_refresh_token,
+      set_token_type,
+      set_scope
     } = this.props;
+
+    const storeTokens = tokens => {
+      console.log("Got tokens!", tokens);
+      /*
+          {
+           "access_token":"2YotnFZFEjr1zCsicMWpAA",
+           "token_type":"example",
+           "expires_in":3600,
+           "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
+           "example_parameter":"example_value"
+         }
+        */
+      const setters = {
+        access_token: set_access_token,
+        refresh_token: set_refresh_token,
+        token_type: set_token_type,
+        scope: set_scope
+      };
+      R.forEach(
+        key => R.prop(key, setters)(R.prop(key, tokens)),
+        R.keys(setters)
+      );
+    };
+    const getTokensAndHandleError = async fetchFunc => {
+      try {
+        storeTokens(await fetchFunc());
+      } catch (error) {
+        this.setState({ error });
+      }
+    };
+    const getTokens = R.partial(getTokensAndHandleError, [createAuthWindow]);
+    const refreshToken = R.partial(getTokensAndHandleError, [
+      authService.refreshTokens
+    ]);
+
     return (
       <>
         <label class="bp3-label">
@@ -107,14 +146,20 @@ class OAuth2Form extends PureComponent {
           />
         </label>
         <ControlGroup>
-          <Button text="Fetch token" onClick={R.bind(this.getTokens, this)} />
-          <Button text="Refresh token" onClick={R.bind(this.getTokens, this)} />
+          <Button text="Fetch token" onClick={getTokens} />
+          {refresh_token ? (
+            <Button text="Refresh token" onClick={refreshToken} />
+          ) : (
+            <Button text="Refresh token" disabled />
+          )}
         </ControlGroup>
         <TextArea
+          style={{ height: "100px" }}
           fill={true}
-          value={
-            this.state.tokens ? JSON.stringify(this.state.tokens, null, 2) : ""
-          }
+          value={`access_token: ${access_token || ""}
+token_type: ${token_type || ""}
+refresh_token: ${refresh_token || ""}
+scope: ${token_scope || ""}`}
         />
       </>
     );
@@ -135,12 +180,24 @@ export default connect({
       authorizationUrl: oAuthProps.authorizationUrl,
       accessTokenUrl: oAuthProps.accessTokenUrl,
       redirectUrl: oAuthProps.redirectUrl,
+      scope: oAuthProps.scope,
 
       setClientId: R.partial(setOAuthProp, ["clientId"]),
       setClientSecret: R.partial(setOAuthProp, ["clientSecret"]),
       setAccessTokenUrl: R.partial(setOAuthProp, ["accessTokenUrl"]),
       setAuthorizationUrl: R.partial(setOAuthProp, ["authorizationUrl"]),
-      setRedirectUrl: R.partial(setOAuthProp, ["redirectUrl"])
+      setRedirectUrl: R.partial(setOAuthProp, ["redirectUrl"]),
+      setScope: R.partial(setOAuthProp, ["scope"]),
+
+      access_token: oAuthProps.access_token,
+      refresh_token: oAuthProps.refresh_token,
+      token_type: oAuthProps.token_type,
+      token_scope: oAuthProps.token_scope,
+
+      set_access_token: R.partial(setOAuthProp, ["access_token"]),
+      set_refresh_token: R.partial(setOAuthProp, ["refresh_token"]),
+      set_token_type: R.partial(setOAuthProp, ["token_type"]),
+      set_scope: R.partial(setOAuthProp, ["token_scope"])
     };
   }
 })(OAuth2Form);

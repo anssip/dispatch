@@ -1,5 +1,3 @@
-// this window should load the Authorization URL
-
 import authService from "../../../../models/oauth2";
 const { BrowserWindow } = window.require("electron").remote;
 // const createAppWindow = require('../main/app-process');

@@ -1,16 +1,10 @@
 const jwtDecode = require("jwt-decode");
 const request = require("request");
 const url = require("url");
-// const envVariables = require('../env-variables');
 const keytar = window.require("keytar");
 const os = window.require("os");
 
-// const {apiIdentifier, auth0Domain, clientId} = envVariables;
-
 const redirectUri = `https://dispatch.rest/callback`;
-// const redirectUri = `http://localhost:3000/callback`;
-// const redirectUri = `file:///callback`;
-
 const keytarService = "electron-openid-oauth";
 const keytarAccount = os.userInfo().username;
 
@@ -24,7 +18,7 @@ function refreshTokens() {
   return new Promise(async (resolve, reject) => {
     const refreshToken = await keytar.getPassword(keytarService, keytarAccount);
 
-    if (!refreshToken) return reject();
+    if (!refreshToken) return reject("Refresh token not");
 
     // TODO: change to use the AUTH TOKEN URL supplied in the
     const refreshOptions = {
@@ -44,9 +38,7 @@ function refreshTokens() {
         logout();
         return reject(error || body.error);
       }
-
       accessToken = body.access_token;
-
       resolve();
     });
   });
