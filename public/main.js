@@ -16,7 +16,7 @@ require("update-electron-app")({
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
-    width: 900, 
+    width: 900,
     height: 680
   });
   mainWindow.loadURL(
@@ -25,11 +25,11 @@ const createWindow = () => {
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
   mainWindow.on("closed", () => (mainWindow = null));
-}
+};
 
 const createMenu = () => {
   new MenuBuilder(mainWindow).createMenus();
-}
+};
 
 app.on("ready", () => {
   createWindow();

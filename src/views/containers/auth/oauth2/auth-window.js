@@ -1,7 +1,7 @@
 // this window should load the Authorization URL
 
-const authService = require("../../../../models/oauth2");
-const { BrowserWindow } = require("electron").remote;
+import authService from "../../../../models/oauth2";
+const { BrowserWindow } = window.require("electron").remote;
 // const createAppWindow = require('../main/app-process');
 
 let win = null;
@@ -13,7 +13,7 @@ function getAuthenticationURL() {
     "scope=&" +
     "response_type=code&" +
     "client_id=e1d3feefab9a06198e33&" +
-    "redirect_uri=https://dispatch.rest/redirect"
+    "redirect_uri=https://dispatch.rest/callback"
   );
 }
 
@@ -24,6 +24,7 @@ function destroyAuthWin() {
 }
 
 function createAuthWindow() {
+  console.log("createAuthWindow()");
   destroyAuthWin();
 
   // Create the browser window.
@@ -35,30 +36,34 @@ function createAuthWindow() {
     }
   });
 
-  win.loadURL(authService.getAuthenticationURL());
+  console.log(`loading URL ${getAuthenticationURL()}`);
+  win.loadURL(getAuthenticationURL());
 
-  const {
-    session: { webRequest }
-  } = win.webContents;
+  return new Promise((resolve, reject) => {
+    const {
+      session: { webRequest }
+    } = win.webContents;
+    const filter = {
+      urls: ["https://dispatch.rest/*"]
+    };
+    webRequest.onBeforeRequest(filter, async ({ url }) => {
+      console.log(`onBeforeRequest() url: ${url}`);
+      const tokens = await authService.loadTokens(url);
+      destroyAuthWin();
+      resolve(tokens);
+    });
 
-  const filter = {
-    urls: ["file:///callback*"]
-  };
+    win.on("authenticated", () => {
+      console.log("Authenticated!!!!");
+      destroyAuthWin();
+      reject();
+    });
 
-  webRequest.onBeforeRequest(filter, async ({ url }) => {
-    await authService.loadTokens(url);
-    // createAppWindow();
-    return destroyAuthWin();
-  });
-
-  win.on("authenticated", () => {
-    console.log("Authenticated!!!!");
-    destroyAuthWin();
-  });
-
-  win.on("closed", () => {
-    win = null;
+    win.on("closed", () => {
+      win = null;
+      reject();
+    });
   });
 }
 
-module.exports = createAuthWindow;
+export default createAuthWindow;

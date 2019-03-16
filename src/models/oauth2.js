@@ -2,26 +2,22 @@ const jwtDecode = require("jwt-decode");
 const request = require("request");
 const url = require("url");
 // const envVariables = require('../env-variables');
-const keytar = require("keytar");
-const os = require("os");
+const keytar = window.require("keytar");
+const os = window.require("os");
 
 // const {apiIdentifier, auth0Domain, clientId} = envVariables;
 
-const redirectUri = `file:///callback`;
+const redirectUri = `https://dispatch.rest/callback`;
+// const redirectUri = `http://localhost:3000/callback`;
+// const redirectUri = `file:///callback`;
 
 const keytarService = "electron-openid-oauth";
 const keytarAccount = os.userInfo().username;
 
 let accessToken = null;
-let profile = null;
-let refreshToken = null;
 
 function getAccessToken() {
   return accessToken;
-}
-
-function getProfile() {
-  return profile;
 }
 
 function refreshTokens() {
@@ -50,7 +46,6 @@ function refreshTokens() {
       }
 
       accessToken = body.access_token;
-      profile = jwtDecode(body.id_token);
 
       resolve();
     });
@@ -58,6 +53,7 @@ function refreshTokens() {
 }
 
 function loadTokens(callbackURL) {
+  console.log("loadTokens");
   return new Promise((resolve, reject) => {
     const urlParts = url.parse(callbackURL, true);
     const query = urlParts.query;
@@ -65,6 +61,7 @@ function loadTokens(callbackURL) {
     const exchangeOptions = {
       grant_type: "authorization_code",
       client_id: "e1d3feefab9a06198e33",
+      client_secret: "e5e33fd730ad073494513bb4e003af0237d80212",
       code: query.code,
       redirect_uri: redirectUri
     };
@@ -74,25 +71,24 @@ function loadTokens(callbackURL) {
       method: "POST",
       url: `https://github.com/login/oauth/access_token`,
       headers: {
-        "content-type": "application/json"
+        "content-type": "application/json",
+        Accept: "application/json"
       },
       body: JSON.stringify(exchangeOptions)
     };
 
     request(options, (error, resp, body) => {
+      console.log(body);
       if (error || body.error) {
         logout();
         return reject(error || body.error);
       }
-
       const responseBody = JSON.parse(body);
-      accessToken = responseBody.access_token;
-      profile = jwtDecode(responseBody.id_token);
-      refreshToken = responseBody.refresh_token;
-
-      keytar.setPassword(keytarService, keytarAccount, refreshToken);
-
-      resolve();
+      const refreshToken = responseBody.refresh_token;
+      if (refreshToken) {
+        keytar.setPassword(keytarService, keytarAccount, refreshToken);
+      }
+      resolve(responseBody);
     });
   });
 }
@@ -100,13 +96,10 @@ function loadTokens(callbackURL) {
 async function logout() {
   await keytar.deletePassword(keytarService, keytarAccount);
   accessToken = null;
-  profile = null;
-  refreshToken = null;
 }
 
-module.exports = {
+export default {
   getAccessToken,
-  getProfile,
   loadTokens,
   logout,
   refreshTokens

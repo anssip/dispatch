@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import {
   FormGroup,
-  Text,
+  TextArea,
   Classes,
   Card,
   ControlGroup,
@@ -13,6 +13,8 @@ import styled from "styled-components";
 import connect from "unstated-connect2";
 import requestContainer from "../../../models/RequestContainer";
 import withValueChangeDetection from "../../components/Input";
+import createAuthWindow from "./oauth2/auth-window";
+import { get } from "http";
 
 const R = require("ramda");
 const FormField = withValueChangeDetection(
@@ -24,6 +26,16 @@ const FormField = withValueChangeDetection(
 );
 
 class OAuth2Form extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = { tokens: null };
+  }
+  async getTokens() {
+    const tokens = await createAuthWindow();
+    console.log("Got tokens!", tokens);
+    this.setState({ tokens });
+  }
+
   render() {
     const {
       clientId,
@@ -94,6 +106,16 @@ class OAuth2Form extends PureComponent {
             dir="auto"
           />
         </label>
+        <ControlGroup>
+          <Button text="Fetch token" onClick={R.bind(this.getTokens, this)} />
+          <Button text="Refresh token" onClick={R.bind(this.getTokens, this)} />
+        </ControlGroup>
+        <TextArea
+          fill={true}
+          value={
+            this.state.tokens ? JSON.stringify(this.state.tokens, null, 2) : ""
+          }
+        />
       </>
     );
   }

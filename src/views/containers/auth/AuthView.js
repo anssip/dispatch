@@ -23,11 +23,13 @@ const Wrapper = styled.div`
 `;
 
 const authOptions = [
-  { id: "none", label: "", component: "" },
+  { id: "none", label: "none", component: "" },
   { id: "basic", label: "Basic", component: <BasicAuthForm /> },
   { id: "bearer", label: "Bearer", component: "" },
   { id: "oAuth2", label: "OAuth 2.0", component: <OAuth2Form /> }
 ];
+
+const idFromLabel = label => R.find(R.propEq("label", label))(authOptions).id;
 
 class AuthView extends React.PureComponent {
   constructor(props) {
@@ -35,6 +37,9 @@ class AuthView extends React.PureComponent {
   }
   render() {
     const { authType, setAuthType } = this.props;
+    const selectedAuth = R.find(R.propEq("id", authType || "none"))(
+      authOptions
+    );
     return (
       <div>
         <FormGroup label="Type" labelFor="authTypeSelect">
@@ -43,14 +48,11 @@ class AuthView extends React.PureComponent {
             onChange={setAuthType}
             id="authTypeSelect"
             options={R.map(R.prop("label"), authOptions)}
-            value={authType}
+            value={selectedAuth.label}
             className={Classes.FIXED}
           />
         </FormGroup>
-        <Wrapper>
-          {R.find(R.propEq("id", authType))(authOptions).component}
-          {/* TODO: render a type specific view based on selected type */}
-        </Wrapper>
+        <Wrapper>{selectedAuth.component}</Wrapper>
       </div>
     );
   }
@@ -65,6 +67,7 @@ export default connect({
   selector: ({ container }) => ({
     setAuthType: R.compose(
       R.bind(container.setAuthType, container),
+      idFromLabel,
       R.prop("value"),
       R.prop("currentTarget")
     ),
