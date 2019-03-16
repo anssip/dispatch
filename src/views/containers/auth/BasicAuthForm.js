@@ -26,12 +26,10 @@ const FormField = withValueChangeDetection(
   )
 );
 
-const Wrapper = styled.div``;
-
 const BasicAuthForm = props => {
   const { username, password, setUsername, setPassword } = props;
   return (
-    <Wrapper>
+    <>
       <label class="bp3-label">
         Username
         <FormField
@@ -56,8 +54,7 @@ const BasicAuthForm = props => {
           dir="auto"
         />
       </label>
-      <Button onClick={openAuthWindow} />
-    </Wrapper>
+    </>
   );
 };
 
