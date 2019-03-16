@@ -1,15 +1,14 @@
-import React from 'react';
-import connect from 'unstated-connect2';
-import SplitPane from 'react-split-pane';
-import Sidebar from './Sidebar';
-import './splitpane.css';
-import RequestView from './RequestView';
+import React from "react";
+import connect from "unstated-connect2";
+import SplitPane from "react-split-pane";
+import Sidebar from "./Sidebar";
+import "./splitpane.css";
+import RequestView from "./RequestView";
 import { ResizeSensor, Card, TextArea } from "@blueprintjs/core";
-import requestContainer from '../../models/RequestContainer';
-import contextContainer from '../../models/ContextContainer';
+import requestContainer from "../../models/RequestContainer";
+import contextContainer from "../../models/ContextContainer";
 
-const R = require('ramda');
-
+const R = require("ramda");
 
 class MainWindow extends React.Component {
   constructor(props) {
@@ -23,16 +22,34 @@ class MainWindow extends React.Component {
     const paneHeight = this.state.paneHeight;
     // console.log(`MainWindow:: contentHeight/paneHeight ${this.state.contentHeight}/${this.state.paneHeight}`);
 
-    return (
-      request ?
-      <ResizeSensor onResize={entries => this.handleWrapperResize(entries)} >
-        <SplitPane className="bp3-dark" split="vertical" minSize={200} defaultSize={350}>
+    return request ? (
+      <ResizeSensor onResize={entries => this.handleWrapperResize(entries)}>
+        <SplitPane
+          className="bp3-dark"
+          split="vertical"
+          minSize={200}
+          defaultSize={350}
+        >
           <Sidebar />
 
-          <SplitPane className="bp3-dark" split="vertical" primary="second" defaultSize={270}>
-            <SplitPane className="bp3-dark" split="horizontal" primary="second" minSize={200} defaultSize={200}>
-              <RequestView paneWidth={this.state.paneWidth} paneHeight={this.state.contentHeight - this.state.paneHeight} />
-              <ResizeSensor onResize={entries => this.handleResize(entries)} >
+          <SplitPane
+            className="bp3-dark"
+            split="vertical"
+            primary="second"
+            defaultSize={270}
+          >
+            <SplitPane
+              className="bp3-dark"
+              split="horizontal"
+              primary="second"
+              minSize={200}
+              defaultSize={200}
+            >
+              <RequestView
+                paneWidth={this.state.paneWidth}
+                paneHeight={this.state.contentHeight - this.state.paneHeight}
+              />
+              <ResizeSensor onResize={entries => this.handleResize(entries)}>
                 <TextArea
                   large={true}
                   value={getPreview(ctx, getEnv(), request.body)}
@@ -42,19 +59,19 @@ class MainWindow extends React.Component {
                 />
               </ResizeSensor>
             </SplitPane>
-            <Card>
-              Response pane
-            </Card>
+            <Card>Response pane</Card>
           </SplitPane>
-
         </SplitPane>
       </ResizeSensor>
-      :
+    ) : (
       <Card>Open a project first!</Card>
     );
   }
   handleResize(entries) {
-    this.setState({ paneWidth: entries[0].contentRect.width, paneHeight: entries[0].contentRect.height });
+    this.setState({
+      paneWidth: entries[0].contentRect.width,
+      paneHeight: entries[0].contentRect.height
+    });
   }
   handleWrapperResize(entries) {
     this.setState({ contentHeight: entries[0].contentRect.height });

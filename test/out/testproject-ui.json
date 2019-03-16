@@ -45,7 +45,14 @@
           "username": "anssssip",
           "password": "asssldfjoiweqgeb"
         },
-        "selected": "basic"
+        "selected": "OAuth 2.0",
+        "oAuth2": {
+          "clientId": "client1",
+          "clientSecret": "secret2",
+          "authorizationUrl": "http://authme.org/auth",
+          "accessTokenUrl": "http://authme.org/tokens",
+          "redirectUrl": "https://dispatch.rest/welcome"
+        }
       }
     },
     {
