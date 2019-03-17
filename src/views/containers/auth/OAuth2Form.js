@@ -60,8 +60,8 @@ class OAuth2Form extends PureComponent {
       try {
         const resp = await fetchFunc(authProps);
         console.log("got response tokens", resp);
+        this.setState({ error: null });
         storeTokens(resp);
-        // this.setState({ error: null });
       } catch (error) {
         console.error("Failed to fetch token", error);
         this.setState({ error });
@@ -156,9 +156,9 @@ export default connect({
           R.partial(setOAuthProp, ["authorizationUrl"])
         ],
         [
-          "Redirect URL",
-          authProps.redirectUrl,
-          R.partial(setOAuthProp, ["redirectUrl"])
+          "Redirect URI",
+          authProps.redirectUri,
+          R.partial(setOAuthProp, ["redirectUri"])
         ],
         ["Scope", authProps.scope, R.partial(setOAuthProp, ["scope"])]
       ],

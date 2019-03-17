@@ -20,9 +20,8 @@ In OAuth 2.0, the term “grant type” refers to the way an application gets an
 
 [What is the OAuth 2.0 Authorization Code Grant Type?](https://developer.okta.com/blog/2018/04/10/oauth-authorization-code-grant-type)
 
-- Clean up oauth2.js
-- Store the OAuth token info to req.auth and persist
 - Bind the form fields with oauth2.js
+- Render request methods (GET, POST, PUT) in different colors
 
 * Auth: Basic auth, Bearer token, later: OAuth 2
 * request sending

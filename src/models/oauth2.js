@@ -1,17 +1,15 @@
 const request = require("request");
 const url = require("url");
-const redirectUri = `https://dispatch.rest/callback`;
 const { BrowserWindow, getCurrentWindow } = window.require("electron").remote;
 let win = null;
 
-function getAuthenticationURL() {
+function buildAuthURL(props) {
   return (
-    "https://github.com/login/oauth/authorize?" +
-    "audience=myAudience&" +
-    "scope=&" +
-    "response_type=code&" +
-    "client_id=e1d3feefab9a06198e33&" +
-    "redirect_uri=https://dispatch.rest/callback"
+    `${props.authorizationUrl}?` +
+    (props.scope ? `scope=${props.scope}&` : "") +
+    `response_type=code` +
+    `&client_id=${props.clientId}` +
+    `&redirect_uri=${props.redirectUri}`
   );
 }
 
@@ -30,8 +28,11 @@ const loadTokens = props => {
       nodeIntegration: false
     }
   });
-  console.log(`loading URL ${getAuthenticationURL()}`);
-  win.loadURL(getAuthenticationURL());
+  const authUrl = buildAuthURL(props);
+  console.log(`loading URL ${authUrl}`);
+  win.loadURL(authUrl);
+  // https://github.com/login/oauth/authorize&response_type=code&client_id=e1d3feefab9a06198e33&redirect_uri=https://dispatch.rest/callback
+
   win.on("closed", () => {
     win = null;
   });
@@ -46,7 +47,7 @@ const loadTokens = props => {
     webRequest.onBeforeRequest(filter, async ({ url }) => {
       console.log(`onBeforeRequest() url: ${url}`);
       try {
-        const tokens = await requestTokens(url);
+        const tokens = await requestTokens(props, url);
         // destroyAuthWin();
         resolve(tokens);
       } catch (e) {
@@ -72,31 +73,32 @@ const destroyAuthWin = () => {
   win = null;
 };
 
-const requestTokens = callbackURL => {
+const requestTokens = (props, callbackURL) => {
   console.log("requestTokens");
 
   return new Promise((resolve, reject) => {
     const urlParts = url.parse(callbackURL, true);
     const query = urlParts.query;
+
     const exchangeOptions = {
       grant_type: "authorization_code",
-      client_id: "e1d3feefab9a06198e33",
-      client_secret: "e5e33fd730ad073494513bb4e003af0237d80212",
+      client_id: props.clientId,
+      client_secret: props.clientSecret,
       code: query.code,
-      redirect_uri: redirectUri
+      redirect_uri: props.redirectUri
     };
     // TODO: change to use the AUTH TOKEN URL supplied in the
     const options = {
       method: "POST",
-      url: `https://github.com/login/oauth/access_token`,
+      url: props.accessTokenUrl,
       headers: {
         "content-type": "application/json",
         Accept: "application/json"
       },
       body: JSON.stringify(exchangeOptions)
     };
-    request(options, (error, resp, body) => {
-      console.log(body);
+    request(options, (error, resp, responseBody) => {
+      destroyAuthWin();
       if (error || resp.statusCode >= 400) {
         console.error("request failed", error);
         const msg =
@@ -107,13 +109,20 @@ const requestTokens = callbackURL => {
             : `Failed to fetch token`;
         return reject(new Error(msg));
       }
-      resolve(JSON.parse(body));
+      const body = JSON.parse(responseBody);
+      console.log("Response body", body);
+      if (body.error) {
+        console.error(`Rejecting with error ${body.error}`);
+        return reject(new Error(`${body.error}: ${JSON.stringify(body)}`));
+      }
+
+      resolve(body);
     });
   });
 };
 
 function refreshTokens(props) {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     if (!props.refreshToken) return reject("Refresh is required to refresh");
 
     // TODO: change to use the AUTH TOKEN URL supplied in the

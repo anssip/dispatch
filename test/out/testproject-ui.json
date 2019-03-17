@@ -46,15 +46,16 @@
           "password": "asssldfjoiweqgeb"
         },
         "oAuth2": {
-          "clientId": "client1",
-          "clientSecret": "secret2",
-          "authorizationUrl": "http://authme.org/auth",
-          "accessTokenUrl": "http://authme.org/tokens",
+          "clientId": "e1d3feefab9a06198e33",
+          "clientSecret": "e5e33fd730ad073494513bb4e003af0237d80212",
+          "authorizationUrl": "https://github.com/login/oauth/authorize",
+          "accessTokenUrl": "https://github.com/login/oauth/access_token",
           "redirectUrl": "https://dispatch.rest/welcome",
-          "access_token": "e43890c9fbbf138f68b9dc8a485f424cef3ea583",
+          "access_token": "62eafb282fd02c99831626a1c066861488bcf120",
           "token_type": "bearer",
           "token_scope": "",
-          "scope": "home"
+          "scope": "",
+          "redirectUri": "https://dispatch.rest/callback"
         },
         "selected": "oAuth2"
       }
