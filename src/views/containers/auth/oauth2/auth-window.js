@@ -1,7 +1,5 @@
 import authService from "../../../../models/oauth2";
 const { BrowserWindow, getCurrentWindow } = window.require("electron").remote;
-// const createAppWindow = require('../main/app-process');
-
 let win = null;
 
 function getAuthenticationURL() {
@@ -14,18 +12,15 @@ function getAuthenticationURL() {
     "redirect_uri=https://dispatch.rest/callback"
   );
 }
-
 function destroyAuthWin() {
   if (!win) return;
   win.close();
   win = null;
 }
-
 function createAuthWindow() {
   console.log("createAuthWindow()");
   destroyAuthWin();
 
-  // Create the browser window.
   win = new BrowserWindow({
     // parent: getCurrentWindow(),
     // modal: true,
@@ -36,7 +31,6 @@ function createAuthWindow() {
       nodeIntegration: false
     }
   });
-
   console.log(`loading URL ${getAuthenticationURL()}`);
   win.loadURL(getAuthenticationURL());
 
@@ -53,13 +47,11 @@ function createAuthWindow() {
       destroyAuthWin();
       resolve(tokens);
     });
-
     webRequest.onErrorOccurred(details => {
       console.error("createAuthWindow():: onErrorOccurred", details);
       reject(new Error(`Authorization failed: ${details.error}`));
       destroyAuthWin();
     });
-
     webRequest.onHeadersReceived(details => {
       console.debug("createAuthWindow():: onHeadersReceived", details);
       if (details.statusCode >= 400) {
@@ -73,19 +65,12 @@ function createAuthWindow() {
       }
       destroyAuthWin();
     });
-
     webRequest.onResponseStarted(details => {
       console.debug("createAuthWindow():: onResponseStarted", details);
     });
-
     webRequest.onCompleted(details => {
       console.debug("createAuthWindow():: onCompleted", details);
     });
-
-    // win.on("closed", () => {
-    //   win = null;
-    //   reject();
-    // });
   });
 }
 

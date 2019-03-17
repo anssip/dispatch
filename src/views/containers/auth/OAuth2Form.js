@@ -33,21 +33,11 @@ class OAuth2Form extends PureComponent {
 
   render() {
     const {
-      clientId,
-      setClientId,
-      clientSecret,
-      setClientSecret,
-      authorizationUrl,
-      setAuthorizationUrl,
-      accessTokenUrl,
-      setAccessTokenUrl,
-      redirectUrl,
-      setRedirectUrl,
+      formFields,
       access_token,
       refresh_token,
       token_type,
       token_scope,
-      scope,
       set_access_token,
       set_refresh_token,
       set_token_type,
@@ -56,15 +46,6 @@ class OAuth2Form extends PureComponent {
 
     const storeTokens = tokens => {
       console.log("Got tokens!", tokens);
-      /*
-          {
-           "access_token":"2YotnFZFEjr1zCsicMWpAA",
-           "token_type":"example",
-           "expires_in":3600,
-           "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
-           "example_parameter":"example_value"
-         }
-        */
       const setters = {
         access_token: set_access_token,
         refresh_token: set_refresh_token,
@@ -91,70 +72,36 @@ class OAuth2Form extends PureComponent {
     const refreshToken = R.partial(getTokensAndHandleError, [
       authService.refreshTokens
     ]);
-
-    // TODO: ender the fields from an array
     return (
       <>
-        <ControlGroup fill={true}>
-          <label class="bp3-label">Client ID</label>
-          <FormField
-            value={clientId}
-            onChange={setClientId}
-            class="bp3-input"
-            style={{ width: "60%" }}
-            type="text"
-            dir="auto"
+        {formFields.map((f, i) => (
+          <ControlGroup fill={true}>
+            <label style={{ width: "180px" }} class="bp3-label">
+              {f[0]}
+            </label>
+            <FormField
+              value={f[1]}
+              onChange={f[2]}
+              class="bp3-input"
+              style={{ width: "100%" }}
+              type="text"
+              dir="auto"
+            />
+          </ControlGroup>
+        ))}
+        <ControlGroup style={{ marginTop: "10px" }}>
+          <Button
+            intent="primary"
+            icon="exchange"
+            text="Fetch token"
+            onClick={getTokens}
           />
-        </ControlGroup>
-
-        <label class="bp3-label">
-          Client Secret
-          <FormField
-            value={clientSecret}
-            onChange={setClientSecret}
-            class="bp3-input"
-            style={{ width: "100%" }}
-            type="text"
-            dir="auto"
-          />
-        </label>
-        <label class="bp3-label">
-          Authorization URL
-          <FormField
-            value={authorizationUrl}
-            onChange={setAuthorizationUrl}
-            class="bp3-input"
-            style={{ width: "100%" }}
-            type="text"
-            dir="auto"
-          />
-        </label>
-        <label class="bp3-label">
-          Access Token URL
-          <FormField
-            value={accessTokenUrl}
-            onChange={setAccessTokenUrl}
-            class="bp3-input"
-            style={{ width: "100%" }}
-            type="text"
-            dir="auto"
-          />
-        </label>
-        <label class="bp3-label">
-          Redirect URL
-          <FormField
-            value={redirectUrl}
-            onChange={setRedirectUrl}
-            class="bp3-input"
-            style={{ width: "100%" }}
-            type="text"
-            dir="auto"
-          />
-        </label>
-        <ControlGroup>
-          <Button text="Fetch token" onClick={getTokens} />
           {refresh_token ? (
-            <Button text="Refresh token" onClick={refreshToken} />
+            <Button
+              icon="refresh"
+              text="Refresh token"
+              onClick={refreshToken}
+            />
           ) : (
             <Button text="Refresh token" disabled />
           )}
@@ -185,20 +132,34 @@ export default connect({
       "oAuth2"
     ]);
     return {
-      clientId: oAuthProps.clientId,
-      clientSecret: oAuthProps.clientSecret,
-      authorizationUrl: oAuthProps.authorizationUrl,
-      accessTokenUrl: oAuthProps.accessTokenUrl,
-      redirectUrl: oAuthProps.redirectUrl,
-      scope: oAuthProps.scope,
-
-      setClientId: R.partial(setOAuthProp, ["clientId"]),
-      setClientSecret: R.partial(setOAuthProp, ["clientSecret"]),
-      setAccessTokenUrl: R.partial(setOAuthProp, ["accessTokenUrl"]),
-      setAuthorizationUrl: R.partial(setOAuthProp, ["authorizationUrl"]),
-      setRedirectUrl: R.partial(setOAuthProp, ["redirectUrl"]),
-      setScope: R.partial(setOAuthProp, ["scope"]),
-
+      formFields: [
+        [
+          "Client ID",
+          oAuthProps.clientId,
+          R.partial(setOAuthProp, ["clientId"])
+        ],
+        [
+          "Client Secret",
+          oAuthProps.clientSecret,
+          R.partial(setOAuthProp, ["clientSecret"])
+        ],
+        [
+          "Access Token URL",
+          oAuthProps.accessTokenUrl,
+          R.partial(setOAuthProp, ["accessTokenUrl"])
+        ],
+        [
+          "Authorization URL",
+          oAuthProps.authorizationUrl,
+          R.partial(setOAuthProp, ["authorizationUrl"])
+        ],
+        [
+          "Redirect URL",
+          oAuthProps.redirectUrl,
+          R.partial(setOAuthProp, ["redirectUrl"])
+        ],
+        ["Scope", oAuthProps.scope, R.partial(setOAuthProp, ["scope"])]
+      ],
       access_token: oAuthProps.access_token,
       refresh_token: oAuthProps.refresh_token,
       token_type: oAuthProps.token_type,
