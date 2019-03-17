@@ -16,7 +16,6 @@ import connect from "unstated-connect2";
 import requestContainer from "../../../models/RequestContainer";
 import withValueChangeDetection from "../../components/Input";
 
-const openAuthWindow = require("./oauth2/auth-window");
 const R = require("ramda");
 const FormField = withValueChangeDetection(
   props => <input className="bp3-input" {...props} />,

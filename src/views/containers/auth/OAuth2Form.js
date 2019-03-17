@@ -9,11 +9,9 @@ import {
   InputGroup,
   Button
 } from "@blueprintjs/core";
-import styled from "styled-components";
 import connect from "unstated-connect2";
 import requestContainer from "../../../models/RequestContainer";
 import withValueChangeDetection from "../../components/Input";
-import createAuthWindow from "./oauth2/auth-window";
 import authService from "../../../models/oauth2";
 
 const R = require("ramda");
@@ -33,6 +31,7 @@ class OAuth2Form extends PureComponent {
 
   render() {
     const {
+      authProps,
       formFields,
       access_token,
       refresh_token,
@@ -59,7 +58,7 @@ class OAuth2Form extends PureComponent {
     };
     const getTokensAndHandleError = async fetchFunc => {
       try {
-        const resp = await fetchFunc();
+        const resp = await fetchFunc(authProps);
         console.log("got response tokens", resp);
         storeTokens(resp);
         // this.setState({ error: null });
@@ -68,7 +67,9 @@ class OAuth2Form extends PureComponent {
         this.setState({ error });
       }
     };
-    const getTokens = R.partial(getTokensAndHandleError, [createAuthWindow]);
+    const getTokens = R.partial(getTokensAndHandleError, [
+      authService.loadTokens
+    ]);
     const refreshToken = R.partial(getTokensAndHandleError, [
       authService.refreshTokens
     ]);
@@ -127,43 +128,44 @@ scope: ${token_scope || ""}`
 export default connect({
   container: requestContainer,
   selector: ({ container }) => {
-    const oAuthProps = container.getAuthProps("oAuth2");
+    const authProps = container.getAuthProps("oAuth2");
     const setOAuthProp = R.partial(R.bind(container.setAuthProp, container), [
       "oAuth2"
     ]);
     return {
+      authProps,
       formFields: [
         [
           "Client ID",
-          oAuthProps.clientId,
+          authProps.clientId,
           R.partial(setOAuthProp, ["clientId"])
         ],
         [
           "Client Secret",
-          oAuthProps.clientSecret,
+          authProps.clientSecret,
           R.partial(setOAuthProp, ["clientSecret"])
         ],
         [
           "Access Token URL",
-          oAuthProps.accessTokenUrl,
+          authProps.accessTokenUrl,
           R.partial(setOAuthProp, ["accessTokenUrl"])
         ],
         [
           "Authorization URL",
-          oAuthProps.authorizationUrl,
+          authProps.authorizationUrl,
           R.partial(setOAuthProp, ["authorizationUrl"])
         ],
         [
           "Redirect URL",
-          oAuthProps.redirectUrl,
+          authProps.redirectUrl,
           R.partial(setOAuthProp, ["redirectUrl"])
         ],
-        ["Scope", oAuthProps.scope, R.partial(setOAuthProp, ["scope"])]
+        ["Scope", authProps.scope, R.partial(setOAuthProp, ["scope"])]
       ],
-      access_token: oAuthProps.access_token,
-      refresh_token: oAuthProps.refresh_token,
-      token_type: oAuthProps.token_type,
-      token_scope: oAuthProps.token_scope,
+      access_token: authProps.access_token,
+      refresh_token: authProps.refresh_token,
+      token_type: authProps.token_type,
+      token_scope: authProps.token_scope,
 
       set_access_token: R.partial(setOAuthProp, ["access_token"]),
       set_refresh_token: R.partial(setOAuthProp, ["refresh_token"]),
