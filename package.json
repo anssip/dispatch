@@ -60,6 +60,7 @@
     "javascript-stringify": "^1.6.0",
     "json-templater": "^1.2.0",
     "jsonlint": "^1.6.3",
+    "jwt-decode": "^2.2.0",
     "keytar": "^4.4.1",
     "nodemon": "^1.18.10",
     "overstated": "^1.1.3",

@@ -78,8 +78,12 @@ class OAuth2Form extends PureComponent {
     };
     const getTokensAndHandleError = async fetchFunc => {
       try {
-        storeTokens(await fetchFunc());
+        const resp = await fetchFunc();
+        console.log("got response tokens", resp);
+        storeTokens(resp);
+        // this.setState({ error: null });
       } catch (error) {
+        console.error("Failed to fetch token", error);
         this.setState({ error });
       }
     };
@@ -158,10 +162,14 @@ class OAuth2Form extends PureComponent {
         <TextArea
           style={{ height: "100px" }}
           fill={true}
-          value={`access_token: ${access_token || ""}
+          value={
+            this.state.error
+              ? this.state.error
+              : `access_token: ${access_token || ""}
 token_type: ${token_type || ""}
 refresh_token: ${refresh_token || ""}
-scope: ${token_scope || ""}`}
+scope: ${token_scope || ""}`
+          }
         />
       </>
     );

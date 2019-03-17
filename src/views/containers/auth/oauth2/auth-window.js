@@ -1,5 +1,5 @@
 import authService from "../../../../models/oauth2";
-const { BrowserWindow } = window.require("electron").remote;
+const { BrowserWindow, getCurrentWindow } = window.require("electron").remote;
 // const createAppWindow = require('../main/app-process');
 
 let win = null;
@@ -27,7 +27,10 @@ function createAuthWindow() {
 
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1000,
+    // parent: getCurrentWindow(),
+    // modal: true,
+    // titleBarStyle: "customButtonsOnHover",
+    width: 500,
     height: 600,
     webPreferences: {
       nodeIntegration: false
@@ -51,16 +54,38 @@ function createAuthWindow() {
       resolve(tokens);
     });
 
-    win.on("authenticated", () => {
-      console.log("Authenticated!!!!");
+    webRequest.onErrorOccurred(details => {
+      console.error("createAuthWindow():: onErrorOccurred", details);
+      reject(new Error(`Authorization failed: ${details.error}`));
       destroyAuthWin();
-      reject();
     });
 
-    win.on("closed", () => {
-      win = null;
-      reject();
+    webRequest.onHeadersReceived(details => {
+      console.debug("createAuthWindow():: onHeadersReceived", details);
+      if (details.statusCode >= 400) {
+        reject(
+          new Error(
+            `Authorization failed with status ${details.statusCode}: ${
+              details.statusLine
+            }`
+          )
+        );
+      }
+      destroyAuthWin();
     });
+
+    webRequest.onResponseStarted(details => {
+      console.debug("createAuthWindow():: onResponseStarted", details);
+    });
+
+    webRequest.onCompleted(details => {
+      console.debug("createAuthWindow():: onCompleted", details);
+    });
+
+    // win.on("closed", () => {
+    //   win = null;
+    //   reject();
+    // });
   });
 }
 
