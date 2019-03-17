@@ -88,19 +88,21 @@ class OAuth2Form extends PureComponent {
       authService.refreshTokens
     ]);
 
+    // TODO: ender the fields from an array
     return (
       <>
-        <label class="bp3-label">
-          Client ID
+        <ControlGroup fill={true}>
+          <label class="bp3-label">Client ID</label>
           <FormField
             value={clientId}
             onChange={setClientId}
             class="bp3-input"
-            style={{ width: "100%" }}
+            style={{ width: "60%" }}
             type="text"
             dir="auto"
           />
-        </label>
+        </ControlGroup>
+
         <label class="bp3-label">
           Client Secret
           <FormField
