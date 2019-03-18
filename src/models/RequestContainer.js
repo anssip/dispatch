@@ -31,14 +31,14 @@ class RequestContainer extends Container {
     return this.state.isModified;
   }
   addNewRequest() {
-    this.addRequest(this.createEmptyRequest());
+    this.addRequest(this.createEmptyRequest(true));
   }
   addRequest(request) {
     this.setState({
-      requests: [
-        ...R.map(this.cloneNonSelected, this.state.requests || []),
-        request
-      ]
+      requests: R.append(
+        request,
+        R.map(R.assoc("selected", false), this.state.requests || [])
+      )
     });
   }
   replaceSelectedRequest(replaceWith) {
@@ -62,12 +62,12 @@ class RequestContainer extends Container {
   isEmpty() {
     return this.getRequests().length == 0;
   }
-  createEmptyRequest() {
+  createEmptyRequest(selected = true) {
     return {
       method: "GET",
       name: this.getNamePlaceholder(),
       url: "http://echo.dispatch.rest",
-      selected: true,
+      selected,
       body: ""
     };
   }

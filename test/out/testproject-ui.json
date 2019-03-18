@@ -4,11 +4,11 @@
       "method": "POST",
       "name": "request-0",
       "url": "http://echo.dispatch.rest",
-      "selected": false,
+      "selected": true,
       "body": "Heippa homot!"
     },
     {
-      "name": "Create test source",
+      "name": "Create my source",
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-source",
       "body": "{req1_config:\"{{ctx.source.config}}\"}",
@@ -39,7 +39,7 @@
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-sink",
       "body": "{\n  anotherConfig: \"{{source.config}}\",\n  numFoos:{\"foo\":1001}\n}",
-      "selected": true,
+      "selected": false,
       "auth": {
         "basic": {
           "username": "anssssip",
