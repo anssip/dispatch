@@ -5,50 +5,50 @@ const R = require("ramda");
 const print = json => console.log(JSON.stringify(json, null, 2));
 
 describe("RequestContainer", () => {
-
   const testRequests = [
     {
-      "method": "POST",
-      "name": "request-0",
-      "url": "http://echo.dispatch.rest",
-      "selected": false,
-      "body": "Heippa homot!",      
-      "auth": {
-        "selected": "basic",
-        "basic": {
-          "username": "anssi",
-          "password": "secretx"
+      method: "POST",
+      name: "request-0",
+      url: "http://echo.dispatch.rest",
+      selected: false,
+      body: "Heippa homot!",
+      auth: {
+        selected: "basic",
+        basic: {
+          username: "anssi",
+          password: "secretx"
         }
       }
     },
     {
-      "name": "Create test source",
-      "method": "POST",
-      "url": "https://localhost:8000/connectors/gt-source",
-      "headers": [
+      name: "Create test source",
+      method: "POST",
+      url: "https://localhost:8000/connectors/gt-source",
+      headers: [
         { name: "Cache-Control", value: "max-age=0" },
         { name: "Connection", value: "keep-alive" }
       ],
-      "params": [
+      params: [
         { name: "param1", value: "value1" },
         { name: "param2", value: "value2" }
       ],
-      "body": "{req1_config:\"{{ctx.source.config}}\"}",
-      "selected": false,
+      body: '{req1_config:"{{ctx.source.config}}"}',
+      selected: false
     },
     {
-      "name": "Create foobar sink",
-      "method": "POST",
-      "url": "https://localhost:8000/connectors/gt-sink",
-      "body": "{\n  anotherConfig: \"{{source.config}}\",\n  numFoos:{\"foo\":1001}\n}",
-      "selected": true
+      name: "Create foobar sink",
+      method: "POST",
+      url: "https://localhost:8000/connectors/gt-sink",
+      body:
+        '{\n  anotherConfig: "{{source.config}}",\n  numFoos:{"foo":1001}\n}',
+      selected: true
     },
     {
-      "method": "DELETE",
-      "name": "testX",
-      "url": "http://echo.dispatch.rest",
-      "selected": false,
-      "body": "{\n\tblob: \"blob1\"\n}"
+      method: "DELETE",
+      name: "testX",
+      url: "http://echo.dispatch.rest",
+      selected: false,
+      body: '{\n\tblob: "blob1"\n}'
     }
   ];
 
@@ -108,38 +108,4 @@ describe("RequestContainer", () => {
     expect(req.params[0].name).to.be.eq("param2");
     expect(req.params[0].value).to.be.eq("value2");
   });
-
-  describe("Auth", () => {
-    it("should add basic auth username to a request without any existing auth", () => {
-      container.select(1);
-      const req = container.setAuthProp("basic", "username", "carlos");
-      print(req);
-      expect(req.auth.basic.username).to.be.eq("carlos");
-      expect(req.auth.basic.password).to.be.undefined;
-    });
-    it("should update basic auth username", () => {
-      container.select(0);
-      const req = container.setAuthProp("basic", "username", "hank");
-      print(req);
-      expect(req.auth.basic.username).to.be.eq("hank");
-      expect(req.auth.basic.password).to.be.eq("secretx");
-    });
-    it("should add a second auth type", () => {
-      container.select(0);
-      const req = container.setAuthProp("bearer", "token", "123");
-      print(req);
-      expect(req.auth.basic.username).to.be.eq("anssi");
-      expect(req.auth.basic.password).to.be.eq("secretx");
-      expect(req.auth.bearer.token).to.be.eq("123");
-    });
-    it("should change the selected auth type", () => {
-      container.select(0);
-      const req = container.setAuthType("bearer");
-      expect(req.auth.basic.username).to.be.eq("anssi");
-      expect(req.auth.basic.password).to.be.eq("secretx");
-      expect(req.auth.selected).to.be.eq("bearer");
-
-    });
-  });
-
 });

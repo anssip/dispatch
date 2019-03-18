@@ -12,7 +12,13 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 next:
 
+- Sidebar.js to connect to the AuthContainer. Renders a SidebarList with render props for each rendered list item: list item is either a Request or an AuthMethod.
+  - Sidebar passes selection etc. functions down to SidebarList
+- Selecting an auth method from the list renders OAuth2Form (to be renamed and refactored to AuthForm)
+
 ### OAuth2Form
+
+- refactor this to be tied to the selected auth method
 
 In OAuth 2.0, the term “grant type” refers to the way an application gets an access token.
 
@@ -20,24 +26,22 @@ In OAuth 2.0, the term “grant type” refers to the way an application gets an
 
 [What is the OAuth 2.0 Authorization Code Grant Type?](https://developer.okta.com/blog/2018/04/10/oauth-authorization-code-grant-type)
 
-- OAauth2 Implicit grant
+- Clean up oauth2.js
+- Store the OAuth token info to req.auth and persist
+- Bind the form fields with oauth2.js
 
-  - Don't show the refresh_token field nor the Refresh button
-  - https://developer.okta.com/blog/2018/05/24/what-is-the-oauth2-implicit-grant-type
+* Auth: Basic auth, Bearer token, later: OAuth 2
+* request sending
+* non JSON requests?
 
-- Resource Owner Password grant
+# Auth data model
 
-  - fields: Username, password, accessTokenUrl
-  - request to the `token` URL
-  - https://developer.okta.com/authentication-guide/implementing-authentication/password
-
-- Client Credentials grant
-  - fields: accessTokenUrl
-  - clientId / clientSecret sent in basic auth into the `token` URL
-  - https://developer.okta.com/authentication-guide/implementing-authentication/client-creds
-
-* Render request methods (GET, POST, PUT) in different colors
-
-- Auth: Basic auth, Bearer token, later: OAuth 2
-- request sending
-- non JSON requests?
+```
+project:
+    - AuthContainer
+      - methods[]
+        - methd: type, [attributes], tokens
+    - requests:
+      - request
+        - auth method index
+```

@@ -1,6 +1,6 @@
-import { Container } from 'overstated';
+import { Container } from "overstated";
 
-const R = require('ramda');
+const R = require("ramda");
 const object = require("json-templater").object;
 
 class RequestContainer extends Container {
@@ -14,7 +14,9 @@ class RequestContainer extends Container {
     super.setState({ isModified: true, ...state }, cb);
   }
   mapRequests(requests) {
-    return (requests || []).map(r => typeof r.body === "string" ? r : { ...r, body: JSON.stringify(r.body) } );
+    return (requests || []).map(r =>
+      typeof r.body === "string" ? r : { ...r, body: JSON.stringify(r.body) }
+    );
   }
   init(requests) {
     this.setState({ isModified: false, requests: this.mapRequests(requests) });
@@ -32,12 +34,20 @@ class RequestContainer extends Container {
     this.addRequest(this.createEmptyRequest());
   }
   addRequest(request) {
-    this.setState({ requests: [... R.map(this.cloneNonSelected, this.state.requests || []), request] });
+    this.setState({
+      requests: [
+        ...R.map(this.cloneNonSelected, this.state.requests || []),
+        request
+      ]
+    });
   }
   replaceSelectedRequest(replaceWith) {
-    return this.setState({ 
+    return this.setState({
       isModified: true,
-      requests: R.map( R.when(R.prop('selected'), R.partial(R.identity, [replaceWith])), this.state.requests)
+      requests: R.map(
+        R.when(R.prop("selected"), R.partial(R.identity, [replaceWith])),
+        this.state.requests
+      )
     });
   }
   getRequests() {
@@ -54,20 +64,24 @@ class RequestContainer extends Container {
   }
   createEmptyRequest() {
     return {
-      method: 'GET',
+      method: "GET",
       name: this.getNamePlaceholder(),
-      url: 'http://echo.dispatch.rest',
+      url: "http://echo.dispatch.rest",
       selected: true,
       body: ""
     };
   }
   getNamePlaceholder() {
     // @ts-ignore
-    const oldWithNum = this.state.requests.reverse().find(r => r.name.indexOf('request-') >= 0);
-    return oldWithNum ? `request-${Number(oldWithNum.name.split('request-')[1]) + 1}` : 'request-0';
+    const oldWithNum = this.state.requests
+      .reverse()
+      .find(r => r.name.indexOf("request-") >= 0);
+    return oldWithNum
+      ? `request-${Number(oldWithNum.name.split("request-")[1]) + 1}`
+      : "request-0";
   }
   cloneNonSelected(request) {
-    if (! request) throw new Error('request not specified');
+    if (!request) throw new Error("request not specified");
     const newRequest = R.clone(request);
     newRequest.selected = false;
     return newRequest;
@@ -75,14 +89,21 @@ class RequestContainer extends Container {
   select(index) {
     console.log(`selecting request at ${index}`);
     const selectedLens = R.lensProp("selected");
-    const noneSelectedRequests = R.map(R.assoc("selected", false), this.state.requests);
-    const requests = R.over(R.lensIndex(index), R.set(selectedLens, true), noneSelectedRequests);
+    const noneSelectedRequests = R.map(
+      R.assoc("selected", false),
+      this.state.requests
+    );
+    const requests = R.over(
+      R.lensIndex(index),
+      R.set(selectedLens, true),
+      noneSelectedRequests
+    );
     return this.setState({ requests });
   }
   getSelected() {
-    console.log('getSelected');
+    console.log("getSelected");
     if (this.isEmpty()) return {};
-    return R.find(R.prop('selected'))(this.state.requests) || {};
+    return R.find(R.prop("selected"))(this.state.requests) || {};
     // return selected || this.state.requests[0];
   }
   setProp(prop, value) {
@@ -90,20 +111,20 @@ class RequestContainer extends Container {
     return this.replaceSelectedRequest(newReq);
   }
   setMethod(value) {
-      return this.setProp('method', value);
-  } 
+    return this.setProp("method", value);
+  }
   setName(value) {
-    return this.setProp('name', value);
+    return this.setProp("name", value);
   }
   setUrl(value) {
-    return this.setProp('url', value);
+    return this.setProp("url", value);
   }
   setBody(value) {
-    return this.setProp('body', value);
+    return this.setProp("body", value);
   }
-  _addReqComponent({component = "headers", name = null, value = null}) {
+  _addReqComponent({ component = "headers", name = null, value = null }) {
     const req = this.getSelected();
-    if (! req) throw new Error("No request selected");
+    if (!req) throw new Error("No request selected");
 
     const newValues = R.append({ name, value }, req[component] || []);
     const newReq = R.assoc(component, newValues, req);
@@ -112,21 +133,25 @@ class RequestContainer extends Container {
   }
   _setCompProp(index, prop, value, component = "headers") {
     const req = this.getSelected();
-    if (! req) throw new Error("No request selected");
-    if (! req[component] || req[component].length < index) return;
+    if (!req) throw new Error("No request selected");
+    if (!req[component] || req[component].length < index) return;
     if (req[component].length <= index) {
       return this._addReqComponent({ component, [prop]: value });
     }
 
-    const newValues = R.over(R.lensIndex(index), R.assoc(prop, value), req[component]);
+    const newValues = R.over(
+      R.lensIndex(index),
+      R.assoc(prop, value),
+      req[component]
+    );
     const newReq = R.assoc(component, newValues, req);
     this.replaceSelectedRequest(newReq);
     return newReq;
   }
   _deleteComp(index, component = "headers") {
     const req = this.getSelected();
-    if (! req) return;
-    if (! req[component] || req[component].length < index) return;
+    if (!req) return;
+    if (!req[component] || req[component].length < index) return;
 
     const newReq = R.assoc(component, R.remove(index, 1, req[component]), req);
     this.replaceSelectedRequest(newReq);
@@ -157,42 +182,17 @@ class RequestContainer extends Container {
   deleteParam(index) {
     this._deleteComp(index, "params");
   }
-  setAuthProp(authType, prop, value) {
-    const req = this.getSelected();
-    if (! req) return;
-    const authPropsForType = req.auth && req.auth[authType] || {};
-    const newAuth = R.assoc(authType, R.assoc(prop, value, authPropsForType), req.auth || {});
-    const newReq = R.assoc("auth", newAuth, req);
-    console.log(`setAuthProp: new request ${JSON.stringify(newReq)}`);
-    this.replaceSelectedRequest(newReq);
-    return newReq;
-  }
-  setAuthType(authType) {
-    const req = this.getSelected();
-    if (! req) return;
-    const newAuth = R.assoc("selected", authType, req.auth || {});
-    const newReq = R.assoc("auth", newAuth, req);
-    this.replaceSelectedRequest(newReq);
-    return newReq;
-  }
-  getAuthType() {
-    const req = this.getSelected();
-    if (! (req && req.auth)) return "none";
-    return req.auth.selected || "none";
-  }
-  getAuthProps(authType) {
-    const req = this.getSelected();
-    if (! req) return null;
-    if (! req.auth) return { [authType]: {} };
-    return req.auth[authType] || {};
-  }
   getPreview(ctx, env, value) {
     const evalObject = value => {
       let tmpValue = `let __x = ${value}; __x;`;
       tmpValue = eval(tmpValue);
       return tmpValue;
-    }
-    const fill = (tmpl, ...rest) => [evalObject(ctx), ...rest, env].reduce((acc, curr) => object(acc, curr), tmpl);
+    };
+    const fill = (tmpl, ...rest) =>
+      [evalObject(ctx), ...rest, env].reduce(
+        (acc, curr) => object(acc, curr),
+        tmpl
+      );
     // @ts-ignore
     try {
       console.log(`======> about to fill`, value);
@@ -205,10 +205,9 @@ class RequestContainer extends Container {
       return result;
     } catch (e) {
       // console.error(e);
-      return '';
+      return "";
     }
   }
 }
-
 
 export default new RequestContainer();
