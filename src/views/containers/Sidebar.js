@@ -10,12 +10,13 @@ import {
   MenuItem
 } from "@blueprintjs/core";
 import styled from "styled-components";
-import RequestList from "./RequestList";
+import SidebarList from "./SidebarList";
 import ContextEditor from "./context/ContextEditor";
 import EnvironmentEditor from "./EnvironmentEditor";
 import connect from "unstated-connect2";
 import requestContainer from "../../models/RequestContainer";
 import contextContainer from "../../models/ContextContainer";
+import Request from "../components/Request";
 
 const R = require("ramda");
 
@@ -30,7 +31,15 @@ class Sidebar extends React.Component {
     this.state = { tab: "requests" };
   }
   render() {
-    const { add, selectEnv, addEnv, environments, selectedEnv } = this.props;
+    const {
+      add,
+      selectEnv,
+      addEnv,
+      environments,
+      selectedEnv,
+      requests,
+      selectRequest
+    } = this.props;
     console.log(`Sidebar: selectedEnv: ${selectEnv}`);
 
     const addClicked = () => {
@@ -50,7 +59,22 @@ class Sidebar extends React.Component {
           renderActiveTabPanelOnly={true}
           selectedTabId={this.state.tab}
         >
-          <Tab id="requests" title="Requests" panel={<RequestList />} />
+          <Tab
+            id="requests"
+            title="Requests"
+            panel={
+              <SidebarList
+                items={requests}
+                render={(request, i) => (
+                  <Request
+                    handleClick={R.partial(selectRequest, [i])}
+                    id={i}
+                    model={request}
+                  />
+                )}
+              />
+            }
+          />
           <Tab id="context" title="Context" panel={<ContextEditor />} />
           <Tab id="env" title="Variables" panel={<EnvironmentEditor />} />
         </Tabs>
@@ -96,6 +120,8 @@ const EnvMenu = props => (
 export default connect({
   containers: [requestContainer, contextContainer],
   selector: ({ containers }) => ({
+    requests: containers[0].getRequests(),
+    selectRequest: R.bind(containers[0].select, containers[0]),
     add: {
       requests: R.bind(containers[0].addNewRequest, containers[0]),
       env: R.bind(containers[1].addEmptyVariable, containers[1])

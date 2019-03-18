@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { Card, Text, Colors } from "@blueprintjs/core";
-const R = require('ramda');
+const R = require("ramda");
 
 // blueprint Indogo5
 const Method = styled.span`
-  color: #AD99FF;
+  color: #ad99ff;
   margin-right: 5px;
 `;
 
@@ -16,7 +16,14 @@ const RequestCard = styled.div`
 `;
 
 const Request = props => (
-  <RequestCard style={props.model.selected ? { color: "#fff", backgroundColor: "#394B59" } : { color: "#aaa" }} onClick={R.partial(props.handleClick, 'request')}>
+  <RequestCard
+    style={
+      props.model.selected
+        ? { color: "#fff", backgroundColor: "#394B59" }
+        : { color: "#aaa" }
+    }
+    onClick={props.handleClick}
+  >
     <Text ellipsize={true}>
       <Method>{props.model.method}</Method>
       {props.model.name}

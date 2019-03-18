@@ -159,7 +159,7 @@ class RequestView extends React.Component {
                 <Tab
                   id="auth"
                   title="Auth"
-                  panel={<RequestViewComponent render={<AuthView />} />}
+                  panel={<RequestViewComponent render={"<AuthView />"} />}
                 />
               </Tabs>
             </TabContainer>
