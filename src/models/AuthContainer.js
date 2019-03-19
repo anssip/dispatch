@@ -13,7 +13,7 @@ class AuthContainer extends Container {
     super.setState({ isModified: true, ...state }, cb);
   }
   init(methods) {
-    this.setState({ isModified: false, methods });
+    this.setState({ isModified: false, methods: methods || [] });
   }
   reset() {
     this.setState({ isModified: false, methods: [] });
@@ -45,7 +45,7 @@ class AuthContainer extends Container {
     });
   }
   getMethods() {
-    return this.state.methods;
+    return this.state.methods || [];
   }
   getSize() {
     return this.getMethods().length;
@@ -55,7 +55,6 @@ class AuthContainer extends Container {
   }
   createEmptyMethd() {
     return {
-      method: "GET",
       name: this.getNamePlaceholder(),
       selected: true
     };

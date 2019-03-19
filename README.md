@@ -12,9 +12,10 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 next:
 
-- Sidebar.js to connect to the AuthContainer. Renders a SidebarList with render props for each rendered list item: list item is either a Request or an AuthMethod.
-  - Sidebar passes selection etc. functions down to SidebarList
-- Selecting an auth method from the list renders OAuth2Form (to be renamed and refactored to AuthForm)
+- Auth method selection to request to `RequestView` next to the name
+- Rest of the auth grant flows
+- Request preview with headers, params, and auth
+- Request sending
 
 ### OAuth2Form
 

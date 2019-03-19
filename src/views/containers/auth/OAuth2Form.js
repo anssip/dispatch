@@ -11,6 +11,7 @@ import {
 } from "@blueprintjs/core";
 import connect from "unstated-connect2";
 import requestContainer from "../../../models/RequestContainer";
+import authContainer from "../../../models/AuthContainer";
 import withValueChangeDetection from "../../components/Input";
 import authService from "../../../models/oauth2";
 
@@ -126,51 +127,45 @@ scope: ${token_scope || ""}`
 
 // @ts-ignore
 export default connect({
-  container: requestContainer,
+  container: authContainer,
   selector: ({ container }) => {
-    const authProps = container.getAuthProps("oAuth2");
-    const setOAuthProp = R.partial(R.bind(container.setAuthProp, container), [
-      "oAuth2"
-    ]);
+    const props = container.getSelected();
+    const setProp = R.bind(container.setProp, container);
     return {
-      authProps,
+      authProps: props,
       formFields: [
-        [
-          "Client ID",
-          authProps.clientId,
-          R.partial(setOAuthProp, ["clientId"])
-        ],
+        ["Client ID", props.clientId, R.partial(setProp, ["clientId"])],
         [
           "Client Secret",
-          authProps.clientSecret,
-          R.partial(setOAuthProp, ["clientSecret"])
+          props.clientSecret,
+          R.partial(setProp, ["clientSecret"])
         ],
         [
           "Access Token URL",
-          authProps.accessTokenUrl,
-          R.partial(setOAuthProp, ["accessTokenUrl"])
+          props.accessTokenUrl,
+          R.partial(setProp, ["accessTokenUrl"])
         ],
         [
           "Authorization URL",
-          authProps.authorizationUrl,
-          R.partial(setOAuthProp, ["authorizationUrl"])
+          props.authorizationUrl,
+          R.partial(setProp, ["authorizationUrl"])
         ],
         [
           "Redirect URI",
-          authProps.redirectUri,
-          R.partial(setOAuthProp, ["redirectUri"])
+          props.redirectUri,
+          R.partial(setProp, ["redirectUri"])
         ],
-        ["Scope", authProps.scope, R.partial(setOAuthProp, ["scope"])]
+        ["Scope", props.scope, R.partial(setProp, ["scope"])]
       ],
-      access_token: authProps.access_token,
-      refresh_token: authProps.refresh_token,
-      token_type: authProps.token_type,
-      token_scope: authProps.token_scope,
+      access_token: props.access_token,
+      refresh_token: props.refresh_token,
+      token_type: props.token_type,
+      token_scope: props.token_scope,
 
-      set_access_token: R.partial(setOAuthProp, ["access_token"]),
-      set_refresh_token: R.partial(setOAuthProp, ["refresh_token"]),
-      set_token_type: R.partial(setOAuthProp, ["token_type"]),
-      set_scope: R.partial(setOAuthProp, ["token_scope"])
+      set_access_token: R.partial(setProp, ["access_token"]),
+      set_refresh_token: R.partial(setProp, ["refresh_token"]),
+      set_token_type: R.partial(setProp, ["token_type"]),
+      set_scope: R.partial(setProp, ["token_scope"])
     };
   }
 })(OAuth2Form);

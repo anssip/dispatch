@@ -1,5 +1,6 @@
 import requestContainer from "./RequestContainer";
 import contextContainer from "./ContextContainer";
+import authContainer from "./AuthContainer";
 import { Container } from "overstated";
 
 const R = require("ramda");
@@ -33,6 +34,7 @@ class ProjectContainer extends Container {
     if (project) {
       requestContainer.init(project.requests);
       contextContainer.init(project.context, project.vars);
+      authContainer.init(project.methods);
     }
   }
 
@@ -96,6 +98,7 @@ class ProjectContainer extends Container {
     );
     requestContainer.setModified(false);
     contextContainer.setModified(false);
+    authContainer.setModified(false);
     return files;
   }
 
@@ -104,6 +107,7 @@ class ProjectContainer extends Container {
     if (project) {
       requestContainer.init(project.requests);
       contextContainer.init(project.context, project.vars);
+      authContainer.init(project.methods);
       return this.updateMostRecent(path);
     }
     return null;
@@ -128,7 +132,8 @@ class ProjectContainer extends Container {
       {
         requests: requestContainer.getRequests(),
         context: contextContainer.getValue(),
-        vars: contextContainer.getVariables()
+        vars: contextContainer.getVariables(),
+        methods: authContainer.getMethods()
       },
       null,
       2

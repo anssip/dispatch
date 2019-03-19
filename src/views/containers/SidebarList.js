@@ -24,7 +24,7 @@ const SidebarList = ({ items, render }) => (
       small={true}
       value={""}
     />
-    {items.map((item, index) => (
+    {(items || []).map((item, index) => (
       <Wrapper>{render(item, index)}</Wrapper>
     ))}
   </div>
