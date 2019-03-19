@@ -16,7 +16,9 @@ import EnvironmentEditor from "./EnvironmentEditor";
 import connect from "unstated-connect2";
 import requestContainer from "../../models/RequestContainer";
 import contextContainer from "../../models/ContextContainer";
+import authContainer from "../../models/AuthContainer";
 import Request from "../components/Request";
+import AuthMethod from "../components/AuthMethod";
 
 const R = require("ramda");
 
@@ -38,7 +40,9 @@ class Sidebar extends React.Component {
       environments,
       selectedEnv,
       requests,
-      selectRequest
+      selectRequest,
+      methods,
+      selectMethod
     } = this.props;
     console.log(`Sidebar: selectedEnv: ${selectEnv}`);
 
@@ -77,6 +81,22 @@ class Sidebar extends React.Component {
           />
           <Tab id="context" title="Context" panel={<ContextEditor />} />
           <Tab id="env" title="Variables" panel={<EnvironmentEditor />} />
+          <Tab
+            id="methods"
+            title="Auth"
+            panel={
+              <SidebarList
+                items={methods}
+                render={(method, i) => (
+                  <AuthMethod
+                    handleClick={R.partial(selectMethod, [i])}
+                    id={i}
+                    model={method}
+                  />
+                )}
+              />
+            }
+          />
         </Tabs>
 
         {/* Move the add button to the RequestList and to the EnvironmentEditor?? */}
@@ -118,13 +138,16 @@ const EnvMenu = props => (
 
 // @ts-ignore
 export default connect({
-  containers: [requestContainer, contextContainer],
+  containers: [requestContainer, contextContainer, authContainer],
   selector: ({ containers }) => ({
     requests: containers[0].getRequests(),
     selectRequest: R.bind(containers[0].select, containers[0]),
+    methods: containers[2].getMethods(),
+    selectMethod: R.bind(containers[2].select, containers[2]),
     add: {
       requests: R.bind(containers[0].addNewRequest, containers[0]),
-      env: R.bind(containers[1].addEmptyVariable, containers[1])
+      env: R.bind(containers[1].addEmptyVariable, containers[1]),
+      methods: R.bind(containers[2].addNewMethod, containers[2])
     },
     selectEnv: R.bind(containers[1].selectEnv, containers[1]),
     selectedEnv:

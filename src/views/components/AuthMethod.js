@@ -9,14 +9,14 @@ const Type = styled.span`
   margin-right: 5px;
 `;
 
-const RequestCard = styled.div`
+const Wrapper = styled.div`
   padding: 10px;
   margin-left: -10px;
   cursor: pointer;
 `;
 
 const AuthMethod = props => (
-  <RequestCard
+  <Wrapper
     style={
       props.model.selected
         ? { color: "#fff", backgroundColor: "#394B59" }
@@ -28,7 +28,7 @@ const AuthMethod = props => (
       <Type>{props.model.type}</Type>
       {props.model.name}
     </Text>
-  </RequestCard>
+  </Wrapper>
 );
 
 export default AuthMethod;
