@@ -4,6 +4,7 @@ import SplitPane from "react-split-pane";
 import Sidebar from "./Sidebar";
 import "./splitpane.css";
 import RequestView from "./RequestView";
+import AuthView from "./auth/AuthView";
 import { ResizeSensor, Card, TextArea } from "@blueprintjs/core";
 import requestContainer from "../../models/RequestContainer";
 import contextContainer from "../../models/ContextContainer";
@@ -18,10 +19,7 @@ class MainWindow extends React.Component {
   }
 
   render() {
-    const { ctx, getEnv, request, getContext, getPreview } = this.props;
-    const paneWidth = this.state.paneWidth;
-    const paneHeight = this.state.paneHeight;
-    // console.log(`MainWindow:: contentHeight/paneHeight ${this.state.contentHeight}/${this.state.paneHeight}`);
+    const { ctx, getEnv, request, getPreview, activeSidebarTab } = this.props;
 
     return request ? (
       <ResizeSensor onResize={entries => this.handleWrapperResize(entries)}>
@@ -46,10 +44,14 @@ class MainWindow extends React.Component {
               minSize={200}
               defaultSize={200}
             >
-              <RequestView
-                paneWidth={this.state.paneWidth}
-                paneHeight={this.state.contentHeight - this.state.paneHeight}
-              />
+              {activeSidebarTab === "requests" ? (
+                <RequestView
+                  paneWidth={this.state.paneWidth}
+                  paneHeight={this.state.contentHeight - this.state.paneHeight}
+                />
+              ) : (
+                <AuthView />
+              )}
               <ResizeSensor onResize={entries => this.handleResize(entries)}>
                 <TextArea
                   large={true}
@@ -86,6 +88,7 @@ export default connect({
     request: containers[0].getSelected(),
     getPreview: R.bind(containers[0].getPreview, containers[0]),
     ctx: containers[1].getValue(),
-    getEnv: R.bind(containers[1].getSelectedEnvironment, containers[1])
+    getEnv: R.bind(containers[1].getSelectedEnvironment, containers[1]),
+    activeSidebarTab: projectContainer.getActiveSidebarTab()
   })
 })(MainWindow);

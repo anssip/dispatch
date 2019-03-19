@@ -13,7 +13,7 @@ import {
 } from "@blueprintjs/core";
 import styled from "styled-components";
 import connect from "unstated-connect2";
-import requestContainer from "../../../models/RequestContainer";
+import authContainer from "../../../models/AuthContainer";
 import withValueChangeDetection from "../../components/Input";
 
 const R = require("ramda");
@@ -59,17 +59,11 @@ const BasicAuthForm = props => {
 
 // @ts-ignore
 export default connect({
-  container: requestContainer,
+  container: authContainer,
   selector: ({ container }) => ({
-    username: container.getAuthProps("basic").username,
-    password: container.getAuthProps("basic").password,
-    setUsername: R.partial(R.bind(container.setAuthProp, container), [
-      "basic",
-      "username"
-    ]),
-    setPassword: R.partial(R.bind(container.setAuthProp, container), [
-      "basic",
-      "password"
-    ])
+    username: container.getProp("username"),
+    password: container.getProp("password"),
+    setUsername: R.partial(R.bind(container.setProp, container), ["username"]),
+    setPassword: R.partial(R.bind(container.setProp, container), ["password"])
   })
 })(BasicAuthForm);

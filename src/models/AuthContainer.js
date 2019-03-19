@@ -66,7 +66,7 @@ class AuthContainer extends Container {
       .reverse()
       .find(r => r.name.indexOf("method-") >= 0);
     return oldWithNum
-      ? `request-${Number(oldWithNum.name.split("method-")[1]) + 1}`
+      ? `method-${Number(oldWithNum.name.split("method-")[1]) + 1}`
       : "method-0";
   }
   cloneNonSelected(method) {
@@ -100,6 +100,9 @@ class AuthContainer extends Container {
     console.log(`setProp: new method ${JSON.stringify(newMethod)}`);
     this.replaceSelectedMethod(newMethod);
     return newMethod;
+  }
+  getProp(prop) {
+    return R.prop(prop, this.getSelected());
   }
 }
 
