@@ -1,16 +1,21 @@
 import ProjectContainer from "../src/models/ProjectContainer";
 import fileUtil from "../src/models/file_util";
-const { expect } = require("chai"); 
+const { expect } = require("chai");
 const path = require("path");
-const TEMP_PROJECT_PATH = path.join(process.cwd(), "test", "out", "testproj.json")
+const TEMP_PROJECT_PATH = path.join(
+  process.cwd(),
+  "test",
+  "out",
+  "testproj.json"
+);
 
 describe("project container", () => {
   let projectContainer;
   // runs before all tests in this block
-  before(async function () {
+  before(async function() {
     fileUtil.setFs(require("fs"));
     await fileUtil.unlink(TEMP_PROJECT_PATH);
-    projectContainer = new ProjectContainer(fileUtil, require('os').homedir);
+    projectContainer = new ProjectContainer(fileUtil, require("os").homedir());
     await projectContainer.init();
   });
 
@@ -31,7 +36,9 @@ describe("project container", () => {
 
   it("Should save the project", async () => {
     // add some requests and context to the project
-    const data = await fileUtil.readFile(path.join(process.cwd(), "test", "project.json"));
+    const data = await fileUtil.readFile(
+      path.join(process.cwd(), "test", "project.json")
+    );
     const expected = JSON.parse(data);
     console.log(`loaded project ${data}`);
 
@@ -47,12 +54,18 @@ describe("project container", () => {
     const result = JSON.parse(data);
 
     expect(result.requests.length).to.be.equal(expected.requests.length);
-    expect(result.context.source.name).to.be.equal(expected.context.source.name);
+    expect(result.context.source.name).to.be.equal(
+      expected.context.source.name
+    );
 
-    const settingsData = await fileUtil.readFile(projectContainer.SETTINGS_FILE);
+    const settingsData = await fileUtil.readFile(
+      projectContainer.SETTINGS_FILE
+    );
     const settings = JSON.parse(settingsData);
 
     expect(settings.files.length).to.be.greaterThan(0);
-    expect(settings.files).to.be.an('array').that.does.includes(TEMP_PROJECT_PATH);
+    expect(settings.files)
+      .to.be.an("array")
+      .that.does.includes(TEMP_PROJECT_PATH);
   });
-})
+});

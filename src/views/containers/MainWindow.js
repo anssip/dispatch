@@ -7,6 +7,7 @@ import RequestView from "./RequestView";
 import { ResizeSensor, Card, TextArea } from "@blueprintjs/core";
 import requestContainer from "../../models/RequestContainer";
 import contextContainer from "../../models/ContextContainer";
+import projectContainer from "../../models/ProjectContainer";
 
 const R = require("ramda");
 
@@ -80,7 +81,7 @@ class MainWindow extends React.Component {
 
 // @ts-ignore
 export default connect({
-  containers: [requestContainer, contextContainer],
+  containers: [requestContainer, contextContainer, projectContainer],
   selector: ({ containers }) => ({
     request: containers[0].getSelected(),
     getPreview: R.bind(containers[0].getPreview, containers[0]),

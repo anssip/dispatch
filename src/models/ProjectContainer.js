@@ -2,45 +2,55 @@ import requestContainer from "./RequestContainer";
 import contextContainer from "./ContextContainer";
 import { Container } from "overstated";
 
-const R = require('ramda');
+const R = require("ramda");
 
 class ProjectContainer extends Container {
-  constructor(fileUtil, homedir) {
+  constructor() {
     super();
+    console.log("Creating new ProjectContainer");
 
-    this.APP_SETTINGS_DIR = `${homedir()}/.dispatch`;
-    this.SETTINGS_FILE = `${this.APP_SETTINGS_DIR}/settings.json`;
-
-    this.fileUtil = fileUtil;
-    this.state = { recentIsActive: true, files: [] };
+    this.state = {
+      recentIsActive: true,
+      files: [],
+      activeSidebarTab: "requests"
+    };
+  }
+  // @ts-ignore
+  setState(state, cb) {
+    super.setState({ isModified: true, ...state }, cb);
   }
 
-  async init() {
-    await this.loadSettings();
+  async init(fileUtil, homedir) {
+    this.APP_SETTINGS_DIR = `${homedir}/.dispatch`;
+    this.SETTINGS_FILE = `${this.APP_SETTINGS_DIR}/settings.json`;
+    this.fileUtil = fileUtil;
 
+    await this.loadSettings();
     const activeProjectFile = this.getActive();
     if (!activeProjectFile) return;
-    
+
     const project = await this.load(activeProjectFile);
     if (project) {
       requestContainer.init(project.requests);
-      contextContainer.init(project.context, project.vars);  
+      contextContainer.init(project.context, project.vars);
     }
   }
 
   async loadSettings() {
-    if (! await this.fileUtil.fileExists(this.APP_SETTINGS_DIR)) {
+    if (!(await this.fileUtil.fileExists(this.APP_SETTINGS_DIR))) {
       await this.fileUtil.mkdir(this.APP_SETTINGS_DIR);
     }
-    if (! await this.fileUtil.fileExists(this.SETTINGS_FILE)) {
-      this.fileUtil.writeFile(this.SETTINGS_FILE, JSON.stringify({ files: [] }));
+    if (!(await this.fileUtil.fileExists(this.SETTINGS_FILE))) {
+      this.fileUtil.writeFile(
+        this.SETTINGS_FILE,
+        JSON.stringify({ files: [], activeSidebarTab: "requests" })
+      );
     }
     const contents = await this.fileUtil.readFile(this.SETTINGS_FILE);
     const data = JSON.parse(contents);
     this.setState(data);
     return data;
   }
-
 
   async load(path) {
     console.log(`loading project file ${path}`);
@@ -62,8 +72,8 @@ class ProjectContainer extends Container {
   }
 
   getActive() {
-    if (! this.state.recentIsActive) return null;
-    return this.state.files[0]; 
+    if (!this.state.recentIsActive) return null;
+    return this.state.files[0];
   }
 
   setActive(path) {
@@ -80,7 +90,10 @@ class ProjectContainer extends Container {
     const files = this.updateMostRecent(path);
     console.log(`We have ${files.length} recent files`);
     console.log(`Saving settings to ${this.SETTINGS_FILE}`);
-    await this.fileUtil.writeFile(this.SETTINGS_FILE, JSON.stringify({ files }));
+    await this.fileUtil.writeFile(
+      this.SETTINGS_FILE,
+      JSON.stringify({ files, activeSidebarTab: this.state.activeSidebarTab })
+    );
     requestContainer.setModified(false);
     contextContainer.setModified(false);
     return files;
@@ -111,11 +124,15 @@ class ProjectContainer extends Container {
 
   // TODO: delegate to requestContainer.getPersistedData() and contextContainer.getPersistedData()
   getProjectFileData() {
-    return JSON.stringify({
-      requests: requestContainer.getRequests(),
-      context: contextContainer.getValue(),
-      vars: contextContainer.getVariables()
-    }, null, 2);
+    return JSON.stringify(
+      {
+        requests: requestContainer.getRequests(),
+        context: contextContainer.getValue(),
+        vars: contextContainer.getVariables()
+      },
+      null,
+      2
+    );
   }
 
   newProject() {
@@ -133,12 +150,19 @@ class ProjectContainer extends Container {
   }
 
   isModified() {
-    const isModified = requestContainer.isModified() || contextContainer.isModified();
+    const isModified =
+      requestContainer.isModified() || contextContainer.isModified();
     console.log(`ProjectContainer: isModified ? ${isModified}`);
     return isModified;
   }
+
+  setActiveSidebarTab(activeSidebarTab) {
+    this.setState({ activeSidebarTab });
+  }
+
+  getActiveSidebarTab() {
+    return this.state.activeSidebarTab;
+  }
 }
 
-// module.exports = new ProjectContainer(); 
-
-export default ProjectContainer;
+export default new ProjectContainer();

@@ -4,7 +4,7 @@
       "name": "Create test source",
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-source",
-      "headers": [],
+      "headers": {},
       "body": {
         "req1_config": "{{ctx.source.config}}"
       },

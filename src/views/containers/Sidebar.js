@@ -17,6 +17,7 @@ import connect from "unstated-connect2";
 import requestContainer from "../../models/RequestContainer";
 import contextContainer from "../../models/ContextContainer";
 import authContainer from "../../models/AuthContainer";
+import projectContainer from "../../models/ProjectContainer";
 import Request from "../components/Request";
 import AuthMethod from "../components/AuthMethod";
 
@@ -30,10 +31,11 @@ const BottomBar = styled.div`
 class Sidebar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tab: "requests" };
   }
   render() {
     const {
+      activeTab,
+      setActiveTab,
       add,
       selectEnv,
       addEnv,
@@ -47,11 +49,11 @@ class Sidebar extends React.Component {
     console.log(`Sidebar: selectedEnv: ${selectEnv}`);
 
     const addClicked = () => {
-      if (this.state.tab === "context") {
-        this.changeTab("requests");
+      if (activeTab === "context") {
+        setActiveTab("requests");
         add.requests();
       } else {
-        add[this.state.tab]();
+        add[activeTab]();
       }
     };
 
@@ -59,9 +61,9 @@ class Sidebar extends React.Component {
       <Card className="left-pane">
         <Tabs
           id="sidebarTabs"
-          onChange={tab => this.changeTab(tab)}
+          onChange={setActiveTab}
           renderActiveTabPanelOnly={true}
-          selectedTabId={this.state.tab}
+          selectedTabId={activeTab}
         >
           <Tab
             id="requests"
@@ -117,11 +119,6 @@ class Sidebar extends React.Component {
       </Card>
     );
   }
-
-  changeTab(tab) {
-    console.log(`Changing to tab ${tab}`);
-    this.setState({ tab });
-  }
 }
 
 const EnvMenu = props => (
@@ -138,8 +135,15 @@ const EnvMenu = props => (
 
 // @ts-ignore
 export default connect({
-  containers: [requestContainer, contextContainer, authContainer],
+  containers: [
+    requestContainer,
+    contextContainer,
+    authContainer,
+    projectContainer
+  ],
   selector: ({ containers }) => ({
+    activeTab: containers[3].getActiveSidebarTab(),
+    setActiveTab: R.bind(containers[3].setActiveSidebarTab, containers[3]),
     requests: containers[0].getRequests(),
     selectRequest: R.bind(containers[0].select, containers[0]),
     methods: containers[2].getMethods(),
