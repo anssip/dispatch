@@ -1,8 +1,8 @@
 {
   "requests": [
     {
-      "method": "POST",
-      "name": "request-0",
+      "method": "GET",
+      "name": "Get mystuff",
       "url": "http://echo.dispatch.rest",
       "selected": true,
       "body": "Heippa homot!"

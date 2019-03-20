@@ -34,6 +34,7 @@ class OAuth2Form extends PureComponent {
     const {
       authProps,
       formFields,
+      grantType,
       access_token,
       refresh_token,
       token_type,
@@ -41,7 +42,8 @@ class OAuth2Form extends PureComponent {
       set_access_token,
       set_refresh_token,
       set_token_type,
-      set_scope
+      set_scope,
+      setGrantType
     } = this.props;
 
     const storeTokens = tokens => {
@@ -74,8 +76,26 @@ class OAuth2Form extends PureComponent {
     const refreshToken = R.partial(getTokensAndHandleError, [
       authService.refreshTokens
     ]);
+    const grantTypes = [
+      { value: 0, label: "Authorization Code" },
+      { value: 1, label: "Implicit" },
+      { value: 2, label: "Password Credentials" },
+      { value: 3, label: "Client Credentials" }
+    ];
     return (
       <>
+        <ControlGroup fill={true}>
+          <label style={{ width: "180px" }} class="bp3-label">
+            Grant type
+          </label>
+          <HTMLSelect
+            fill={true}
+            style={{ width: "100%" }}
+            value={grantType}
+            onChange={setGrantType}
+            options={grantTypes}
+          />
+        </ControlGroup>
         {formFields.map((f, i) => (
           <ControlGroup fill={true}>
             <label style={{ width: "180px" }} class="bp3-label">
@@ -134,34 +154,44 @@ export default connect({
     return {
       authProps: props,
       formFields: [
-        ["Client ID", props.clientId, R.partial(setProp, ["clientId"])],
+        ["Client ID", props.clientId, R.partial(setProp, ["clientId"]), [0, 1]],
         [
           "Client Secret",
           props.clientSecret,
-          R.partial(setProp, ["clientSecret"])
+          R.partial(setProp, ["clientSecret"]),
+          [0]
         ],
         [
           "Access Token URL",
           props.accessTokenUrl,
-          R.partial(setProp, ["accessTokenUrl"])
+          R.partial(setProp, ["accessTokenUrl"]),
+          [0]
         ],
         [
           "Authorization URL",
           props.authorizationUrl,
-          R.partial(setProp, ["authorizationUrl"])
+          R.partial(setProp, ["authorizationUrl"]),
+          [0, 1]
         ],
         [
           "Redirect URI",
           props.redirectUri,
-          R.partial(setProp, ["redirectUri"])
+          R.partial(setProp, ["redirectUri"]),
+          [0, 1]
         ],
-        ["Scope", props.scope, R.partial(setProp, ["scope"])]
-      ],
+        ["Scope", props.scope, R.partial(setProp, ["scope"]), [0, 1]]
+      ].filter(f => f[3].indexOf(parseInt(props.grantType) || 0) >= 0),
+      grantType: props.grantType || 0,
       access_token: props.access_token,
       refresh_token: props.refresh_token,
       token_type: props.token_type,
       token_scope: props.token_scope,
 
+      setGrantType: R.compose(
+        R.partial(setProp, ["grantType"]),
+        R.prop("value"),
+        R.prop("currentTarget")
+      ),
       set_access_token: R.partial(setProp, ["access_token"]),
       set_refresh_token: R.partial(setProp, ["refresh_token"]),
       set_token_type: R.partial(setProp, ["token_type"]),
