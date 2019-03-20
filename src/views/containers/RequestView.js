@@ -8,7 +8,8 @@ import {
   InputGroup,
   Button,
   Tabs,
-  Tab
+  Tab,
+  Icon
 } from "@blueprintjs/core";
 import styled from "styled-components";
 import RequestViewComponent from "./RequestViewCompoent";
@@ -31,7 +32,11 @@ const UrlInput = withValueChangeDetection(
   )
 );
 const NameInput = withValueChangeDetection(
-  props => <EditableText {...props} />,
+  props => (
+    <h2>
+      <EditableText {...props} />
+    </h2>
+  ),
   R.identity
 );
 const METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
@@ -42,9 +47,10 @@ const TabContainer = styled.div`
 const MainPane = styled.div`
   height: 100%;
 `;
-const NameWrapper = styled.h2`
-  margin-top: 10px;
-  text-align: left;
+const AuthMethodWrapper = styled.div`
+  text-align: right;
+  padding-top: 15px;
+  width: 200px;
 `;
 
 class RequestView extends React.Component {
@@ -75,7 +81,7 @@ class RequestView extends React.Component {
     } = this.props;
 
     console.log("RequestView, authMethods", request.authMethod);
-    if (request && request.name) {
+    if (request) {
       const onMethodChange = R.compose(
         setMethod,
         R.prop("value"),
@@ -100,20 +106,25 @@ class RequestView extends React.Component {
                 onClick={dispatchSelected}
               />
             </ControlGroup>
-            <NameWrapper>
+
+            <ControlGroup fill={true}>
               <NameInput value={request.name} onChange={setName} />
-            </NameWrapper>
-            <ControlGroup>
-              <label class="bp3-label">Auth</label>
-              <HTMLSelect
-                value={request.authMethod || 0}
-                onChange={setAuthMethod}
-                options={authMethods.map((m, i) => ({
-                  label: m.name,
-                  value: i
-                }))}
-                className={Classes.FIXED}
-              />
+              <AuthMethodWrapper>
+                <Icon
+                  icon="blocked-person"
+                  style={{ marginRight: 8 }}
+                  iconSize={16}
+                />
+                <HTMLSelect
+                  value={request.authMethod || 0}
+                  onChange={setAuthMethod}
+                  options={authMethods.map((m, i) => ({
+                    label: m.name,
+                    value: i
+                  }))}
+                  className={Classes.FIXED}
+                />
+              </AuthMethodWrapper>
             </ControlGroup>
 
             <TabContainer>
@@ -214,6 +225,6 @@ export default connect({
       R.prop("value"),
       R.prop("currentTarget")
     ),
-    authMethods: R.prepend({ name: "none" }, containers[2].getMethods())
+    authMethods: R.prepend({ name: "no auth" }, containers[2].getMethods())
   })
 })(RequestView);
