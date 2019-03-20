@@ -18,6 +18,7 @@ import AuthView from "./auth/AuthView";
 import connect from "unstated-connect2";
 import requestContainer from "../../models/RequestContainer";
 import contextContainer from "../../models/ContextContainer";
+import authContainer from "../../models/AuthContainer";
 import withValueChangeDetection from "../components/Input";
 import Dispatcher from "../../models/Dispatcher";
 
@@ -68,9 +69,12 @@ class RequestView extends React.Component {
       addHeader,
       setHeaderName,
       setHeaderValue,
-      deleteHeader
+      deleteHeader,
+      setAuthMethod,
+      authMethods
     } = this.props;
 
+    console.log("RequestView, authMethods", request.authMethod);
     if (request && request.name) {
       const onMethodChange = R.compose(
         setMethod,
@@ -99,6 +103,18 @@ class RequestView extends React.Component {
             <NameWrapper>
               <NameInput value={request.name} onChange={setName} />
             </NameWrapper>
+            <ControlGroup>
+              <label class="bp3-label">Auth</label>
+              <HTMLSelect
+                value={request.authMethod || 0}
+                onChange={setAuthMethod}
+                options={authMethods.map((m, i) => ({
+                  label: m.name,
+                  value: i
+                }))}
+                className={Classes.FIXED}
+              />
+            </ControlGroup>
 
             <TabContainer>
               <Tabs
@@ -174,7 +190,7 @@ class RequestView extends React.Component {
 
 // @ts-ignore
 export default connect({
-  containers: [requestContainer, contextContainer],
+  containers: [requestContainer, contextContainer, authContainer],
   selector: ({ containers, paneWidth, paneHeight }) => ({
     paneWidth,
     paneHeight,
@@ -192,6 +208,12 @@ export default connect({
     deleteHeader: R.bind(containers[0].deleteHeader, containers[0]),
     dispatchSelected: R.partial(new Dispatcher(...containers).dispatch, [
       containers[0].getSelected()
-    ])
+    ]),
+    setAuthMethod: R.compose(
+      R.bind(containers[0].setAuthMethod, containers[0]),
+      R.prop("value"),
+      R.prop("currentTarget")
+    ),
+    authMethods: R.prepend({ name: "none" }, containers[2].getMethods())
   })
 })(RequestView);

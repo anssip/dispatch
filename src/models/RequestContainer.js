@@ -113,6 +113,9 @@ class RequestContainer extends Container {
   setMethod(value) {
     return this.setProp("method", value);
   }
+  setAuthMethod(methodIndex) {
+    return this.setProp("authMethod", methodIndex);
+  }
   setName(value) {
     return this.setProp("name", value);
   }

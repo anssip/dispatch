@@ -20,7 +20,7 @@ const createWindow = () => {
     height: 680
   });
   mainWindow.loadURL(
-    false
+    isDev
       ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );

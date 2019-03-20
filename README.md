@@ -12,6 +12,7 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 next:
 
+- (Make sure auth method names are unqique
 - Auth method selection to request to `RequestView` next to the name
 - Rest of the auth grant flows
 - Request preview with headers, params, and auth
