@@ -28,22 +28,25 @@ In OAuth 2.0, the term “grant type” refers to the way an application gets an
 
 [What is the OAuth 2.0 Authorization Code Grant Type?](https://developer.okta.com/blog/2018/04/10/oauth-authorization-code-grant-type)
 
-- Clean up oauth2.js
-- Store the OAuth token info to req.auth and persist
-- Bind the form fields with oauth2.js
+- Implicit
 
-* Auth: Basic auth, Bearer token, later: OAuth 2
-* request sending
-* non JSON requests?
+  - Don't show the refresh_token field nor the Refresh button
 
-# Auth data model
+    - https://developer.okta.com/blog/2018/05/24/what-is-the-oauth2-implicit-grant-type
 
-```
-project:
-    - AuthContainer
-      - methods[]
-        - methd: type, [attributes], tokens
-    - requests:
-      - request
-        - auth method index
-```
+  - Resource Owner Password grant
+
+    - fields: Username, password, accessTokenUrl
+    - request to the `token` URL
+    - https://developer.okta.com/authentication-guide/implementing-authentication/password
+
+  - Client Credentials grant
+    - fields: accessTokenUrl
+    - clientId / clientSecret sent in basic auth into the `token` URL
+    - https://developer.okta.com/authentication-guide/implementing-authentication/client-creds
+
+  * Render request methods (GET, POST, PUT) in different colors
+
+  - Auth: Basic auth, Bearer token, later: OAuth 2
+  - request sending
+  - non JSON requests?

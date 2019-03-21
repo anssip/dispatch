@@ -140,16 +140,8 @@
   "methods": [
     {
       "method": "GET",
-      "name": "API credentials",
-      "selected": false,
-      "type": "basic",
-      "username": "anssi",
-      "password": "anssipanssi"
-    },
-    {
-      "method": "GET",
       "name": "default",
-      "selected": true,
+      "selected": false,
       "type": "oAuth2",
       "redirectUri": "https://dispatch.rest/callback",
       "authorizationUrl": "https://github.com/login/oauth/authorize",
@@ -159,6 +151,22 @@
       "access_token": "b0a398d009c6e1d606ebc30fabdf34116d135b01",
       "token_type": "bearer",
       "token_scope": ""
+    },
+    {
+      "method": "GET",
+      "name": "API credentials",
+      "selected": false,
+      "type": "basic",
+      "username": "anssi",
+      "password": "anssipanssi"
+    },
+    {
+      "name": "Implicit",
+      "selected": true,
+      "type": "oAuth2",
+      "grantType": "1",
+      "clientId": "jSC2EdBkYj1w2MVOQJ4WDMTtE0KKSuUU",
+      "authorizationUrl": "https://dispatch-rest-dev.eu.auth0.com/authorize"
     }
   ]
 }

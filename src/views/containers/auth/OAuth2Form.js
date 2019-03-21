@@ -117,23 +117,22 @@ class OAuth2Form extends PureComponent {
           />
         </ControlGroup>
         {formFields.map((f, i) => (
-          <ControlGroup fill={true}>
+          <ControlGroup key={i} fill={true}>
             <label
               style={{
-                width: "180px",
-                color: f[3].indexOf(grantType) >= 0 ? "#fff" : "#777"
+                width: "180px"
               }}
               class="bp3-label"
             >
               {f[0]}
             </label>
             <FormField
+              key={f[0]}
               value={f[1]}
               onChange={f[2]}
               class="bp3-input"
               style={{
-                width: "100%",
-                display: f[3].indexOf(grantType) >= 0 ? "block" : "none"
+                width: "100%"
               }}
               type="text"
               dir="auto"
@@ -245,7 +244,7 @@ export default connect({
             GRANT_TYPE_CLIENT_CREDS
           ]
         ]
-      ],
+      ].filter(f => f[3].indexOf(parseInt(props.grantType)) >= 0),
       grantType: parseInt(props.grantType) || 0,
       access_token: props.access_token,
       refresh_token: props.refresh_token,
