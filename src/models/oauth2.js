@@ -1,6 +1,7 @@
 const request = require("request");
 const url = require("url");
 const { BrowserWindow, getCurrentWindow } = window.require("electron").remote;
+const R = require("ramda");
 let win = null;
 
 const GRANT_TYPE_AUTH_CODE = 0;
@@ -47,27 +48,18 @@ const loadTokens = props => {
       session: { webRequest }
     } = win.webContents;
 
-    const filter = { urls: ["https://dispatch.rest/*"] };
-    // Detect the redirect using the onBeforeRequest event
-    webRequest.onBeforeRequest(filter, async ({ url }) => {
-      console.log(`onBeforeRequest() url: ${url}`);
-      try {
-        const tokens = await requestTokens(props, url);
-        // destroyAuthWin();
-        resolve(tokens);
-      } catch (e) {
-        console.error(`Failed to fetch the token: ${e.message}`);
-        destroyAuthWin();
-        reject(e);
+    console.log(`redirectUril = ${props.redirectUri}`);
+    webRequest.onCompleted(() => {
+      if (win) {
+        win.show();
       }
     });
-    webRequest.onErrorOccurred(details => {
-      console.error("createAuthWindow():: onErrorOccurred", details);
-      reject(new Error(`Authorization failed: ${details.error}`));
+    win.webContents.on("did-navigate", async () => {
+      const url = win.webContents.getURL();
+      console.log(`Navigated to ${url}`);
+      const tokens = await requestTokens(props, url);
       // destroyAuthWin();
-    });
-    webRequest.onCompleted(filter, () => {
-      win.show();
+      resolve(tokens);
     });
   });
 };
@@ -103,7 +95,7 @@ const requestTokens = (props, callbackURL) => {
       body: JSON.stringify(exchangeOptions)
     };
     request(options, (error, resp, responseBody) => {
-      destroyAuthWin();
+      // destroyAuthWin();
       if (error || resp.statusCode >= 400) {
         console.error("request failed", error);
         const msg =
@@ -128,9 +120,8 @@ const requestTokens = (props, callbackURL) => {
 
 function refreshTokens(props) {
   return new Promise((resolve, reject) => {
-    if (!props.refreshToken) return reject("Refresh is required to refresh");
-
-    // TODO: change to use the AUTH TOKEN URL supplied in the
+    if (!props.refreshToken)
+      return reject("Refresh token is required to refresh");
     const refreshOptions = {
       method: "POST",
       url: `https://github.com/login/oauth/access_token`,

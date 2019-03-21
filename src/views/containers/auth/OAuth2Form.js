@@ -244,7 +244,7 @@ export default connect({
             GRANT_TYPE_CLIENT_CREDS
           ]
         ]
-      ].filter(f => f[3].indexOf(parseInt(props.grantType)) >= 0),
+      ].filter(f => f[3].indexOf(parseInt(props.grantType || 0)) >= 0),
       grantType: parseInt(props.grantType) || 0,
       access_token: props.access_token,
       refresh_token: props.refresh_token,

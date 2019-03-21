@@ -141,7 +141,7 @@
     {
       "method": "GET",
       "name": "default",
-      "selected": false,
+      "selected": true,
       "type": "oAuth2",
       "redirectUri": "https://dispatch.rest/callback",
       "authorizationUrl": "https://github.com/login/oauth/authorize",
@@ -162,7 +162,7 @@
     },
     {
       "name": "Implicit",
-      "selected": true,
+      "selected": false,
       "type": "oAuth2",
       "grantType": "1",
       "clientId": "jSC2EdBkYj1w2MVOQJ4WDMTtE0KKSuUU",
