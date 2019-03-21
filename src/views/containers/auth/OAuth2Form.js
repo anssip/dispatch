@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { Component, PureComponent } from "react";
 import {
   FormGroup,
   TextArea,
@@ -15,6 +15,12 @@ import authContainer from "../../../models/AuthContainer";
 import withValueChangeDetection from "../../components/Input";
 import authService from "../../../models/oauth2";
 
+const {
+  GRANT_TYPE_AUTH_CODE,
+  GRANT_TYPE_CLIENT_CREDS,
+  GRANT_TYPE_IMPLICIT,
+  GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS
+} = authService;
 const R = require("ramda");
 const FormField = withValueChangeDetection(
   props => <input className="bp3-input" {...props} />,
@@ -22,6 +28,16 @@ const FormField = withValueChangeDetection(
     R.prop("value"),
     R.prop("target")
   )
+);
+const createFormField = (value, onChange, display) => (
+  <FormField
+    value={value}
+    onChange={onChange}
+    class="bp3-input"
+    style={{ width: "100%", display }}
+    type="text"
+    dir="auto"
+  />
 );
 
 class OAuth2Form extends PureComponent {
@@ -77,11 +93,15 @@ class OAuth2Form extends PureComponent {
       authService.refreshTokens
     ]);
     const grantTypes = [
-      { value: 0, label: "Authorization Code" },
-      { value: 1, label: "Implicit" },
-      { value: 2, label: "Password Credentials" },
-      { value: 3, label: "Client Credentials" }
+      { value: GRANT_TYPE_AUTH_CODE, label: "Authorization Code" },
+      { value: GRANT_TYPE_IMPLICIT, label: "Implicit" },
+      {
+        value: GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS,
+        label: "Password Credentials"
+      },
+      { value: GRANT_TYPE_CLIENT_CREDS, label: "Client Credentials" }
     ];
+
     return (
       <>
         <ControlGroup fill={true}>
@@ -98,14 +118,23 @@ class OAuth2Form extends PureComponent {
         </ControlGroup>
         {formFields.map((f, i) => (
           <ControlGroup fill={true}>
-            <label style={{ width: "180px" }} class="bp3-label">
+            <label
+              style={{
+                width: "180px",
+                color: f[3].indexOf(grantType) >= 0 ? "#fff" : "#777"
+              }}
+              class="bp3-label"
+            >
               {f[0]}
             </label>
             <FormField
               value={f[1]}
               onChange={f[2]}
               class="bp3-input"
-              style={{ width: "100%" }}
+              style={{
+                width: "100%",
+                display: f[3].indexOf(grantType) >= 0 ? "block" : "none"
+              }}
               type="text"
               dir="auto"
             />
@@ -154,34 +183,70 @@ export default connect({
     return {
       authProps: props,
       formFields: [
-        ["Client ID", props.clientId, R.partial(setProp, ["clientId"]), [0, 1]],
+        [
+          "Client ID",
+          props.clientId,
+          R.partial(setProp, ["clientId"]),
+          [
+            GRANT_TYPE_AUTH_CODE,
+            GRANT_TYPE_IMPLICIT,
+            GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS,
+            GRANT_TYPE_CLIENT_CREDS
+          ]
+        ],
         [
           "Client Secret",
           props.clientSecret,
           R.partial(setProp, ["clientSecret"]),
-          [0]
+          [
+            GRANT_TYPE_AUTH_CODE,
+            GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS,
+            GRANT_TYPE_CLIENT_CREDS
+          ]
         ],
         [
           "Access Token URL",
           props.accessTokenUrl,
           R.partial(setProp, ["accessTokenUrl"]),
-          [0]
+          [GRANT_TYPE_AUTH_CODE, GRANT_TYPE_CLIENT_CREDS]
         ],
         [
           "Authorization URL",
           props.authorizationUrl,
           R.partial(setProp, ["authorizationUrl"]),
-          [0, 1]
+          [GRANT_TYPE_AUTH_CODE, GRANT_TYPE_IMPLICIT]
         ],
         [
           "Redirect URI",
           props.redirectUri,
           R.partial(setProp, ["redirectUri"]),
-          [0, 1]
+          [GRANT_TYPE_AUTH_CODE, GRANT_TYPE_IMPLICIT]
         ],
-        ["Scope", props.scope, R.partial(setProp, ["scope"]), [0, 1]]
-      ].filter(f => f[3].indexOf(parseInt(props.grantType) || 0) >= 0),
-      grantType: props.grantType || 0,
+        [
+          "Username",
+          props.usrname,
+          R.partial(setProp, ["username"]),
+          [GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS]
+        ],
+        [
+          "Password",
+          props.password,
+          R.partial(setProp, ["password"]),
+          [GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS]
+        ],
+        [
+          "Scope",
+          props.scope,
+          R.partial(setProp, ["scope"]),
+          [
+            GRANT_TYPE_AUTH_CODE,
+            GRANT_TYPE_IMPLICIT,
+            GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS,
+            GRANT_TYPE_CLIENT_CREDS
+          ]
+        ]
+      ],
+      grantType: parseInt(props.grantType) || 0,
       access_token: props.access_token,
       refresh_token: props.refresh_token,
       token_type: props.token_type,

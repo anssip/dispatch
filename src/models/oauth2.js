@@ -3,6 +3,11 @@ const url = require("url");
 const { BrowserWindow, getCurrentWindow } = window.require("electron").remote;
 let win = null;
 
+const GRANT_TYPE_AUTH_CODE = 0;
+const GRANT_TYPE_IMPLICIT = 1;
+const GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS = 2;
+const GRANT_TYPE_CLIENT_CREDS = 3;
+
 function buildAuthURL(props) {
   return (
     `${props.authorizationUrl}?` +
@@ -148,5 +153,9 @@ function refreshTokens(props) {
 
 export default {
   loadTokens,
-  refreshTokens
+  refreshTokens,
+  GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS,
+  GRANT_TYPE_AUTH_CODE,
+  GRANT_TYPE_CLIENT_CREDS,
+  GRANT_TYPE_IMPLICIT
 };
