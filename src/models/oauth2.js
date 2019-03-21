@@ -1,5 +1,6 @@
 const request = require("request");
 const url = require("url");
+const querystring = require("querystring");
 const { BrowserWindow, getCurrentWindow } = window.require("electron").remote;
 const R = require("ramda");
 let win = null;
@@ -9,15 +10,31 @@ const GRANT_TYPE_IMPLICIT = 1;
 const GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS = 2;
 const GRANT_TYPE_CLIENT_CREDS = 3;
 
-function buildAuthURL(props) {
+const responseTypes = new Map([
+  [GRANT_TYPE_AUTH_CODE, "code"],
+  [GRANT_TYPE_IMPLICIT, "token"]
+]);
+
+/*
+# Implicit:
+
+https://authorization-server.com/auth
+ ?response_type=token
+ &client_id=29352910282374239857
+ &redirect_uri=https%3A%2F%2Fexample-app.com%2Fcallback
+ &scope=create+delete
+ &state=xcoiv98y3md22vwsuye3kch
+*/
+
+const buildAuthURL = props => {
   return (
     `${props.authorizationUrl}?` +
     (props.scope ? `scope=${props.scope}&` : "") +
-    `response_type=code` +
+    `response_type=${responseTypes.get(parseInt(props.grantType))}` +
     `&client_id=${props.clientId}` +
     `&redirect_uri=${props.redirectUri}`
   );
-}
+};
 
 const loadTokens = props => {
   console.log("loadTokens()", props);
@@ -57,9 +74,30 @@ const loadTokens = props => {
     win.webContents.on("did-navigate", async () => {
       const url = win.webContents.getURL();
       console.log(`Navigated to ${url}`);
-      const tokens = await requestTokens(props, url);
-      // destroyAuthWin();
-      resolve(tokens);
+
+      if (props.grantType == GRANT_TYPE_IMPLICIT) {
+        // check the existence of access_token
+        // check if this is equal to the redirectUrl (?)
+        // https://www.dispatch.rest/callback#access_token=D7-4rzRoM6dMkQWfxy8WMEbeGQXYZbYU&expires_in=7200&token_type=Bearer&state=g6Fo2SBvZERQYTJrTk9mbEJaTjR0TGctUTdNZWl6ODlpQlNJT6N0aWTZIHdHZjNKaUQ3UDN5OGNLbjBVM05ZRlVqOW9VQTU2YUkxo2NpZNkgalNDMkVkQmtZajF3Mk1WT1FKNFdETVR0RTBLS1N1VVU
+        try {
+          const tokens = parseTokenFromUrl(url);
+          if (tokens) {
+            return resolve(tokens);
+          } else {
+            console.log(
+              "Did not receive tokens. Still waiting for redirect and token..."
+            );
+          }
+        } catch (err) {
+          reject(err);
+        }
+      }
+
+      if (props.grantType == GRANT_TYPE_AUTH_CODE) {
+        const tokens = await requestTokens(props, url);
+        // destroyAuthWin();
+        resolve(tokens);
+      }
     });
   });
 };
@@ -70,13 +108,29 @@ const destroyAuthWin = () => {
   win = null;
 };
 
+const parseTokenFromUrl = url => {
+  if (url.match(/(error=)/)) throw new Error("Failed to fetch token: ${url}");
+  if (url.match(/(access_token=)/)) {
+    return querystring.parse(url.split("#")[1]);
+  }
+  return null;
+};
+
 const requestTokens = (props, callbackURL) => {
   console.log("requestTokens");
+  const urlParts = url.parse(callbackURL, true);
+  const query = urlParts.query;
 
+  /*
+    Implicit grant response
+
+  https://example-app.com/redirect
+  #access_token=g0ZGZmNj4mOWIjNTk2Pw1Tk4ZTYyZGI3
+  &token_type=Bearer
+  &expires_in=600
+  &state=xcoVv98y2kd44vuqwye3kcq
+  */
   return new Promise((resolve, reject) => {
-    const urlParts = url.parse(callbackURL, true);
-    const query = urlParts.query;
-
     const exchangeOptions = {
       grant_type: "authorization_code",
       client_id: props.clientId,
