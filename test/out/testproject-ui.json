@@ -139,18 +139,16 @@
   ],
   "methods": [
     {
-      "method": "GET",
-      "name": "default",
+      "name": "Implicit",
       "selected": false,
       "type": "oAuth2",
+      "grantType": "1",
+      "clientId": "jSC2EdBkYj1w2MVOQJ4WDMTtE0KKSuUU",
+      "authorizationUrl": "https://dispatch-rest-dev.eu.auth0.com/authorize",
       "redirectUri": "https://dispatch.rest/callback",
-      "authorizationUrl": "https://github.com/login/oauth/authorize",
-      "accessTokenUrl": "https://github.com/login/oauth/access_token",
-      "clientId": "e1d3feefab9a06198e33",
-      "clientSecret": "e5e33fd730ad073494513bb4e003af0237d80212",
-      "access_token": "b0a398d009c6e1d606ebc30fabdf34116d135b01",
-      "token_type": "bearer",
-      "token_scope": ""
+      "scope": "read",
+      "access_token": "Q669Xj2l6h-Lp5aiJP32Mf-OQb38LEzV",
+      "token_type": "Bearer"
     },
     {
       "method": "GET",
@@ -161,16 +159,33 @@
       "password": "anssipanssi"
     },
     {
-      "name": "Implicit",
+      "method": "GET",
+      "name": "Authorization code",
+      "selected": false,
+      "type": "oAuth2",
+      "redirectUri": "https://dispatch.rest/callback",
+      "authorizationUrl": "https://github.com/login/oauth/authorize",
+      "accessTokenUrl": "https://github.com/login/oauth/access_token",
+      "clientId": "e1d3feefab9a06198e33",
+      "clientSecret": "e5e33fd730ad073494513bb4e003af0237d80212",
+      "access_token": "b0a398d009c6e1d606ebc30fabdf34116d135b01",
+      "token_type": "bearer",
+      "token_scope": "",
+      "grantType": "0"
+    },
+    {
+      "name": "Resource owner pwd",
       "selected": true,
       "type": "oAuth2",
-      "grantType": "1",
+      "grantType": "2",
+      "password": "beHzuf-3vadti-totveh",
       "clientId": "jSC2EdBkYj1w2MVOQJ4WDMTtE0KKSuUU",
-      "authorizationUrl": "https://dispatch-rest-dev.eu.auth0.com/authorize",
-      "redirectUri": "https://dispatch.rest/callback",
-      "scope": "read",
-      "access_token": "Q669Xj2l6h-Lp5aiJP32Mf-OQb38LEzV",
-      "token_type": "Bearer"
+      "clientSecret": "942ptsM_IoduUAifbJbbfZ3lXu2U3LL7joFnYYixnqgIfu7vMSYMlZLLRdvEFuGs",
+      "accessTokenUrl": "https://dispatch-rest-dev.eu.auth0.com/oauth/token",
+      "username": "api@iki.fi",
+      "access_token": "F58y1gVn_86JInrRsbgL6oQEIgbasYHw",
+      "token_type": "Bearer",
+      "token_scope": "openid profile email address phone"
     }
   ]
 }

@@ -127,7 +127,7 @@ class OAuth2Form extends PureComponent {
               {f[0]}
             </label>
             <FormField
-              key={f[0]}
+              key={`${grantType}-${f[0]}`}
               value={f[1]}
               onChange={f[2]}
               class="bp3-input"
@@ -207,7 +207,11 @@ export default connect({
           "Access Token URL",
           props.accessTokenUrl,
           R.partial(setProp, ["accessTokenUrl"]),
-          [GRANT_TYPE_AUTH_CODE, GRANT_TYPE_CLIENT_CREDS]
+          [
+            GRANT_TYPE_AUTH_CODE,
+            GRANT_TYPE_CLIENT_CREDS,
+            GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS
+          ]
         ],
         [
           "Authorization URL",
@@ -223,7 +227,7 @@ export default connect({
         ],
         [
           "Username",
-          props.usrname,
+          props.username,
           R.partial(setProp, ["username"]),
           [GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS]
         ],

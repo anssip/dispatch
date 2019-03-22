@@ -15,17 +15,6 @@ const responseTypes = new Map([
   [GRANT_TYPE_IMPLICIT, "token"]
 ]);
 
-/*
-# Implicit:
-
-https://authorization-server.com/auth
- ?response_type=token
- &client_id=29352910282374239857
- &redirect_uri=https%3A%2F%2Fexample-app.com%2Fcallback
- &scope=create+delete
- &state=xcoiv98y3md22vwsuye3kch
-*/
-
 const buildAuthURL = props => {
   return (
     `${props.authorizationUrl}?` +
@@ -36,8 +25,68 @@ const buildAuthURL = props => {
   );
 };
 
-const loadTokens = props => {
-  console.log("loadTokens()", props);
+const authResourceOwnerPwd = props => {
+  console.log("authResourceOwnerPwd", props);
+
+  /*
+  curl --request POST \
+  --url https://{yourOktaDomain}/oauth2/default/v1/token \
+  --header 'accept: application/json' \
+  --header 'authorization: Basic MG9hYn...' \
+  --header 'content-type: application/x-www-form-urlencoded' \
+  --data 'grant_type=password&username=testuser1%40example.com&password=%7CmCov
+  rlnU9oZU4qWGrhQSM%3Dyd&scope=openid'
+  */
+
+  return new Promise((resolve, reject) => {
+    const exchangeOptions = {
+      username: props.username,
+      password: props.password,
+      grant_type: "password",
+      // client_id: props.clientId,
+      // client_secret: props.clientSecret,
+      redirect_uri: props.redirectUri,
+      scope: props.scope
+    };
+    const options = {
+      method: "POST",
+      url: props.accessTokenUrl,
+      headers: {
+        "content-type": "application/json",
+        Accept: "application/json"
+      },
+      auth: {
+        username: props.clientId,
+        password: props.clientSecret
+      },
+      body: JSON.stringify(exchangeOptions)
+    };
+
+    // TODO: refactor code repetition (same code in authInWindow)
+    request(options, (error, resp, responseBody) => {
+      if (error || resp.statusCode >= 400) {
+        console.error("request failed", error);
+        const msg =
+          resp && resp.statusCode >= 400
+            ? `Token request failed with status ${
+                resp.statusCode
+              }, ${JSON.stringify(resp)}`
+            : `Failed to fetch token`;
+        return reject(new Error(msg));
+      }
+      const body = JSON.parse(responseBody);
+      console.log("Response body", body);
+      if (body.error) {
+        console.error(`Rejecting with error ${body.error}`);
+        return reject(new Error(`${body.error}: ${JSON.stringify(body)}`));
+      }
+      resolve(body);
+    });
+  });
+};
+
+const authInWindow = props => {
+  console.log("authInWindow()", props);
   destroyAuthWin();
 
   win = new BrowserWindow({
@@ -76,9 +125,6 @@ const loadTokens = props => {
       console.log(`Navigated to ${url}`);
 
       if (props.grantType == GRANT_TYPE_IMPLICIT) {
-        // check the existence of access_token
-        // check if this is equal to the redirectUrl (?)
-        // https://www.dispatch.rest/callback#access_token=D7-4rzRoM6dMkQWfxy8WMEbeGQXYZbYU&expires_in=7200&token_type=Bearer&state=g6Fo2SBvZERQYTJrTk9mbEJaTjR0TGctUTdNZWl6ODlpQlNJT6N0aWTZIHdHZjNKaUQ3UDN5OGNLbjBVM05ZRlVqOW9VQTU2YUkxo2NpZNkgalNDMkVkQmtZajF3Mk1WT1FKNFdETVR0RTBLS1N1VVU
         try {
           const tokens = parseTokenFromUrl(url);
           if (tokens) {
@@ -92,7 +138,6 @@ const loadTokens = props => {
           reject(err);
         }
       }
-
       if (props.grantType == GRANT_TYPE_AUTH_CODE) {
         const tokens = await requestTokens(props, url);
         // destroyAuthWin();
@@ -121,15 +166,6 @@ const requestTokens = (props, callbackURL) => {
   const urlParts = url.parse(callbackURL, true);
   const query = urlParts.query;
 
-  /*
-    Implicit grant response
-
-  https://example-app.com/redirect
-  #access_token=g0ZGZmNj4mOWIjNTk2Pw1Tk4ZTYyZGI3
-  &token_type=Bearer
-  &expires_in=600
-  &state=xcoVv98y2kd44vuqwye3kcq
-  */
   return new Promise((resolve, reject) => {
     const exchangeOptions = {
       grant_type: "authorization_code",
@@ -195,6 +231,17 @@ function refreshTokens(props) {
     });
   });
 }
+
+const loadTokens = props => {
+  const authFunctions = new Map([
+    [GRANT_TYPE_AUTH_CODE, authInWindow],
+    [GRANT_TYPE_IMPLICIT, authInWindow],
+    [GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS, authResourceOwnerPwd]
+  ]);
+
+  console.log(`loadTokens() grant type: ${props.grantType}`, authFunctions);
+  return authFunctions.get(parseInt(props.grantType))(props);
+};
 
 export default {
   loadTokens,
