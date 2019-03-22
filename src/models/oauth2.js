@@ -25,9 +25,10 @@ const buildAuthURL = props => {
   );
 };
 
+const clientCredentials = props => {};
+
 const authResourceOwnerPwd = props => {
   console.log("authResourceOwnerPwd", props);
-
   /*
   curl --request POST \
   --url https://{yourOktaDomain}/oauth2/default/v1/token \
@@ -37,52 +38,29 @@ const authResourceOwnerPwd = props => {
   --data 'grant_type=password&username=testuser1%40example.com&password=%7CmCov
   rlnU9oZU4qWGrhQSM%3Dyd&scope=openid'
   */
-
-  return new Promise((resolve, reject) => {
-    const exchangeOptions = {
-      username: props.username,
-      password: props.password,
-      grant_type: "password",
-      // client_id: props.clientId,
-      // client_secret: props.clientSecret,
-      redirect_uri: props.redirectUri,
-      scope: props.scope
-    };
-    const options = {
-      method: "POST",
-      url: props.accessTokenUrl,
-      headers: {
-        "content-type": "application/json",
-        Accept: "application/json"
-      },
-      auth: {
-        username: props.clientId,
-        password: props.clientSecret
-      },
-      body: JSON.stringify(exchangeOptions)
-    };
-
-    // TODO: refactor code repetition (same code in authInWindow)
-    request(options, (error, resp, responseBody) => {
-      if (error || resp.statusCode >= 400) {
-        console.error("request failed", error);
-        const msg =
-          resp && resp.statusCode >= 400
-            ? `Token request failed with status ${
-                resp.statusCode
-              }, ${JSON.stringify(resp)}`
-            : `Failed to fetch token`;
-        return reject(new Error(msg));
-      }
-      const body = JSON.parse(responseBody);
-      console.log("Response body", body);
-      if (body.error) {
-        console.error(`Rejecting with error ${body.error}`);
-        return reject(new Error(`${body.error}: ${JSON.stringify(body)}`));
-      }
-      resolve(body);
-    });
-  });
+  const exchangeOptions = {
+    username: props.username,
+    password: props.password,
+    grant_type: "password",
+    // client_id: props.clientId,
+    // client_secret: props.clientSecret,
+    redirect_uri: props.redirectUri,
+    scope: props.scope
+  };
+  const options = {
+    method: "POST",
+    url: props.accessTokenUrl,
+    headers: {
+      "content-type": "application/json",
+      Accept: "application/json"
+    },
+    auth: {
+      username: props.clientId,
+      password: props.clientSecret
+    },
+    body: JSON.stringify(exchangeOptions)
+  };
+  return doRequest(options);
 };
 
 const authInWindow = props => {
@@ -166,26 +144,28 @@ const requestTokens = (props, callbackURL) => {
   const urlParts = url.parse(callbackURL, true);
   const query = urlParts.query;
 
+  const exchangeOptions = {
+    grant_type: "authorization_code",
+    client_id: props.clientId,
+    client_secret: props.clientSecret,
+    code: query.code,
+    redirect_uri: props.redirectUri
+  };
+  const options = {
+    method: "POST",
+    url: props.accessTokenUrl,
+    headers: {
+      "content-type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify(exchangeOptions)
+  };
+  return doRequest(options);
+};
+
+const doRequest = options => {
   return new Promise((resolve, reject) => {
-    const exchangeOptions = {
-      grant_type: "authorization_code",
-      client_id: props.clientId,
-      client_secret: props.clientSecret,
-      code: query.code,
-      redirect_uri: props.redirectUri
-    };
-    // TODO: change to use the AUTH TOKEN URL supplied in the
-    const options = {
-      method: "POST",
-      url: props.accessTokenUrl,
-      headers: {
-        "content-type": "application/json",
-        Accept: "application/json"
-      },
-      body: JSON.stringify(exchangeOptions)
-    };
     request(options, (error, resp, responseBody) => {
-      // destroyAuthWin();
       if (error || resp.statusCode >= 400) {
         console.error("request failed", error);
         const msg =
@@ -202,7 +182,6 @@ const requestTokens = (props, callbackURL) => {
         console.error(`Rejecting with error ${body.error}`);
         return reject(new Error(`${body.error}: ${JSON.stringify(body)}`));
       }
-
       resolve(body);
     });
   });
