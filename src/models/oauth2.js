@@ -19,32 +19,48 @@ const buildAuthURL = props => {
   return (
     `${props.authorizationUrl}?` +
     (props.scope ? `scope=${props.scope}&` : "") +
+    (props.audience ? `audience=${props.audience}&` : "") +
     `response_type=${responseTypes.get(parseInt(props.grantType))}` +
     `&client_id=${props.clientId}` +
     `&redirect_uri=${props.redirectUri}`
   );
 };
 
-const clientCredentials = props => {};
+const authClientCredentials = props => {
+  //  https://developer.okta.com/authentication-guide/implementing-authentication/client-creds/#_1-setting-up-your-application
+  console.log("clientCredentials", props);
+
+  const exchangeOptions = {
+    client_id: props.clientId,
+    client_secret: props.clientSecret,
+    audience: props.audience,
+    grant_type: "client_credentials"
+  };
+  const options = {
+    method: "POST",
+    url: props.accessTokenUrl,
+    headers: {
+      "content-type": "application/json",
+      "cache-control": "no-cache",
+      Accept: "application/json"
+    },
+    auth: {
+      username: props.clientId,
+      password: props.clientSecret
+    },
+    body: JSON.stringify(exchangeOptions)
+  };
+  return doRequest(options);
+};
 
 const authResourceOwnerPwd = props => {
+  // https://developer.okta.com/authentication-guide/implementing-authentication/password/#_1-setting-up-your-application
   console.log("authResourceOwnerPwd", props);
-  /*
-  curl --request POST \
-  --url https://{yourOktaDomain}/oauth2/default/v1/token \
-  --header 'accept: application/json' \
-  --header 'authorization: Basic MG9hYn...' \
-  --header 'content-type: application/x-www-form-urlencoded' \
-  --data 'grant_type=password&username=testuser1%40example.com&password=%7CmCov
-  rlnU9oZU4qWGrhQSM%3Dyd&scope=openid'
-  */
+
   const exchangeOptions = {
     username: props.username,
     password: props.password,
     grant_type: "password",
-    // client_id: props.clientId,
-    // client_secret: props.clientSecret,
-    redirect_uri: props.redirectUri,
     scope: props.scope
   };
   const options = {
@@ -215,9 +231,9 @@ const loadTokens = props => {
   const authFunctions = new Map([
     [GRANT_TYPE_AUTH_CODE, authInWindow],
     [GRANT_TYPE_IMPLICIT, authInWindow],
-    [GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS, authResourceOwnerPwd]
+    [GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS, authResourceOwnerPwd],
+    [GRANT_TYPE_CLIENT_CREDS, authClientCredentials]
   ]);
-
   console.log(`loadTokens() grant type: ${props.grantType}`, authFunctions);
   return authFunctions.get(parseInt(props.grantType))(props);
 };

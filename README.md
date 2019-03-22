@@ -12,13 +12,13 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 next:
 
-- (Make sure auth method names are unqique
-- Auth method selection to request to `RequestView` next to the name
 - Rest of the auth grant flows
 - Request preview with headers, params, and auth
 - Request sending
 
 ### OAuth2Form
+
+- Logging to the output pane when fetching OAuth2 tokens!!
 
 - refactor this to be tied to the selected auth method
 
@@ -50,3 +50,10 @@ In OAuth 2.0, the term “grant type” refers to the way an application gets an
   - Auth: Basic auth, Bearer token, later: OAuth 2
   - request sending
   - non JSON requests?
+
+### working Client Credential request
+
+curl --request POST \
+ --url https://dispatch-rest-dev.eu.auth0.com/oauth/token \
+ --header 'content-type: application/json' \
+ --data '{"client_id":"a9lqkFe4IfYQExWVHo4jBXpiESSXZxYq","client_secret":"Bhoz9vTSSJwKoqvSkXPgY3b2uNSY3NEtQCAgF39cgyd9z3fdQzi7SITlXO4VoOt2","audience":"http","grant_type":"client_credentials"}'

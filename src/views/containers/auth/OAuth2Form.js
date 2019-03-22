@@ -247,6 +247,12 @@ export default connect({
             GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS,
             GRANT_TYPE_CLIENT_CREDS
           ]
+        ],
+        [
+          "Audience",
+          props.audience,
+          R.partial(setProp, ["audience"]),
+          [GRANT_TYPE_IMPLICIT, GRANT_TYPE_CLIENT_CREDS]
         ]
       ].filter(f => f[3].indexOf(parseInt(props.grantType || 0)) >= 0),
       grantType: parseInt(props.grantType) || 0,
