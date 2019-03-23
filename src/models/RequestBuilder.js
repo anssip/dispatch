@@ -47,7 +47,7 @@ class RequestBuilder {
     // TODO: filling for headers & params
     const headers = this.req.headers
       ? this.req.headers.map(h => `-H '${h.name}: ${h.value}'`)
-      : null;
+      : [];
     const query =
       this.req.params && this.req.params.length > 0
         ? `?${this.req.params.map(p => `${p.name}=${p.value}`).join("&")}`

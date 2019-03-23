@@ -4,8 +4,28 @@
       "method": "GET",
       "name": "Get mystuff",
       "url": "http://echo.dispatch.rest",
-      "selected": false,
-      "body": "Heippa homot!"
+      "selected": true,
+      "body": "Heippa homot!",
+      "headers": [
+        {
+          "name": "header2",
+          "value": "value1"
+        },
+        {
+          "name": "myheader",
+          "value": "insdumb"
+        }
+      ],
+      "params": [
+        {
+          "name": "nice",
+          "value": "one"
+        },
+        {
+          "name": "bust",
+          "value": "1"
+        }
+      ]
     },
     {
       "name": "Create my source",
@@ -39,7 +59,7 @@
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-sink",
       "body": "{\n  anotherConfig: \"{{source.config}}\",\n  numFoos:{\"foo\":\"{{version}}\"}\n}",
-      "selected": true,
+      "selected": false,
       "auth": {
         "basic": {
           "username": "anssssip",

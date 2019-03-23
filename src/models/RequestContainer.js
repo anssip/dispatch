@@ -138,8 +138,8 @@ class RequestContainer extends Container {
   _setCompProp(index, prop, value, component = "headers") {
     const req = this.getSelected();
     if (!req) throw new Error("No request selected");
-    if (!req[component] || req[component].length < index) return;
-    if (req[component].length <= index) {
+    // if (!req[component] || req[component].length < index) return;
+    if (!req[component] || req[component].length <= index) {
       return this._addReqComponent({ component, [prop]: value });
     }
 
