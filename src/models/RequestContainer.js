@@ -1,5 +1,5 @@
 import { Container } from "overstated";
-import PreviewBuilder from "./PreviewBuilder";
+import RequestBuilder from "./RequestBuilder";
 
 const R = require("ramda");
 
@@ -186,8 +186,8 @@ class RequestContainer extends Container {
   deleteParam(index) {
     this._deleteComp(index, "params");
   }
-  getPreview(ctx, env, auth) {
-    return new PreviewBuilder(ctx, env, this.getSelected(), auth).build();
+  getPreview(ctx, env, auth, format = "curl") {
+    return new RequestBuilder(ctx, env, this.getSelected(), auth).getCurl();
   }
 }
 

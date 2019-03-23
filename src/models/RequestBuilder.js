@@ -1,7 +1,7 @@
 const R = require("ramda");
 const object = require("json-templater").object;
 
-class PreviewBuilder {
+class RequestBuilder {
   constructor(ctx, env, req, auth) {
     console.log("PreviewBuilder", req);
     this.ctx = ctx;
@@ -38,21 +38,32 @@ class PreviewBuilder {
       return null;
     }
   }
-  build() {
-    // TODO: Add headers & params
+  getCurl() {
     const methodPart =
       this.req.method === "GET" ? "" : `-X "${this.req.method}"`;
     const body = this.getBody();
     const bodyPart = body ? `-d $'${body}'` : "";
-    const headersPart = "";
 
-    const append = (part, rest) => {
-      if (rest === "") return part;
-      return part + " \\\n\t" + rest;
+    // TODO: filling for headers & params
+    const headers = this.req.headers
+      ? this.req.headers.map(h => `-H '${h.name}: ${h.value}'`)
+      : null;
+    const query =
+      this.req.params && this.req.params.length > 0
+        ? `?${this.req.params.map(p => `${p.name}=${p.value}`).join("&")}`
+        : "";
+
+    const append = (first, ...rest) => {
+      return rest
+        .filter(p => !!p)
+        .reduce((acc, curr) => acc + " \\\n\t" + curr, first);
     };
-
-    return append(`curl ${methodPart} "${this.req.url}"`, bodyPart);
+    return append(
+      `curl ${methodPart} "${this.req.url}${query}"`,
+      ...headers,
+      bodyPart
+    );
   }
 }
 
-export default PreviewBuilder;
+export default RequestBuilder;

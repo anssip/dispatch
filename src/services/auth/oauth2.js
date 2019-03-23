@@ -26,25 +26,6 @@ const buildAuthURL = props => {
   );
 };
 
-<<<<<<< HEAD:src/services/auth/oauth2.js
-const loadTokens = props => {
-  console.log("loadTokens()", props);
-  if (props.grantType === GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS) {
-    return authResourceOwner(props);
-  }
-  if (props.grantType === GRANT_TYPE_CLIENT_CREDS) {
-    return authClientCreds(props);
-  }
-  // GRANT_TYPE_AUTH_CODE and GRANT_TYPE_IMPLICIT
-  return authInWindow(props);
-};
-
-// https://developer.okta.com/authentication-guide/implementing-authentication/password/#_1-setting-up-your-application
-const authResourceOwner = props => {};
-
-// https://developer.okta.com/authentication-guide/implementing-authentication/client-creds/#_2-creating-custom-scopes
-const authClientCreds = props => {};
-=======
 const authClientCredentials = props => {
   //  https://developer.okta.com/authentication-guide/implementing-authentication/client-creds/#_1-setting-up-your-application
   console.log("clientCredentials", props);
@@ -101,11 +82,7 @@ const authResourceOwnerPwd = props => {
 const authInWindow = props => {
   console.log("authInWindow()", props);
   destroyAuthWin();
->>>>>>> bfd735007a4dec7ec5df1377762fcffef0a28e33:src/models/oauth2.js
 
-const authInWindow = props => {
-  console.log("authenticateInWindow()", props);
-  destroyAuthWin();
   win = new BrowserWindow({
     // parent: getCurrentWindow(),
     // modal: true,
@@ -142,10 +119,6 @@ const authInWindow = props => {
       console.log(`Navigated to ${url}`);
 
       if (props.grantType == GRANT_TYPE_IMPLICIT) {
-<<<<<<< HEAD:src/services/auth/oauth2.js
-        // https://www.dispatch.rest/callback#access_token=D7-4rzRoM6dMkQWfxy8WMEbeGQXYZbYU&expires_in=7200&token_type=Bearer&state=g6Fo2SBvZERQYTJrTk9mbEJaTjR0TGctUTdNZWl6ODlpQlNJT6N0aWTZIHdHZjNKaUQ3UDN5OGNLbjBVM05ZRlVqOW9VQTU2YUkxo2NpZNkgalNDMkVkQmtZajF3Mk1WT1FKNFdETVR0RTBLS1N1VVU
-=======
->>>>>>> bfd735007a4dec7ec5df1377762fcffef0a28e33:src/models/oauth2.js
         try {
           const tokens = parseTokenFromUrl(url);
           if (tokens) {
@@ -187,8 +160,6 @@ const requestTokens = (props, callbackURL) => {
   const urlParts = url.parse(callbackURL, true);
   const query = urlParts.query;
 
-<<<<<<< HEAD:src/services/auth/oauth2.js
-=======
   const exchangeOptions = {
     grant_type: "authorization_code",
     client_id: props.clientId,
@@ -209,7 +180,6 @@ const requestTokens = (props, callbackURL) => {
 };
 
 const doRequest = options => {
->>>>>>> bfd735007a4dec7ec5df1377762fcffef0a28e33:src/models/oauth2.js
   return new Promise((resolve, reject) => {
     request(options, (error, resp, responseBody) => {
       if (error || resp.statusCode >= 400) {
