@@ -13,7 +13,7 @@ import connect from "unstated-connect2";
 import requestContainer from "../../../models/RequestContainer";
 import authContainer from "../../../models/AuthContainer";
 import withValueChangeDetection from "../../components/Input";
-import authService from "../../../models/oauth2";
+import authService from "../../../services/auth/oauth2";
 
 const {
   GRANT_TYPE_AUTH_CODE,
@@ -97,7 +97,7 @@ class OAuth2Form extends PureComponent {
       { value: GRANT_TYPE_IMPLICIT, label: "Implicit" },
       {
         value: GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS,
-        label: "Password Credentials"
+        label: "Resource Owner Password"
       },
       { value: GRANT_TYPE_CLIENT_CREDS, label: "Client Credentials" }
     ];
@@ -207,7 +207,11 @@ export default connect({
           "Access Token URL",
           props.accessTokenUrl,
           R.partial(setProp, ["accessTokenUrl"]),
-          [GRANT_TYPE_AUTH_CODE, GRANT_TYPE_CLIENT_CREDS]
+          [
+            GRANT_TYPE_AUTH_CODE,
+            GRANT_TYPE_CLIENT_CREDS,
+            GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS
+          ]
         ],
         [
           "Authorization URL",
@@ -223,7 +227,7 @@ export default connect({
         ],
         [
           "Username",
-          props.usrname,
+          props.username,
           R.partial(setProp, ["username"]),
           [GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS]
         ],

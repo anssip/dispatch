@@ -30,15 +30,16 @@ class BodyEditor extends React.Component {
             theme: "midnight"
           }}
           onBeforeChange={(editor, data, value) => {
-            console.log("onBeforeChange");
-            // this.setState({ value });            
-            setBody(request, value);
+            console.log("CodeEditor, onBeforeChange", value);
+            // this.setState({ value });
+            setBody(value);
           }}
           onChange={(editor, data, value) => {
             console.log("onChange");
           }}
         />
-      </Wrapper>);
+      </Wrapper>
+    );
   }
 }
 

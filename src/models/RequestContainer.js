@@ -1,7 +1,7 @@
 import { Container } from "overstated";
+import PreviewBuilder from "./PreviewBuilder";
 
 const R = require("ramda");
-const object = require("json-templater").object;
 
 class RequestContainer extends Container {
   constructor() {
@@ -123,6 +123,7 @@ class RequestContainer extends Container {
     return this.setProp("url", value);
   }
   setBody(value) {
+    console.log("setBody", value);
     return this.setProp("body", value);
   }
   _addReqComponent({ component = "headers", name = null, value = null }) {
@@ -185,31 +186,8 @@ class RequestContainer extends Container {
   deleteParam(index) {
     this._deleteComp(index, "params");
   }
-  getPreview(ctx, env, value) {
-    const evalObject = value => {
-      let tmpValue = `let __x = ${value}; __x;`;
-      tmpValue = eval(tmpValue);
-      return tmpValue;
-    };
-    const fill = (tmpl, ...rest) =>
-      [evalObject(ctx), ...rest, env].reduce(
-        (acc, curr) => object(acc, curr),
-        tmpl
-      );
-    // @ts-ignore
-    try {
-      console.log(`======> about to fill`, value);
-      let tmpValue = evalObject(value);
-      // console.log(`afer initial eval`, tmpValue);
-      tmpValue = fill(tmpValue);
-      // console.log(`after ctx fill`, tmpValue);
-      const result = JSON.stringify(tmpValue, null, 2);
-      // console.log(`result ${JSON.stringify(result)}`);
-      return result;
-    } catch (e) {
-      // console.error(e);
-      return "";
-    }
+  getPreview(ctx, env, auth) {
+    return new PreviewBuilder(ctx, env, this.getSelected(), auth).build();
   }
 }
 

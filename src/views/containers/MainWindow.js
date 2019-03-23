@@ -9,6 +9,7 @@ import { ResizeSensor, Card, TextArea } from "@blueprintjs/core";
 import requestContainer from "../../models/RequestContainer";
 import contextContainer from "../../models/ContextContainer";
 import projectContainer from "../../models/ProjectContainer";
+import authContainer from "../../models/AuthContainer";
 
 const R = require("ramda");
 
@@ -19,7 +20,7 @@ class MainWindow extends React.Component {
   }
 
   render() {
-    const { ctx, getEnv, request, getPreview, activeSidebarTab } = this.props;
+    const { request, preview, activeSidebarTab } = this.props;
 
     return request ? (
       <ResizeSensor onResize={entries => this.handleWrapperResize(entries)}>
@@ -55,8 +56,8 @@ class MainWindow extends React.Component {
               <ResizeSensor onResize={entries => this.handleResize(entries)}>
                 <TextArea
                   large={true}
-                  value={getPreview(ctx, getEnv(), request.body)}
-                  defaultValue={getPreview(ctx, {}, request.body)}
+                  value={preview}
+                  // defaultValue={preview}
                   fill={true}
                   style={{ margin: 0, width: "100%" }}
                 />
@@ -83,12 +84,21 @@ class MainWindow extends React.Component {
 
 // @ts-ignore
 export default connect({
-  containers: [requestContainer, contextContainer, projectContainer],
-  selector: ({ containers }) => ({
-    request: containers[0].getSelected(),
-    getPreview: R.bind(containers[0].getPreview, containers[0]),
-    ctx: containers[1].getValue(),
-    getEnv: R.bind(containers[1].getSelectedEnvironment, containers[1]),
-    activeSidebarTab: projectContainer.getActiveSidebarTab()
-  })
+  containers: [
+    requestContainer,
+    contextContainer,
+    projectContainer,
+    authContainer
+  ],
+  selector: ({ containers }) => {
+    return {
+      request: requestContainer.getSelected(),
+      preview: requestContainer.getPreview(
+        contextContainer.getValue(),
+        contextContainer.getSelectedEnvironment(),
+        authContainer.getSelected()
+      ),
+      activeSidebarTab: projectContainer.getActiveSidebarTab()
+    };
+  }
 })(MainWindow);

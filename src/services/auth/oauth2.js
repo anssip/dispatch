@@ -15,17 +15,6 @@ const responseTypes = new Map([
   [GRANT_TYPE_IMPLICIT, "token"]
 ]);
 
-/*
-# Implicit:
-
-https://authorization-server.com/auth
- ?response_type=token
- &client_id=29352910282374239857
- &redirect_uri=https%3A%2F%2Fexample-app.com%2Fcallback
- &scope=create+delete
- &state=xcoiv98y3md22vwsuye3kch
-*/
-
 const buildAuthURL = props => {
   return (
     `${props.authorizationUrl}?` +
@@ -38,8 +27,25 @@ const buildAuthURL = props => {
 
 const loadTokens = props => {
   console.log("loadTokens()", props);
-  destroyAuthWin();
+  if (props.grantType === GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS) {
+    return authResourceOwner(props);
+  }
+  if (props.grantType === GRANT_TYPE_CLIENT_CREDS) {
+    return authClientCreds(props);
+  }
+  // GRANT_TYPE_AUTH_CODE and GRANT_TYPE_IMPLICIT
+  return authInWindow(props);
+};
 
+// https://developer.okta.com/authentication-guide/implementing-authentication/password/#_1-setting-up-your-application
+const authResourceOwner = props => {};
+
+// https://developer.okta.com/authentication-guide/implementing-authentication/client-creds/#_2-creating-custom-scopes
+const authClientCreds = props => {};
+
+const authInWindow = props => {
+  console.log("authenticateInWindow()", props);
+  destroyAuthWin();
   win = new BrowserWindow({
     // parent: getCurrentWindow(),
     // modal: true,
@@ -76,8 +82,6 @@ const loadTokens = props => {
       console.log(`Navigated to ${url}`);
 
       if (props.grantType == GRANT_TYPE_IMPLICIT) {
-        // check the existence of access_token
-        // check if this is equal to the redirectUrl (?)
         // https://www.dispatch.rest/callback#access_token=D7-4rzRoM6dMkQWfxy8WMEbeGQXYZbYU&expires_in=7200&token_type=Bearer&state=g6Fo2SBvZERQYTJrTk9mbEJaTjR0TGctUTdNZWl6ODlpQlNJT6N0aWTZIHdHZjNKaUQ3UDN5OGNLbjBVM05ZRlVqOW9VQTU2YUkxo2NpZNkgalNDMkVkQmtZajF3Mk1WT1FKNFdETVR0RTBLS1N1VVU
         try {
           const tokens = parseTokenFromUrl(url);
@@ -121,15 +125,6 @@ const requestTokens = (props, callbackURL) => {
   const urlParts = url.parse(callbackURL, true);
   const query = urlParts.query;
 
-  /*
-    Implicit grant response
-
-  https://example-app.com/redirect
-  #access_token=g0ZGZmNj4mOWIjNTk2Pw1Tk4ZTYyZGI3
-  &token_type=Bearer
-  &expires_in=600
-  &state=xcoVv98y2kd44vuqwye3kcq
-  */
   return new Promise((resolve, reject) => {
     const exchangeOptions = {
       grant_type: "authorization_code",
