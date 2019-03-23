@@ -19,12 +19,14 @@ const buildAuthURL = props => {
   return (
     `${props.authorizationUrl}?` +
     (props.scope ? `scope=${props.scope}&` : "") +
+    (props.audience ? `audience=${props.audience}&` : "") +
     `response_type=${responseTypes.get(parseInt(props.grantType))}` +
     `&client_id=${props.clientId}` +
     `&redirect_uri=${props.redirectUri}`
   );
 };
 
+<<<<<<< HEAD:src/services/auth/oauth2.js
 const loadTokens = props => {
   console.log("loadTokens()", props);
   if (props.grantType === GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS) {
@@ -42,6 +44,64 @@ const authResourceOwner = props => {};
 
 // https://developer.okta.com/authentication-guide/implementing-authentication/client-creds/#_2-creating-custom-scopes
 const authClientCreds = props => {};
+=======
+const authClientCredentials = props => {
+  //  https://developer.okta.com/authentication-guide/implementing-authentication/client-creds/#_1-setting-up-your-application
+  console.log("clientCredentials", props);
+
+  const exchangeOptions = {
+    client_id: props.clientId,
+    client_secret: props.clientSecret,
+    audience: props.audience,
+    grant_type: "client_credentials"
+  };
+  const options = {
+    method: "POST",
+    url: props.accessTokenUrl,
+    headers: {
+      "content-type": "application/json",
+      "cache-control": "no-cache",
+      Accept: "application/json"
+    },
+    auth: {
+      username: props.clientId,
+      password: props.clientSecret
+    },
+    body: JSON.stringify(exchangeOptions)
+  };
+  return doRequest(options);
+};
+
+const authResourceOwnerPwd = props => {
+  // https://developer.okta.com/authentication-guide/implementing-authentication/password/#_1-setting-up-your-application
+  console.log("authResourceOwnerPwd", props);
+
+  const exchangeOptions = {
+    username: props.username,
+    password: props.password,
+    grant_type: "password",
+    scope: props.scope
+  };
+  const options = {
+    method: "POST",
+    url: props.accessTokenUrl,
+    headers: {
+      "content-type": "application/json",
+      Accept: "application/json"
+    },
+    auth: {
+      username: props.clientId,
+      password: props.clientSecret
+    },
+    body: JSON.stringify(exchangeOptions)
+  };
+  return doRequest(options);
+};
+
+const authInWindow = props => {
+  console.log("authInWindow()", props);
+  destroyAuthWin();
+>>>>>>> bfd735007a4dec7ec5df1377762fcffef0a28e33:src/models/oauth2.js
 
 const authInWindow = props => {
   console.log("authenticateInWindow()", props);
@@ -82,7 +142,10 @@ const authInWindow = props => {
       console.log(`Navigated to ${url}`);
 
       if (props.grantType == GRANT_TYPE_IMPLICIT) {
+<<<<<<< HEAD:src/services/auth/oauth2.js
         // https://www.dispatch.rest/callback#access_token=D7-4rzRoM6dMkQWfxy8WMEbeGQXYZbYU&expires_in=7200&token_type=Bearer&state=g6Fo2SBvZERQYTJrTk9mbEJaTjR0TGctUTdNZWl6ODlpQlNJT6N0aWTZIHdHZjNKaUQ3UDN5OGNLbjBVM05ZRlVqOW9VQTU2YUkxo2NpZNkgalNDMkVkQmtZajF3Mk1WT1FKNFdETVR0RTBLS1N1VVU
+=======
+>>>>>>> bfd735007a4dec7ec5df1377762fcffef0a28e33:src/models/oauth2.js
         try {
           const tokens = parseTokenFromUrl(url);
           if (tokens) {
@@ -96,7 +159,6 @@ const authInWindow = props => {
           reject(err);
         }
       }
-
       if (props.grantType == GRANT_TYPE_AUTH_CODE) {
         const tokens = await requestTokens(props, url);
         // destroyAuthWin();
@@ -125,26 +187,31 @@ const requestTokens = (props, callbackURL) => {
   const urlParts = url.parse(callbackURL, true);
   const query = urlParts.query;
 
+<<<<<<< HEAD:src/services/auth/oauth2.js
+=======
+  const exchangeOptions = {
+    grant_type: "authorization_code",
+    client_id: props.clientId,
+    client_secret: props.clientSecret,
+    code: query.code,
+    redirect_uri: props.redirectUri
+  };
+  const options = {
+    method: "POST",
+    url: props.accessTokenUrl,
+    headers: {
+      "content-type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify(exchangeOptions)
+  };
+  return doRequest(options);
+};
+
+const doRequest = options => {
+>>>>>>> bfd735007a4dec7ec5df1377762fcffef0a28e33:src/models/oauth2.js
   return new Promise((resolve, reject) => {
-    const exchangeOptions = {
-      grant_type: "authorization_code",
-      client_id: props.clientId,
-      client_secret: props.clientSecret,
-      code: query.code,
-      redirect_uri: props.redirectUri
-    };
-    // TODO: change to use the AUTH TOKEN URL supplied in the
-    const options = {
-      method: "POST",
-      url: props.accessTokenUrl,
-      headers: {
-        "content-type": "application/json",
-        Accept: "application/json"
-      },
-      body: JSON.stringify(exchangeOptions)
-    };
     request(options, (error, resp, responseBody) => {
-      // destroyAuthWin();
       if (error || resp.statusCode >= 400) {
         console.error("request failed", error);
         const msg =
@@ -161,7 +228,6 @@ const requestTokens = (props, callbackURL) => {
         console.error(`Rejecting with error ${body.error}`);
         return reject(new Error(`${body.error}: ${JSON.stringify(body)}`));
       }
-
       resolve(body);
     });
   });
@@ -190,6 +256,17 @@ function refreshTokens(props) {
     });
   });
 }
+
+const loadTokens = props => {
+  const authFunctions = new Map([
+    [GRANT_TYPE_AUTH_CODE, authInWindow],
+    [GRANT_TYPE_IMPLICIT, authInWindow],
+    [GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS, authResourceOwnerPwd],
+    [GRANT_TYPE_CLIENT_CREDS, authClientCredentials]
+  ]);
+  console.log(`loadTokens() grant type: ${props.grantType}`, authFunctions);
+  return authFunctions.get(parseInt(props.grantType))(props);
+};
 
 export default {
   loadTokens,

@@ -127,7 +127,7 @@ class OAuth2Form extends PureComponent {
               {f[0]}
             </label>
             <FormField
-              key={f[0]}
+              key={`${grantType}-${f[0]}`}
               value={f[1]}
               onChange={f[2]}
               class="bp3-input"
@@ -247,6 +247,12 @@ export default connect({
             GRANT_TYPE_RESOURCE_OWNER_PWD_CREDS,
             GRANT_TYPE_CLIENT_CREDS
           ]
+        ],
+        [
+          "Audience",
+          props.audience,
+          R.partial(setProp, ["audience"]),
+          [GRANT_TYPE_IMPLICIT, GRANT_TYPE_CLIENT_CREDS]
         ]
       ].filter(f => f[3].indexOf(parseInt(props.grantType || 0)) >= 0),
       grantType: parseInt(props.grantType) || 0,
