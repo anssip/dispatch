@@ -1,8 +1,18 @@
 import React from "react";
-import { FormGroup, Text, Classes, Card, ControlGroup, HTMLSelect, InputGroup, Button, Tabs, Tab } from "@blueprintjs/core";
+import {
+  FormGroup,
+  Text,
+  Classes,
+  Card,
+  ControlGroup,
+  HTMLSelect,
+  InputGroup,
+  Button,
+  Tabs,
+  Tab
+} from "@blueprintjs/core";
 import styled from "styled-components";
 import BodyEditor from "./BodyEditor";
-
 
 const BodyWrapper = styled.div`
   padding-top: 10px;
@@ -13,33 +23,33 @@ const Divider = styled.div`
 `;
 
 class BodyView extends React.Component {
-
   constructor(props) {
     super(props);
-    this.state = { contentType: 'application/json' };
+    this.state = { contentType: "application/json" };
   }
   render() {
     return (
-      <div>
-        <FormGroup
-          label="Type"
-          labelFor="contentTypeSelect"
-          inline={true}
-        >
-          <HTMLSelect 
-            onChange={e => this.selectContentType(e.currentTarget.value)} 
-            id="contentTypeSelect" 
-            options={['JSON', 'Other', 'No body']} 
+      <>
+        <FormGroup label="Type" labelFor="contentTypeSelect" inline={true}>
+          <HTMLSelect
+            onChange={e => this.selectContentType(e.currentTarget.value)}
+            id="contentTypeSelect"
+            options={["JSON", "Other", "No body"]}
             value={this.state.contentType}
-            className={Classes.FIXED} 
-            />
+            className={Classes.FIXED}
+          />
         </FormGroup>
         <Divider>
           <BodyWrapper>
-            <BodyEditor paneWidth={this.props.paneWidth} paneHeight={this.props.paneHeight} contentType={this.state.contentType} />
+            <BodyEditor
+              paneWidth={this.props.paneWidth}
+              paneHeight={this.props.paneHeight}
+              contentType={this.state.contentType}
+            />
           </BodyWrapper>
         </Divider>
-      </div>);
+      </>
+    );
   }
   selectContentType(contentType) {
     this.setState({ contentType });
