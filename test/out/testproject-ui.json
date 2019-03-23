@@ -4,7 +4,7 @@
       "method": "GET",
       "name": "Get mystuff",
       "url": "http://echo.dispatch.rest",
-      "selected": true,
+      "selected": false,
       "body": "Heippa homot!",
       "headers": [
         {
@@ -58,8 +58,8 @@
       "name": "Create foobar sink",
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-sink",
-      "body": "{\n  anotherConfig: \"{{source.config}}\",\n  numFoos:{\"foo\":\"{{version}}\"}\n}",
-      "selected": false,
+      "body": "\"{{source.config}}\"",
+      "selected": true,
       "auth": {
         "basic": {
           "username": "anssssip",
@@ -108,7 +108,7 @@
       "body": "{\n\tblob: \"blob1\"\n}"
     }
   ],
-  "context": "{\n  source: { \n    config: \"sourceconfig, username: {{username}}\" \n  \n}\n}",
+  "context": "{\n  source: { \n    config: {\n      whatever: \"sourceconfig, username: {{username}}\",\n      nicest: 104\n  },\n  kafka: {\n  }\n}",
   "vars": [
     {
       "name": "appName",

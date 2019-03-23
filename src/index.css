@@ -1,10 +1,14 @@
-
 @import "~normalize.css";
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
 @import "~@blueprintjs/table/lib/css/table.css";
 
-html, body { height:100%; margin:0; padding:0; }
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
 .bp3-dark {
   background-color: #293742;
@@ -17,7 +21,7 @@ html, body { height:100%; margin:0; padding:0; }
 }
 
 .request {
-  padding: 5px; 
+  padding: 5px;
   box-shadow: 0ch;
   border: 0px;
 }
@@ -26,7 +30,6 @@ html, body { height:100%; margin:0; padding:0; }
   margin-bottom: 10px;
   padding-right: 10px;
 }
-
 
 .bp3-drawer {
   left: 0;
@@ -66,3 +69,8 @@ html, body { height:100%; margin:0; padding:0; }
   height: 100%;
   min-height: 100;
  } */
+
+.CodeMirror-context {
+  background: grey;
+  color: #d1edff;
+}

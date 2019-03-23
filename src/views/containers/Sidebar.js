@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  ResizeSensor,
   Card,
   Tab,
   Tabs,
@@ -31,6 +32,7 @@ const BottomBar = styled.div`
 class Sidebar extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { contentHeight: 0 };
   }
   render() {
     const {
@@ -58,66 +60,86 @@ class Sidebar extends React.Component {
     };
 
     return (
-      <Card className="left-pane">
-        <Tabs
-          id="sidebarTabs"
-          onChange={setActiveTab}
-          renderActiveTabPanelOnly={true}
-          selectedTabId={activeTab}
-        >
-          <Tab
-            id="requests"
-            title="Requests"
-            panel={
-              <SidebarList
-                items={requests}
-                render={(request, i) => (
-                  <Request
-                    handleClick={R.partial(selectRequest, [i])}
-                    id={i}
-                    model={request}
-                  />
-                )}
-              />
-            }
-          />
-          <Tab id="context" title="Context" panel={<ContextEditor />} />
-          <Tab id="env" title="Variables" panel={<EnvironmentEditor />} />
-          <Tab
-            id="methods"
-            title="Auth"
-            panel={
-              <SidebarList
-                items={methods}
-                render={(method, i) => (
-                  <AuthMethod
-                    handleClick={R.partial(selectMethod, [i])}
-                    id={i}
-                    model={method}
-                  />
-                )}
-              />
-            }
-          />
-        </Tabs>
-
-        {/* Move the add button to the RequestList and to the EnvironmentEditor?? */}
-        <BottomBar>
-          <ButtonGroup minimal={false} fill={false}>
-            <Button icon="add" onClick={addClicked}>
-              Add
-            </Button>
-            <Popover
-              content={
-                <EnvMenu items={environments} add={addEnv} select={selectEnv} />
+      <ResizeSensor onResize={entries => this.handleResize(entries)}>
+        <Card style={{ height: "100%" }} className="left-pane">
+          <Tabs
+            id="sidebarTabs"
+            onChange={setActiveTab}
+            renderActiveTabPanelOnly={true}
+            selectedTabId={activeTab}
+          >
+            <Tab
+              id="requests"
+              title="Requests"
+              panel={
+                <SidebarList
+                  items={requests}
+                  render={(request, i) => (
+                    <Request
+                      handleClick={R.partial(selectRequest, [i])}
+                      id={i}
+                      model={request}
+                    />
+                  )}
+                />
               }
-            >
-              <Button rightIcon="caret-up" icon="eye-open" text={selectedEnv} />
-            </Popover>
-          </ButtonGroup>
-        </BottomBar>
-      </Card>
+            />
+            <Tab
+              id="context"
+              title="Context"
+              panel={
+                <ContextEditor paneHeight={this.state.contentHeight - 32} />
+              }
+            />
+            <Tab id="env" title="Variables" panel={<EnvironmentEditor />} />
+            <Tab
+              id="methods"
+              title="Auth"
+              panel={
+                <SidebarList
+                  items={methods}
+                  render={(method, i) => (
+                    <AuthMethod
+                      handleClick={R.partial(selectMethod, [i])}
+                      id={i}
+                      model={method}
+                    />
+                  )}
+                />
+              }
+            />
+          </Tabs>
+
+          {/* Move the add button to the RequestList and to the EnvironmentEditor?? */}
+          <BottomBar>
+            <ButtonGroup minimal={false} fill={false}>
+              <Button icon="add" onClick={addClicked}>
+                Add
+              </Button>
+              <Popover
+                content={
+                  <EnvMenu
+                    items={environments}
+                    add={addEnv}
+                    select={selectEnv}
+                  />
+                }
+              >
+                <Button
+                  rightIcon="caret-up"
+                  icon="eye-open"
+                  text={selectedEnv}
+                />
+              </Popover>
+            </ButtonGroup>
+          </BottomBar>
+        </Card>
+      </ResizeSensor>
     );
+  }
+  handleResize(entries) {
+    console.log(`SideBar contentHeight = ${entries[0].contentRect.height}`);
+    this.setState({ contentHeight: entries[0].contentRect.height });
   }
 }
 

@@ -22,7 +22,8 @@ class BodyEditor extends React.Component {
     return (
       <Wrapper>
         <CodeEditor
-          paneHeight={paneHeight - 22}
+          id="body"
+          paneHeight={paneHeight - 272}
           value={request.body}
           options={{
             mode: "javascript",

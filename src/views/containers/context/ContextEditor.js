@@ -14,14 +14,20 @@ import jsonPrettify from "../../../models/json-pretty";
 
 const R = require("ramda");
 
+const Wrapper = styled.div`
+  height: 100%;
+  margin-left: -12px;
+  margin-right: -4px;
+`;
+
 class ContextEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = { isOpen: false };
   }
   render() {
-    const { value, setValue } = this.props;
-    console.log(`rendering context ${value}`);
+    const { value, setValue, paneHeight } = this.props;
+    console.log(`ContextEditor, paneHeight ${paneHeight}`);
 
     return (
       <Wrapper>
@@ -38,7 +44,7 @@ class ContextEditor extends React.Component {
           onClick={R.bind(this.expand, this)}
         />
 
-        {this.renderEditor(value, setValue)}
+        {this.renderEditor("context-1", value, setValue, paneHeight)}
 
         <Drawer
           className="bp3-dark"
@@ -51,25 +57,38 @@ class ContextEditor extends React.Component {
           title="Context"
           {...this.state}
         >
-          {this.renderEditor(value, setValue)}
+          {this.renderEditor("context-2", value, setValue, paneHeight)}
         </Drawer>
       </Wrapper>
     );
   }
 
-  renderEditor(value, setValue) {
+  renderEditor(key, value, setValue, paneHeight) {
     console.log("renderEditor", value);
     return (
       <CodeEditor
         // TODO: separate button & menu item to trigger prerrify
+        id={key}
+        paneHeight={paneHeight}
         value={value}
         autoScroll={true}
+        className="CodeMirror-context"
         options={{
           mode: "javascript",
           json: true,
           lineNumbers: false,
-          theme: "midnight",
-          lineWrapping: false
+          theme: "context",
+          lineWrapping: false,
+          tabSize: 2,
+          indentWithTabs: false,
+          //          electricChars: false,
+          //          smartIndent: false,
+          extraKeys: {
+            Tab: function(cm) {
+              var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+              cm.replaceSelection(spaces, "end", "+input");
+            }
+          }
         }}
         onBeforeChange={(editor, data, value) => {
           console.log("onBeforeChange");
@@ -94,11 +113,10 @@ class ContextEditor extends React.Component {
 // @ts-ignore
 export default connect({
   container,
-  selector: ({ container }) => ({
+  selector: ({ container, paneHeight }) => ({
+    paneHeight,
     value: container.getValue(),
     setValue: R.bind(container.setValue, container)
     // addContext: R.bind(container.addContext, container)
   })
 })(ContextEditor);
-
-const Wrapper = styled.div``;

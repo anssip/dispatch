@@ -45,13 +45,13 @@ class MainWindow extends React.Component {
               minSize={200}
               defaultSize={200}
             >
-              {activeSidebarTab === "requests" ? (
+              {activeSidebarTab === "methods" ? (
+                <AuthView />
+              ) : (
                 <RequestView
                   paneWidth={this.state.paneWidth}
                   paneHeight={this.state.contentHeight - this.state.paneHeight}
                 />
-              ) : (
-                <AuthView />
               )}
               <ResizeSensor onResize={entries => this.handleResize(entries)}>
                 <TextArea
