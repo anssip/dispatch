@@ -12,9 +12,12 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 next:
 
-- Rest of the auth grant flows
-- Request preview with headers, params, and auth
+-
+- filling of request URL, header and param values & names
+- copy button for the curl preview
+- automatic setting of content-type: application/json when JSON body used
 - Request sending
+- Ordering of requests in the sidebar list
 
 ### OAuth2Form
 

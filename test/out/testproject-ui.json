@@ -55,10 +55,10 @@
       "selected": false
     },
     {
-      "name": "Create foobar sink",
+      "name": "Create foobar source",
       "method": "POST",
-      "url": "https://localhost:8000/connectors/gt-sink",
-      "body": "\"{{source.config}}\"",
+      "url": "http://localhost:8083/connectors",
+      "body": "fill(\n  \"{{dbSource}}\",\n  { \n\tconnectorName: \"myDbConnector\",    \n\tjdbcUrl: \"jdbc:mysql://localhost:3306/augment?user=root&password=zymes_FL1\", \n    tableName: \"deposit\",\n  \ttopicPrefix: \"v1_\"\n})\n",
       "selected": true,
       "auth": {
         "basic": {
@@ -81,34 +81,25 @@
       },
       "headers": [
         {
-          "name": "content-type",
-          "value": "application/javascript"
+          "name": "Content-Type",
+          "value": "application/json"
         },
         {
-          "name": "max-lenth",
-          "value": "200"
+          "name": "Accept",
+          "value": "application/json"
         }
       ],
-      "params": [
-        {
-          "name": "name",
-          "value": "anssi"
-        },
-        {
-          "name": "familyName",
-          "value": "piirainen"
-        }
-      ]
+      "params": []
     },
     {
       "method": "GET",
-      "name": "testX",
-      "url": "http://echo.dispatch.rest",
+      "name": "List connectors",
+      "url": "http://localhost:8083/connectors",
       "selected": false,
-      "body": "{\n\tblob: \"blob1\"\n}"
+      "body": ""
     }
   ],
-  "context": "{\n  source: { \n    config: {\n      whatever: \"sourceconfig, username: {{username}}\",\n      nicest: 104\n  },\n  kafka: {\n  }\n}",
+  "context": "{\n  source: { \n    config: {\n      whatever: \"sourceconfig, username: {{username}}\",\n      nicest: 104\n    }\n  },\n  dbSource: {\n    name: \"{{connectorName}}\",\n    config: {\n      \"connector.class\": \"io.confluent.connect.jdbc.JdbcSourceConnector\",\n      \"key.converter\": \"io.confluent.connect.avro.AvroConverter\",\n      \"key.converter.schema.registry.url\": \"http://localhost:8081\",\n      \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n      \"value.converter.schemas.enable\": \"false\",\n      \"connection.url\": \"{{jdbcUrl}}\",\n      \"table.whitelist\": \"{{tableName}}\",\n      \"mode\": \"incrementing\",\n      \"incrementing.column.name\": \"id\",\n      \"validate.non.null\": \"false\",\n      \"topic.prefix\": \"{{topicPrefix}}\",\n      \"table.types\": \"VIEW\",\n      \"batch.max.rows\": 100\n    }\n  }\n}",
   "vars": [
     {
       "name": "appName",

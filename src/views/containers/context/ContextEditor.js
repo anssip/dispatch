@@ -51,7 +51,7 @@ class ContextEditor extends React.Component {
           transitionName=""
           usePortal={true}
           transitionDuration={0}
-          size={Drawer.SIZE_STANDARD}
+          size={Drawer.SIZE_LARGE}
           icon="info-sign"
           onClose={R.bind(this.collapse, this)}
           title="Context"

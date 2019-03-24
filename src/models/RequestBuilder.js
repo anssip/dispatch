@@ -15,6 +15,7 @@ class RequestBuilder {
 
     const evalObject = value => {
       let tmpValue = `let __x = ${value}; __x;`;
+      console.log(`RequestBuilder:: eval`, tmpValue);
       tmpValue = eval(tmpValue);
       return tmpValue;
     };
@@ -25,19 +26,23 @@ class RequestBuilder {
       );
     // @ts-ignore
     try {
-      console.log(`======> about to fill`, this.req);
+      console.log(`======> about to fill`, this.req.body);
       let tmpValue = evalObject(this.req.body);
-      // console.log(`afer initial eval`, tmpValue);
+      console.log(`RequestBuilder:: afer initial eval`, tmpValue);
       tmpValue = fill(tmpValue);
-      // console.log(`after ctx fill`, tmpValue);
+      console.log(`RequestBuilder:: after ctx fill`, tmpValue);
       const result = JSON.stringify(tmpValue, null, 2);
-      // console.log(`result ${JSON.stringify(result)}`);
+      console.log(`RequestBuilder:: result ${JSON.stringify(result)}`);
       return result;
     } catch (e) {
-      // console.error(e);
+      // TODO: show an error indicator when evaluation fails
+      // 1st make sure the context object is valid JSON
+      console.error(e);
       return null;
     }
   }
+
+  // TODO: memoize previous value, and return that if evaluation fails
   getCurl() {
     const methodPart =
       this.req.method === "GET" ? "" : `-X "${this.req.method}"`;
