@@ -189,7 +189,9 @@ class RequestContainer extends Container {
   deleteParam(index) {
     this._deleteComp(index, "params");
   }
-  getPreview(ctx, env, auth, format = "curl") {
+  getPreview(ctx, env, authMethods, format = "curl") {
+    const req = this.getSelected();
+    const auth = req.authMethod >= 0 ? authMethods[req.authMethod] : null;
     return new RequestBuilder(ctx, env, this.getSelected(), auth).getCurl();
   }
 }

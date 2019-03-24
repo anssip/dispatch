@@ -26,7 +26,8 @@
           "value": "1"
         }
       ],
-      "contentType": "text/plain"
+      "contentType": "text/plain",
+      "authMethod": "2"
     },
     {
       "name": "Create my source",

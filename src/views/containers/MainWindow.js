@@ -96,7 +96,7 @@ export default connect({
       preview: requestContainer.getPreview(
         contextContainer.getValue(),
         contextContainer.getSelectedEnvironment(),
-        authContainer.getSelected()
+        authContainer.getMethods()
       ),
       activeSidebarTab: projectContainer.getActiveSidebarTab()
     };

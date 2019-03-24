@@ -67,6 +67,8 @@ class RequestBuilder {
   }
 
   getAuthHeader() {
+    if (!this.auth) return null;
+    // build the header based on this.auth
     return null;
   }
 
