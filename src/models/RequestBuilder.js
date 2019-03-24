@@ -1,5 +1,6 @@
 const R = require("ramda");
 const object = require("json-templater").object;
+const string = require("json-templater").string;
 
 class RequestBuilder {
   constructor(ctx, env, req, auth) {
@@ -10,26 +11,44 @@ class RequestBuilder {
     this.auth = auth;
   }
 
+  evalObject(value) {
+    const fill = R.bind(this.fill, this); // make fill also available to be used in the body editor UI
+    const env = R.bind(this.renderEnv, this); // make env also available to be used in the body editor UI
+    let tmpValue = `let __x = ${value}; __x;`;
+    console.log(`RequestBuilder:: eval`, tmpValue);
+    tmpValue = eval(tmpValue);
+    return tmpValue;
+  }
+
+  /*
+   * Renders context, objects passed as parameters, and environment variables, in this order,
+   * to the specified template string.
+   */
+  fill(tmpl, ...rest) {
+    return [this.evalObject(this.ctx), ...rest, this.env].reduce(
+      (acc, curr) => object(acc, curr),
+      tmpl
+    );
+  }
+
+  /*
+   * Renders environment variables to the specified template string.
+   */
+  renderEnv(tmpl) {
+    if (!tmpl) return tmpl;
+    console.log(`Rendering to ${tmpl}`, this.env);
+    return string(tmpl, this.env);
+  }
+
   getBody() {
     if (!this.req.body || this.req.body === "") return null;
 
-    const evalObject = value => {
-      let tmpValue = `let __x = ${value}; __x;`;
-      console.log(`RequestBuilder:: eval`, tmpValue);
-      tmpValue = eval(tmpValue);
-      return tmpValue;
-    };
-    const fill = (tmpl, ...rest) =>
-      [evalObject(this.ctx), ...rest, this.env].reduce(
-        (acc, curr) => object(acc, curr),
-        tmpl
-      );
     // @ts-ignore
     try {
       console.log(`======> about to fill`, this.req.body);
-      let tmpValue = evalObject(this.req.body);
+      let tmpValue = this.evalObject(this.req.body);
       console.log(`RequestBuilder:: afer initial eval`, tmpValue);
-      tmpValue = fill(tmpValue);
+      tmpValue = this.fill(tmpValue);
       console.log(`RequestBuilder:: after ctx fill`, tmpValue);
       const result = JSON.stringify(tmpValue, null, 2);
       console.log(`RequestBuilder:: result ${JSON.stringify(result)}`);
@@ -44,6 +63,7 @@ class RequestBuilder {
 
   // TODO: memoize previous value, and return that if evaluation fails
   getCurl() {
+    const env = R.bind(this.renderEnv, this);
     const methodPart =
       this.req.method === "GET" ? "" : `-X "${this.req.method}"`;
     const body = this.getBody();
@@ -51,11 +71,13 @@ class RequestBuilder {
 
     // TODO: filling for headers & params
     const headers = this.req.headers
-      ? this.req.headers.map(h => `-H '${h.name}: ${h.value}'`)
+      ? this.req.headers.map(h => `-H '${env(h.name)}: ${env(h.value)}'`)
       : [];
     const query =
       this.req.params && this.req.params.length > 0
-        ? `?${this.req.params.map(p => `${p.name}=${p.value}`).join("&")}`
+        ? `?${this.req.params
+            .map(p => `${env(p.name)}=${encodeURIComponent(env(p.value))}`)
+            .join("&")}`
         : "";
 
     const append = (first, ...rest) => {
@@ -64,7 +86,7 @@ class RequestBuilder {
         .reduce((acc, curr) => acc + " \\\n\t" + curr, first);
     };
     return append(
-      `curl ${methodPart} "${this.req.url}${query}"`,
+      `curl ${methodPart} "${env(this.req.url)}${query}"`,
       ...headers,
       bodyPart
     );

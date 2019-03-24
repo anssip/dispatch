@@ -57,7 +57,7 @@
     {
       "name": "Create foobar source",
       "method": "POST",
-      "url": "http://localhost:8083/connectors",
+      "url": "http://localhost:8083/connectors/{{headerElem}}",
       "body": "fill(\n  \"{{dbSource}}\",\n  { \n\tconnectorName: \"myDbConnector\",    \n\tjdbcUrl: \"jdbc:mysql://localhost:3306/augment?user=root&password=zymes_FL1\", \n    tableName: \"deposit\",\n  \ttopicPrefix: \"v1_\"\n})\n",
       "selected": true,
       "auth": {
@@ -87,9 +87,18 @@
         {
           "name": "Accept",
           "value": "application/json"
+        },
+        {
+          "name": "Test",
+          "value": "foobar-next/{{headerElem}}"
         }
       ],
-      "params": []
+      "params": [
+        {
+          "name": "foobar{{headerElem}}",
+          "value": "{{version}}"
+        }
+      ]
     },
     {
       "method": "GET",
@@ -168,6 +177,19 @@
         {
           "env": "test",
           "value": "anssi"
+        }
+      ]
+    },
+    {
+      "name": "headerElem",
+      "values": [
+        {
+          "env": "test",
+          "value": "test"
+        },
+        {
+          "env": "prod",
+          "value": "test"
         }
       ]
     }
