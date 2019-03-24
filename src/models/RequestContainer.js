@@ -119,6 +119,9 @@ class RequestContainer extends Container {
   setName(value) {
     return this.setProp("name", value);
   }
+  setContentType(value) {
+    return this.setProp("contentType", value);
+  }
   setUrl(value) {
     return this.setProp("url", value);
   }

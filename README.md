@@ -12,6 +12,7 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 next:
 
+- use auth in the CURL preview
 - copy button for the curl preview
 - automatic setting of content-type: application/json when JSON body used
 - Request sending

@@ -22,38 +22,30 @@ const Divider = styled.div`
   margin-top: 20px;
 `;
 
-class BodyView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { contentType: "application/json" };
-  }
-  render() {
-    return (
-      <>
-        <FormGroup label="Type" labelFor="contentTypeSelect" inline={true}>
-          <HTMLSelect
-            onChange={e => this.selectContentType(e.currentTarget.value)}
-            id="contentTypeSelect"
-            options={["JSON", "Other", "No body"]}
-            value={this.state.contentType}
-            className={Classes.FIXED}
-          />
-        </FormGroup>
-        <Divider>
-          <BodyWrapper>
-            <BodyEditor
-              paneWidth={this.props.paneWidth}
-              paneHeight={this.props.paneHeight}
-              contentType={this.state.contentType}
-            />
-          </BodyWrapper>
-        </Divider>
-      </>
-    );
-  }
-  selectContentType(contentType) {
-    this.setState({ contentType });
-  }
-}
+const BodyView = props => (
+  <>
+    <FormGroup label="Type" labelFor="contentTypeSelect" inline={true}>
+      <HTMLSelect
+        onChange={props.onChange}
+        id="contentTypeSelect"
+        options={[
+          { label: "JSON", value: "application/json" },
+          { label: "Text", value: "text/plain" }
+        ]}
+        value={props.contentType}
+        className={Classes.FIXED}
+      />
+    </FormGroup>
+    <Divider>
+      <BodyWrapper>
+        <BodyEditor
+          paneWidth={props.paneWidth}
+          paneHeight={props.paneHeight}
+          contentType={props.contentType}
+        />
+      </BodyWrapper>
+    </Divider>
+  </>
+);
 
 export default BodyView;

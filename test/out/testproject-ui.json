@@ -4,8 +4,8 @@
       "method": "GET",
       "name": "Get mystuff",
       "url": "http://echo.dispatch.rest",
-      "selected": false,
-      "body": "Heippa homot!",
+      "selected": true,
+      "body": "",
       "headers": [
         {
           "name": "header2",
@@ -25,7 +25,8 @@
           "name": "bust",
           "value": "1"
         }
-      ]
+      ],
+      "contentType": "text/plain"
     },
     {
       "name": "Create my source",
@@ -52,14 +53,15 @@
           "value": "value2"
         }
       ],
-      "selected": false
+      "selected": false,
+      "contentType": "application/json"
     },
     {
       "name": "Create foobar source",
       "method": "POST",
       "url": "http://localhost:8083/connectors/{{headerElem}}",
       "body": "fill(\n  \"{{dbSource}}\",\n  { \n\tconnectorName: \"myDbConnector\",    \n\tjdbcUrl: \"jdbc:mysql://localhost:3306/augment?user=root&password=zymes_FL1\", \n    tableName: \"deposit\",\n  \ttopicPrefix: \"v1_\"\n})\n",
-      "selected": true,
+      "selected": false,
       "auth": {
         "basic": {
           "username": "anssssip",
@@ -81,10 +83,6 @@
       },
       "headers": [
         {
-          "name": "Content-Type",
-          "value": "application/json"
-        },
-        {
           "name": "Accept",
           "value": "application/json"
         },
@@ -98,14 +96,17 @@
           "name": "foobar{{headerElem}}",
           "value": "{{version}}"
         }
-      ]
+      ],
+      "authMethod": "0",
+      "contentType": "application/json"
     },
     {
       "method": "GET",
       "name": "List connectors",
       "url": "http://localhost:8083/connectors",
       "selected": false,
-      "body": ""
+      "body": "",
+      "contentType": "Other"
     }
   ],
   "context": "{\n  source: { \n    config: {\n      whatever: \"sourceconfig, username: {{username}}\",\n      nicest: 104\n    }\n  },\n  dbSource: {\n    name: \"{{connectorName}}\",\n    config: {\n      \"connector.class\": \"io.confluent.connect.jdbc.JdbcSourceConnector\",\n      \"key.converter\": \"io.confluent.connect.avro.AvroConverter\",\n      \"key.converter.schema.registry.url\": \"http://localhost:8081\",\n      \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n      \"value.converter.schemas.enable\": \"false\",\n      \"connection.url\": \"{{jdbcUrl}}\",\n      \"table.whitelist\": \"{{tableName}}\",\n      \"mode\": \"incrementing\",\n      \"incrementing.column.name\": \"id\",\n      \"validate.non.null\": \"false\",\n      \"topic.prefix\": \"{{topicPrefix}}\",\n      \"table.types\": \"VIEW\",\n      \"batch.max.rows\": 100\n    }\n  }\n}",

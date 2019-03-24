@@ -61,6 +61,11 @@ class RequestBuilder {
     }
   }
 
+  getBodyContentType() {
+    if (!this.req.contentType) return null;
+    return { name: "Content-Type", value: this.req.contentType };
+  }
+
   // TODO: memoize previous value, and return that if evaluation fails
   getCurl() {
     const env = R.bind(this.renderEnv, this);
@@ -69,10 +74,23 @@ class RequestBuilder {
     const body = this.getBody();
     const bodyPart = body ? `-d $'${body}'` : "";
 
-    // TODO: filling for headers & params
-    const headers = this.req.headers
-      ? this.req.headers.map(h => `-H '${env(h.name)}: ${env(h.value)}'`)
-      : [];
+    const hasContentType = headers =>
+      !!headers
+        .map(h => ({ name: h.name.toLowerCase(), value: h.value }))
+        .find(h => h.name === "content-type");
+
+    const headers = this.req.headers || [];
+    const contentType = this.getBodyContentType();
+    const headerWithContentType = hasContentType(headers)
+      ? headers
+      : contentType && !!this.req.body
+      ? [contentType, ...headers]
+      : headers;
+
+    const headerStrings = headerWithContentType.map(
+      h => `-H '${env(h.name)}: ${env(h.value)}'`
+    );
+
     const query =
       this.req.params && this.req.params.length > 0
         ? `?${this.req.params
@@ -87,7 +105,7 @@ class RequestBuilder {
     };
     return append(
       `curl ${methodPart} "${env(this.req.url)}${query}"`,
-      ...headers,
+      ...headerStrings,
       bodyPart
     );
   }

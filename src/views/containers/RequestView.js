@@ -64,7 +64,6 @@ class RequestView extends React.Component {
       request,
       paneWidth,
       paneHeight,
-      setMethod,
       setName,
       setUrl,
       dispatchSelected,
@@ -77,24 +76,19 @@ class RequestView extends React.Component {
       setHeaderValue,
       deleteHeader,
       setAuthMethod,
-      authMethods
+      authMethods,
+      setContentType
     } = this.props;
 
     console.log("RequestView, authMethods", request.authMethod);
     if (request) {
-      const onMethodChange = R.compose(
-        setMethod,
-        R.prop("value"),
-        R.prop("currentTarget")
-      );
-
       return (
         <MainPane>
           <Card style={{ margin: 0, paddingBottom: 0, height: "100%" }}>
             <ControlGroup fill={true}>
               <HTMLSelect
                 value={request.method}
-                onChange={onMethodChange}
+                onChange={setAuthMethod}
                 options={METHODS}
                 className={Classes.FIXED}
               />
@@ -142,6 +136,8 @@ class RequestView extends React.Component {
                         <BodyView
                           paneWidth={paneWidth}
                           paneHeight={paneHeight}
+                          contentType={request.contentType}
+                          onChange={setContentType}
                         />
                       }
                     />
@@ -205,23 +201,28 @@ export default connect({
   selector: ({ containers, paneWidth, paneHeight }) => ({
     paneWidth,
     paneHeight,
-    request: containers[0].getSelected(),
-    setMethod: R.bind(containers[0].setMethod, containers[0]),
-    setName: R.bind(containers[0].setName, containers[0]),
-    setUrl: R.bind(containers[0].setUrl, containers[0]),
-    addParam: R.bind(containers[0].addParam, containers[0]),
-    setParamName: R.bind(containers[0].setParamName, containers[0]),
-    setParamValue: R.bind(containers[0].setParamValue, containers[0]),
-    deleteParam: R.bind(containers[0].deleteParam, containers[0]),
-    addHeader: R.bind(containers[0].addHeader, containers[0]),
-    setHeaderName: R.bind(containers[0].setHeaderName, containers[0]),
-    setHeaderValue: R.bind(containers[0].setHeaderValue, containers[0]),
-    deleteHeader: R.bind(containers[0].deleteHeader, containers[0]),
+    request: requestContainer.getSelected(),
+    setMethod: R.bind(requestContainer.setMethod, requestContainer),
+    setName: R.bind(requestContainer.setName, requestContainer),
+    setUrl: R.bind(requestContainer.setUrl, requestContainer),
+    addParam: R.bind(requestContainer.addParam, requestContainer),
+    setParamName: R.bind(requestContainer.setParamName, requestContainer),
+    setParamValue: R.bind(requestContainer.setParamValue, requestContainer),
+    deleteParam: R.bind(requestContainer.deleteParam, requestContainer),
+    addHeader: R.bind(requestContainer.addHeader, requestContainer),
+    setHeaderName: R.bind(requestContainer.setHeaderName, requestContainer),
+    setHeaderValue: R.bind(requestContainer.setHeaderValue, requestContainer),
+    deleteHeader: R.bind(requestContainer.deleteHeader, requestContainer),
     dispatchSelected: R.partial(new Dispatcher(...containers).dispatch, [
-      containers[0].getSelected()
+      requestContainer.getSelected()
     ]),
     setAuthMethod: R.compose(
-      R.bind(containers[0].setAuthMethod, containers[0]),
+      R.bind(requestContainer.setAuthMethod, requestContainer),
+      R.prop("value"),
+      R.prop("currentTarget")
+    ),
+    setContentType: R.compose(
+      R.bind(requestContainer.setContentType, requestContainer),
       R.prop("value"),
       R.prop("currentTarget")
     ),
