@@ -66,6 +66,10 @@ class RequestBuilder {
     return { name: "Content-Type", value: this.req.contentType };
   }
 
+  getAuthHeader() {
+    return null;
+  }
+
   // TODO: memoize previous value, and return that if evaluation fails
   getCurl() {
     const env = R.bind(this.renderEnv, this);
@@ -74,20 +78,21 @@ class RequestBuilder {
     const body = this.getBody();
     const bodyPart = body ? `-d $'${body}'` : "";
 
-    const hasContentType = headers =>
+    const hasHeader = (headers, name) =>
       !!headers
         .map(h => ({ name: h.name.toLowerCase(), value: h.value }))
-        .find(h => h.name === "content-type");
-
-    const headers = this.req.headers || [];
-    const contentType = this.getBodyContentType();
-    const headerWithContentType = hasContentType(headers)
-      ? headers
-      : contentType && !!this.req.body
-      ? [contentType, ...headers]
-      : headers;
-
-    const headerStrings = headerWithContentType.map(
+        .find(h => h.name === name);
+    const addHeader = (headers, name, newHeader) => {
+      if (!newHeader) return headers;
+      const myHeaders = headers || [];
+      return hasHeader(myHeaders, name) ? myHeaders : [newHeader, ...myHeaders];
+    };
+    const headers = addHeader(
+      addHeader(this.req.headers, "authorization", this.getAuthHeader()),
+      "content-type",
+      this.req.body && this.getBodyContentType()
+    );
+    const headerStrings = headers.map(
       h => `-H '${env(h.name)}: ${env(h.value)}'`
     );
 
