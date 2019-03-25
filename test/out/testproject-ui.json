@@ -2,32 +2,14 @@
   "requests": [
     {
       "method": "GET",
-      "name": "Get mystuff",
-      "url": "http://echo.dispatch.rest",
+      "name": "Get weclapp",
+      "url": "https://augment-sports.com/wp-json/wc/v2/products",
       "selected": true,
       "body": "",
-      "headers": [
-        {
-          "name": "header2",
-          "value": "value1"
-        },
-        {
-          "name": "myheader",
-          "value": "insdumb"
-        }
-      ],
-      "params": [
-        {
-          "name": "nice",
-          "value": "one"
-        },
-        {
-          "name": "bust",
-          "value": "1"
-        }
-      ],
+      "headers": [],
+      "params": [],
       "contentType": "text/plain",
-      "authMethod": -1
+      "authMethod": "2"
     },
     {
       "name": "Create my source",
@@ -216,7 +198,7 @@
     {
       "method": "GET",
       "name": "Authorization code",
-      "selected": true,
+      "selected": false,
       "type": "oAuth2",
       "redirectUri": "https://dispatch.rest/callback",
       "authorizationUrl": "https://github.com/login/oauth/authorize",
@@ -230,11 +212,11 @@
     },
     {
       "method": "GET",
-      "name": "API credentials",
-      "selected": false,
+      "name": "WeClapp API",
+      "selected": true,
       "type": "basic",
-      "username": "anssi",
-      "password": "anssipanssi"
+      "username": "ck_8a6760e4582f26a7ae95558d086689c9ca28d8d5",
+      "password": "cs_f2ebe1d604e060662d95c345b34151a4cb80a52a"
     },
     {
       "name": "Implicit",

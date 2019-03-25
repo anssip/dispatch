@@ -79,11 +79,15 @@ class RequestBuilder {
     if (
       this.auth.type === "basic" &&
       this.auth.username &&
-      this.auth.username
+      this.auth.password
     ) {
-      // TODO: build basic auth header
+      return {
+        name: "Authorization",
+        value: `Basic ${Buffer.from(
+          `${this.auth.username}:${this.auth.password}`
+        ).toString("base64")}`
+      };
     }
-    // build the header based on this.auth
     return null;
   }
 
