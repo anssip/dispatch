@@ -67,7 +67,22 @@ class RequestBuilder {
   }
 
   getAuthHeader() {
+    console.log("getAuthHeader", this.auth);
     if (!this.auth) return null;
+
+    if (this.auth.type === "oAuth2" && this.auth.access_token) {
+      return {
+        name: "Authorization",
+        value: `Bearer ${this.auth.access_token}`
+      };
+    }
+    if (
+      this.auth.type === "basic" &&
+      this.auth.username &&
+      this.auth.username
+    ) {
+      // TODO: build basic auth header
+    }
     // build the header based on this.auth
     return null;
   }
@@ -85,7 +100,7 @@ class RequestBuilder {
         .map(h => ({ name: h.name.toLowerCase(), value: h.value }))
         .find(h => h.name === name);
     const addHeader = (headers, name, newHeader) => {
-      if (!newHeader) return headers;
+      if (!newHeader) return headers || [];
       const myHeaders = headers || [];
       return hasHeader(myHeaders, name) ? myHeaders : [newHeader, ...myHeaders];
     };

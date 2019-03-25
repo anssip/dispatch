@@ -27,7 +27,7 @@
         }
       ],
       "contentType": "text/plain",
-      "authMethod": "2"
+      "authMethod": -1
     },
     {
       "name": "Create my source",
@@ -55,7 +55,8 @@
         }
       ],
       "selected": false,
-      "contentType": "application/json"
+      "contentType": "application/json",
+      "authMethod": "1"
     },
     {
       "name": "Create foobar source",
@@ -98,7 +99,7 @@
           "value": "{{version}}"
         }
       ],
-      "authMethod": "0",
+      "authMethod": "2",
       "contentType": "application/json"
     },
     {
@@ -107,7 +108,8 @@
       "url": "http://localhost:8083/connectors",
       "selected": false,
       "body": "",
-      "contentType": "Other"
+      "contentType": "Other",
+      "authMethod": "4"
     }
   ],
   "context": "{\n  source: { \n    config: {\n      whatever: \"sourceconfig, username: {{username}}\",\n      nicest: 104\n    }\n  },\n  dbSource: {\n    name: \"{{connectorName}}\",\n    config: {\n      \"connector.class\": \"io.confluent.connect.jdbc.JdbcSourceConnector\",\n      \"key.converter\": \"io.confluent.connect.avro.AvroConverter\",\n      \"key.converter.schema.registry.url\": \"http://localhost:8081\",\n      \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n      \"value.converter.schemas.enable\": \"false\",\n      \"connection.url\": \"{{jdbcUrl}}\",\n      \"table.whitelist\": \"{{tableName}}\",\n      \"mode\": \"incrementing\",\n      \"incrementing.column.name\": \"id\",\n      \"validate.non.null\": \"false\",\n      \"topic.prefix\": \"{{topicPrefix}}\",\n      \"table.types\": \"VIEW\",\n      \"batch.max.rows\": 100\n    }\n  }\n}",

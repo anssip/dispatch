@@ -68,6 +68,7 @@ class RequestView extends React.Component {
       setUrl,
       dispatchSelected,
       addParam,
+      setMethod,
       setParamName,
       setParamValue,
       deleteParam,
@@ -88,7 +89,7 @@ class RequestView extends React.Component {
             <ControlGroup fill={true}>
               <HTMLSelect
                 value={request.method}
-                onChange={setAuthMethod}
+                onChange={setMethod}
                 options={METHODS}
                 className={Classes.FIXED}
               />
@@ -112,10 +113,7 @@ class RequestView extends React.Component {
                 <HTMLSelect
                   value={request.authMethod || 0}
                   onChange={setAuthMethod}
-                  options={authMethods.map((m, i) => ({
-                    label: m.name,
-                    value: i
-                  }))}
+                  options={authMethods}
                   className={Classes.FIXED}
                 />
               </AuthMethodWrapper>
@@ -193,34 +191,41 @@ class RequestView extends React.Component {
 // @ts-ignore
 export default connect({
   containers: [requestContainer, contextContainer, authContainer],
-  selector: ({ containers, paneWidth, paneHeight }) => ({
-    paneWidth,
-    paneHeight,
-    request: requestContainer.getSelected(),
-    setMethod: R.bind(requestContainer.setMethod, requestContainer),
-    setName: R.bind(requestContainer.setName, requestContainer),
-    setUrl: R.bind(requestContainer.setUrl, requestContainer),
-    addParam: R.bind(requestContainer.addParam, requestContainer),
-    setParamName: R.bind(requestContainer.setParamName, requestContainer),
-    setParamValue: R.bind(requestContainer.setParamValue, requestContainer),
-    deleteParam: R.bind(requestContainer.deleteParam, requestContainer),
-    addHeader: R.bind(requestContainer.addHeader, requestContainer),
-    setHeaderName: R.bind(requestContainer.setHeaderName, requestContainer),
-    setHeaderValue: R.bind(requestContainer.setHeaderValue, requestContainer),
-    deleteHeader: R.bind(requestContainer.deleteHeader, requestContainer),
-    dispatchSelected: R.partial(new Dispatcher(...containers).dispatch, [
-      requestContainer.getSelected()
-    ]),
-    setAuthMethod: R.compose(
-      R.bind(requestContainer.setAuthMethod, requestContainer),
-      R.prop("value"),
-      R.prop("currentTarget")
-    ),
-    setContentType: R.compose(
-      R.bind(requestContainer.setContentType, requestContainer),
-      R.prop("value"),
-      R.prop("currentTarget")
-    ),
-    authMethods: R.prepend({ name: "no auth" }, containers[2].getMethods())
-  })
+  selector: ({ containers, paneWidth, paneHeight }) => {
+    const setToRequestFromEvent = (f, valueMapper = R.identity) =>
+      R.compose(
+        R.bind(f, requestContainer),
+        valueMapper,
+        R.prop("value"),
+        R.prop("currentTarget")
+      );
+    return {
+      paneWidth,
+      paneHeight,
+      request: requestContainer.getSelected(),
+      setName: R.bind(requestContainer.setName, requestContainer),
+      setUrl: R.bind(requestContainer.setUrl, requestContainer),
+      addParam: R.bind(requestContainer.addParam, requestContainer),
+      setParamName: R.bind(requestContainer.setParamName, requestContainer),
+      setParamValue: R.bind(requestContainer.setParamValue, requestContainer),
+      deleteParam: R.bind(requestContainer.deleteParam, requestContainer),
+      addHeader: R.bind(requestContainer.addHeader, requestContainer),
+      setHeaderName: R.bind(requestContainer.setHeaderName, requestContainer),
+      setHeaderValue: R.bind(requestContainer.setHeaderValue, requestContainer),
+      deleteHeader: R.bind(requestContainer.deleteHeader, requestContainer),
+      dispatchSelected: R.partial(new Dispatcher(...containers).dispatch, [
+        requestContainer.getSelected()
+      ]),
+      setMethod: setToRequestFromEvent(requestContainer.setMethod),
+      setAuthMethod: setToRequestFromEvent(
+        requestContainer.setAuthMethod,
+        val => val
+      ),
+      setContentType: setToRequestFromEvent(requestContainer.setContentType),
+      authMethods: R.prepend(
+        { label: "no auth", value: -1 },
+        authContainer.getMethods().map((m, i) => ({ label: m.name, value: i }))
+      )
+    };
+  }
 })(RequestView);
