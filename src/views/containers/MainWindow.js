@@ -4,6 +4,7 @@ import SplitPane from "react-split-pane";
 import Sidebar from "./Sidebar";
 import "./splitpane.css";
 import RequestView from "./RequestView";
+import ResponseView from "./ResponseView";
 import AuthView from "./auth/AuthView";
 import { ResizeSensor, Card, TextArea } from "@blueprintjs/core";
 import requestContainer from "../../models/RequestContainer";
@@ -63,7 +64,9 @@ class MainWindow extends React.Component {
                 />
               </ResizeSensor>
             </SplitPane>
-            <Card>Response pane</Card>
+            <Card>
+              <ResponseView />
+            </Card>
           </SplitPane>
         </SplitPane>
       </ResizeSensor>

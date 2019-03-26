@@ -129,6 +129,9 @@ class RequestContainer extends Container {
     console.log("setBody", value);
     return this.setProp("body", value);
   }
+  setResponse(response) {
+    return this.setProp("response", response);
+  }
   _addReqComponent({ component = "headers", name = null, value = null }) {
     const req = this.getSelected();
     if (!req) throw new Error("No request selected");

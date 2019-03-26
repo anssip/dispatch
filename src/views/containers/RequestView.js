@@ -213,6 +213,10 @@ export default connect({
         auth
       )
     );
+    const dispatchSelected = async () => {
+      const resp = await dispatcher.dispatch();
+      requestContainer.setResponse(resp);
+    };
 
     return {
       paneWidth,
@@ -228,7 +232,7 @@ export default connect({
       setHeaderName: R.bind(requestContainer.setHeaderName, requestContainer),
       setHeaderValue: R.bind(requestContainer.setHeaderValue, requestContainer),
       deleteHeader: R.bind(requestContainer.deleteHeader, requestContainer),
-      dispatchSelected: R.bind(dispatcher.dispatch, dispatcher),
+      dispatchSelected,
       setMethod: setToRequestFromEvent(requestContainer.setMethod),
       setAuthMethod: setToRequestFromEvent(
         requestContainer.setAuthMethod,

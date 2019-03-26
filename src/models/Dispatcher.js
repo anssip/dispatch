@@ -9,7 +9,7 @@ class Dispatcher {
     return this.builder.req;
   }
 
-  dispatch(req) {
+  dispatch() {
     const options = {
       method: "POST",
       url: this.builder.getUrl(),
@@ -22,19 +22,20 @@ class Dispatcher {
 
     return new Promise((resolve, reject) => {
       request(options, (error, resp, responseBody) => {
+        const response = resp
+          ? {
+              statusCode: resp.statusCode,
+              headers: resp.headers,
+              body: resp.body
+            }
+          : null;
+
         if (error) {
-          console.log("request failed with error", error);
+          console.log(`request failed with error: ${JSON.stringify(error)}`);
         }
-        console.log("resp", resp);
+        console.log("resp", response);
         console.log("responseBody", responseBody);
-
-        // TODO: set the resonse to the request via RequestContainer
-
-        resolve({
-          error,
-          resp,
-          responseBody
-        });
+        resolve({ error, response });
       });
     });
   }
