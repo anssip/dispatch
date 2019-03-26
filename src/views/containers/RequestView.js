@@ -213,10 +213,11 @@ export default connect({
         auth
       )
     );
+
     return {
       paneWidth,
       paneHeight,
-      request,
+      request: requestContainer.getSelected(),
       setName: R.bind(requestContainer.setName, requestContainer),
       setUrl: R.bind(requestContainer.setUrl, requestContainer),
       addParam: R.bind(requestContainer.addParam, requestContainer),
