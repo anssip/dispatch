@@ -1,27 +1,43 @@
+const request = require("request");
 
 class Dispatcher {
+  constructor(requestBuilder) {
+    this.builder = requestBuilder;
+  }
 
-  constructor(requestContainer, contextContainer) {
-    this.requestContainer = requestContainer;
-    this.requestContainer = contextContainer;
+  req() {
+    return this.builder.req;
   }
 
   dispatch(req) {
-    console.log(`Dispatching ${JSON.stringify(req)}`);
+    const options = {
+      method: "POST",
+      url: this.builder.getUrl(),
+      headers: this.builder
+        .getHeaders()
+        .reduce((acc, h) => ({ ...acc, [h.name]: h.value }), {}),
+      body: this.builder.getBody()
+    };
+    console.log("Dispatching with options", options);
 
-    /*
+    return new Promise((resolve, reject) => {
+      request(options, (error, resp, responseBody) => {
+        if (error) {
+          console.log("request failed with error", error);
+        }
+        console.log("resp", resp);
+        console.log("responseBody", responseBody);
 
-    TODO:
-      - build the request based on data from the req argument and with requestContainer.getPreview() logic
-      - dispatch using node-fetch
-      - collect the response data
-      - a new ResponseContainer to receive the response data
-      - ResponseView connects to the ResponseContainer
-      - Responses are also persisted
+        // TODO: set the resonse to the request via RequestContainer
 
-    */
+        resolve({
+          error,
+          resp,
+          responseBody
+        });
+      });
+    });
   }
-
-};
+}
 
 export default Dispatcher;

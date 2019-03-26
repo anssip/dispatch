@@ -42,6 +42,10 @@ class RequestBuilder {
 
   getBody() {
     if (!this.req.body || this.req.body === "") return null;
+    if (this.req.contentType !== "application/json") {
+      // TODO: also fill in this case
+      return this.req.body;
+    }
 
     // @ts-ignore
     try {
@@ -91,14 +95,8 @@ class RequestBuilder {
     return null;
   }
 
-  // TODO: memoize previous value, and return that if evaluation fails
-  getCurl() {
+  getHeaders() {
     const env = R.bind(this.renderEnv, this);
-    const methodPart =
-      this.req.method === "GET" ? "" : `-X "${this.req.method}"`;
-    const body = this.getBody();
-    const bodyPart = body ? `-d $'${body}'` : "";
-
     const hasHeader = (headers, name) =>
       !!headers
         .map(h => ({ name: h.name.toLowerCase(), value: h.value }))
@@ -113,24 +111,39 @@ class RequestBuilder {
       "content-type",
       this.req.body && this.getBodyContentType()
     );
-    const headerStrings = headers.map(
-      h => `-H '${env(h.name)}: ${env(h.value)}'`
+    return headers.map(h => ({ name: env(h.name), value: env(h.value) }));
+  }
+
+  getQueryString() {
+    const env = R.bind(this.renderEnv, this);
+    return this.req.params && this.req.params.length > 0
+      ? `?${this.req.params
+          .map(p => `${env(p.name)}=${encodeURIComponent(env(p.value))}`)
+          .join("&")}`
+      : "";
+  }
+
+  getUrl() {
+    const env = R.bind(this.renderEnv, this);
+    return `${env(this.req.url)}${this.getQueryString()}`;
+  }
+
+  // TODO: memoize previous value, and return that if evaluation fails
+  getCurl() {
+    const methodPart =
+      this.req.method === "GET" ? "" : `-X "${this.req.method}"`;
+    const body = this.getBody();
+    const bodyPart = body ? `-d $'${body}'` : "";
+    const headerStrings = this.getHeaders().map(
+      h => `-H '${h.name}: ${h.value}'`
     );
-
-    const query =
-      this.req.params && this.req.params.length > 0
-        ? `?${this.req.params
-            .map(p => `${env(p.name)}=${encodeURIComponent(env(p.value))}`)
-            .join("&")}`
-        : "";
-
     const append = (first, ...rest) => {
       return rest
         .filter(p => !!p)
         .reduce((acc, curr) => acc + " \\\n\t" + curr, first);
     };
     return append(
-      `curl ${methodPart} "${env(this.req.url)}${query}"`,
+      `curl ${methodPart} "${this.getUrl()}"`,
       ...headerStrings,
       bodyPart
     );

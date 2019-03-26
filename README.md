@@ -8,16 +8,6 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 ![Screenshot](https://i.imgur.com/7AHNyCT.png)
 
-## TODO
-
-next:
-
-- use auth in the CURL preview
-- copy button for the curl preview
-- automatic setting of content-type: application/json when JSON body used
-- Request sending
-- Ordering of requests in the sidebar list
-
 ### OAuth2Form
 
 - Logging to the output pane when fetching OAuth2 tokens!!
@@ -59,3 +49,13 @@ curl --request POST \
  --url https://dispatch-rest-dev.eu.auth0.com/oauth/token \
  --header 'content-type: application/json' \
  --data '{"client_id":"a9lqkFe4IfYQExWVHo4jBXpiESSXZxYq","client_secret":"Bhoz9vTSSJwKoqvSkXPgY3b2uNSY3NEtQCAgF39cgyd9z3fdQzi7SITlXO4VoOt2","audience":"http","grant_type":"client_credentials"}'
+
+## TODO
+
+next:
+
+- Request sending
+  - Response view: shows headers & response (raw & JSON tabs)
+
+* copy button for the curl preview
+* Ordering of requests in the sidebar list

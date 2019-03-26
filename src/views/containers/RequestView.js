@@ -22,6 +22,7 @@ import contextContainer from "../../models/ContextContainer";
 import authContainer from "../../models/AuthContainer";
 import withValueChangeDetection from "../components/Input";
 import Dispatcher from "../../models/Dispatcher";
+import RequestBuilder from "../../models/RequestBuilder";
 
 const R = require("ramda");
 const UrlInput = withValueChangeDetection(
@@ -199,10 +200,23 @@ export default connect({
         R.prop("value"),
         R.prop("currentTarget")
       );
+    const request = requestContainer.getSelected();
+    const auth =
+      request.authMethod >= 0
+        ? authContainer.getMethods()[request.authMethod]
+        : null;
+    const dispatcher = new Dispatcher(
+      new RequestBuilder(
+        contextContainer.getValue(),
+        contextContainer.getSelectedEnvironment(),
+        request,
+        auth
+      )
+    );
     return {
       paneWidth,
       paneHeight,
-      request: requestContainer.getSelected(),
+      request,
       setName: R.bind(requestContainer.setName, requestContainer),
       setUrl: R.bind(requestContainer.setUrl, requestContainer),
       addParam: R.bind(requestContainer.addParam, requestContainer),
@@ -213,9 +227,7 @@ export default connect({
       setHeaderName: R.bind(requestContainer.setHeaderName, requestContainer),
       setHeaderValue: R.bind(requestContainer.setHeaderValue, requestContainer),
       deleteHeader: R.bind(requestContainer.deleteHeader, requestContainer),
-      dispatchSelected: R.partial(new Dispatcher(...containers).dispatch, [
-        requestContainer.getSelected()
-      ]),
+      dispatchSelected: R.bind(dispatcher.dispatch, dispatcher),
       setMethod: setToRequestFromEvent(requestContainer.setMethod),
       setAuthMethod: setToRequestFromEvent(
         requestContainer.setAuthMethod,
