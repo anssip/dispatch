@@ -14,15 +14,6 @@ const Overview = styled.div`
   justify-content: space-around;
 `;
 
-const StatusCode = styled.div`
-  color: #ad99ff;
-  border: 1px solid #ffc940;
-  padding: 4px;
-  width: 4em;
-  text-align: center;
-  border-radius: 3px;
-`;
-
 const Title = styled.div`
   padding: 10px 10px 2px 10px;
   border-bottom: 1px solid #a7b6c2;
@@ -64,6 +55,16 @@ const ResponseView = props => {
     console.log("ResponseView rendering response", response);
   }
 
+  const StatusCode = styled.div`
+    color: ${response.statusCode >= 400 ? "#F55656" : "#3DCC91"};
+    border: 1px solid ${response.statusCode >= 400 ? "#F55656" : "#3DCC91"};
+    padding: 4px;
+    width: 4em;
+    text-align: center;
+    border-radius: 3px;
+  `;
+
+  // TODO: Add request timing and color the millisecond value if takes more than 500 ms
   return (
     <>
       <Overview>
@@ -84,8 +85,14 @@ const ResponseView = props => {
         ))}
       </Headers>
 
-      {/* // TODO: check if content-type: application/json --> render as pretty JSON
-      // headers & body should be in a separate fields/boxes */}
+      {/* 
+      
+      TODO: check if content-type: application/json --> render as pretty JSON
+      headers & body should be in a separate fields/boxes 
+
+      Use the freaking codemirror Editor here and set it to readOnly: true
+      
+      */}
       <Title>Response body</Title>
       <Body>
         <Text>{response.body}</Text>
