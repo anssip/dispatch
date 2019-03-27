@@ -64,9 +64,7 @@ class MainWindow extends React.Component {
                 />
               </ResizeSensor>
             </SplitPane>
-            <Card>
-              <ResponseView />
-            </Card>
+            <ResponseView />
           </SplitPane>
         </SplitPane>
       </ResizeSensor>

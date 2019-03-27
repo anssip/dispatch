@@ -59,3 +59,4 @@ next:
 
 * copy button for the curl preview
 * Ordering of requests in the sidebar list
+* UI polish

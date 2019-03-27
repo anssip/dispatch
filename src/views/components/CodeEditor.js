@@ -48,7 +48,7 @@ class CodeEditor extends React.Component {
 
   resize() {
     const height = `${this.props.paneHeight}px`;
-    // console.log(`CodeEditor, setting size to ${height}`);
+    console.log(`CodeEditor ${this.props.id}, setting size to ${height}`);
     this[this.props.id].setSize("100%", height);
   }
 
