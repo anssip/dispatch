@@ -58,9 +58,13 @@ class MainWindow extends React.Component {
                 <TextArea
                   large={true}
                   value={preview}
-                  // defaultValue={preview}
                   fill={true}
-                  style={{ margin: 0, width: "100%" }}
+                  style={{
+                    margin: 0,
+                    width: "100%",
+                    color: "#8A9BA8",
+                    fontSize: 13
+                  }}
                 />
               </ResizeSensor>
             </SplitPane>

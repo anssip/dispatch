@@ -14,6 +14,7 @@ import prettify from "../../models/json-pretty";
 
 const Wrapper = styled.div`
   height: 100%;
+  padding: 10px;
 `;
 
 const Overview = styled.div`
