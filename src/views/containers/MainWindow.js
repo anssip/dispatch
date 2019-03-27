@@ -6,7 +6,17 @@ import "./splitpane.css";
 import RequestView from "./RequestView";
 import ResponseView from "./ResponseView";
 import AuthView from "./auth/AuthView";
-import { ResizeSensor, Card, TextArea, Text } from "@blueprintjs/core";
+import {
+  ResizeSensor,
+  Card,
+  TextArea,
+  Button,
+  Tooltip,
+  Position,
+  Popover,
+  Menu,
+  MenuItem
+} from "@blueprintjs/core";
 import requestContainer from "../../models/RequestContainer";
 import contextContainer from "../../models/ContextContainer";
 import projectContainer from "../../models/ProjectContainer";
@@ -20,6 +30,19 @@ const Preview = styled.div`
   word-wrap: break-all;
   overflow: visible;
 `;
+
+const Buttons = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+`;
+
+const ExportMenu = props => (
+  <Menu>
+    <MenuItem text="Copy" />
+    <MenuItem text="Export..." />
+  </Menu>
+);
 
 class MainWindow extends React.Component {
   constructor(props) {
@@ -63,18 +86,33 @@ class MainWindow extends React.Component {
               )}
               <ResizeSensor onResize={entries => this.handleResize(entries)}>
                 {/* <Preview>{preview}</Preview> */}
-                <TextArea
-                  value={preview}
-                  fill={true}
-                  readOnly={true}
-                  style={{
-                    margin: 0,
-                    width: "100%",
-                    color: "#8A9BA8",
-                    fontSize: 13,
-                    resize: "none"
-                  }}
-                />
+                <>
+                  <TextArea
+                    value={preview}
+                    fill={true}
+                    readOnly={true}
+                    style={{
+                      margin: 0,
+                      width: "100%",
+                      color: "#8A9BA8",
+                      fontSize: 13,
+                      resize: "none"
+                    }}
+                  />
+                  <Buttons>
+                    {/* <Popover>
+                      <Tooltip
+                        content="Copy to clipboard"
+                        position={Position.BOTTOM}
+                      >
+                        <Button icon="export" onClick={() => {}} />
+                      </Tooltip>
+                    </Popover> */}
+                    <Popover content={<ExportMenu />}>
+                      <Button icon="export" />
+                    </Popover>
+                  </Buttons>
+                </>
               </ResizeSensor>
             </SplitPane>
             <ResponseView />
@@ -85,6 +123,7 @@ class MainWindow extends React.Component {
       <Card>Open a project first!</Card>
     );
   }
+
   handleResize(entries) {
     this.setState({
       paneWidth: entries[0].contentRect.width,
@@ -92,7 +131,10 @@ class MainWindow extends React.Component {
     });
   }
   handleWrapperResize(entries) {
-    this.setState({ contentHeight: entries[0].contentRect.height });
+    this.setState({
+      contentHeight: entries[0].contentRect.height,
+      contentWidth: entries[0].contentRect.width
+    });
   }
 }
 
