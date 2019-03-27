@@ -6,13 +6,20 @@ import "./splitpane.css";
 import RequestView from "./RequestView";
 import ResponseView from "./ResponseView";
 import AuthView from "./auth/AuthView";
-import { ResizeSensor, Card, TextArea } from "@blueprintjs/core";
+import { ResizeSensor, Card, TextArea, Text } from "@blueprintjs/core";
 import requestContainer from "../../models/RequestContainer";
 import contextContainer from "../../models/ContextContainer";
 import projectContainer from "../../models/ProjectContainer";
 import authContainer from "../../models/AuthContainer";
+import styled from "styled-components";
 
 const R = require("ramda");
+
+const Preview = styled.div`
+  padding: 10px;
+  word-wrap: break-all;
+  overflow: visible;
+`;
 
 class MainWindow extends React.Component {
   constructor(props) {
@@ -43,7 +50,7 @@ class MainWindow extends React.Component {
               className="bp3-dark"
               split="horizontal"
               primary="second"
-              minSize={200}
+              minSize={0}
               defaultSize={200}
             >
               {activeSidebarTab === "methods" ? (
@@ -55,15 +62,17 @@ class MainWindow extends React.Component {
                 />
               )}
               <ResizeSensor onResize={entries => this.handleResize(entries)}>
+                {/* <Preview>{preview}</Preview> */}
                 <TextArea
-                  large={true}
                   value={preview}
                   fill={true}
+                  readOnly={true}
                   style={{
                     margin: 0,
                     width: "100%",
                     color: "#8A9BA8",
-                    fontSize: 13
+                    fontSize: 13,
+                    resize: "none"
                   }}
                 />
               </ResizeSensor>
