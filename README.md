@@ -59,4 +59,5 @@ next:
 
 * copy button for the curl preview
 * Ordering of requests in the sidebar list
+* Context menu for sidebar requestList --> delete, duplicate
 * UI polish

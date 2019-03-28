@@ -23,6 +23,7 @@ import projectContainer from "../../models/ProjectContainer";
 import authContainer from "../../models/AuthContainer";
 import styled from "styled-components";
 
+const { clipboard, remote } = window.require("electron");
 const R = require("ramda");
 
 const Preview = styled.div`
@@ -37,17 +38,26 @@ const Buttons = styled.div`
   right: 0;
 `;
 
-const ExportMenu = props => (
-  <Menu>
-    <MenuItem text="Copy" />
-    <MenuItem text="Export..." />
-  </Menu>
-);
-
-class MainWindow extends React.Component {
+class MainWindow extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = { paneWidth: 0, paneHeight: 0 };
+    this.copyToClipboard = R.bind(this.copyToClipboard, this);
+    this.export = R.bind(this.export, this);
+  }
+
+  copyToClipboard() {
+    clipboard.writeText(this.props.preview);
+  }
+
+  export() {
+    remote
+      .getCurrentWindow()
+      .webContents.send(
+        "export-request",
+        `${this.props.request.name.replace(/ /g, "-")}.sh`,
+        this.props.preview
+      );
   }
 
   render() {
@@ -100,15 +110,17 @@ class MainWindow extends React.Component {
                     }}
                   />
                   <Buttons>
-                    {/* <Popover>
-                      <Tooltip
-                        content="Copy to clipboard"
-                        position={Position.BOTTOM}
-                      >
-                        <Button icon="export" onClick={() => {}} />
-                      </Tooltip>
-                    </Popover> */}
-                    <Popover content={<ExportMenu />}>
+                    <Popover
+                      content={
+                        <Menu>
+                          <MenuItem
+                            text="Copy"
+                            onClick={this.copyToClipboard}
+                          />
+                          <MenuItem text="Export..." onClick={this.export} />
+                        </Menu>
+                      }
+                    >
                       <Button icon="export" />
                     </Popover>
                   </Buttons>

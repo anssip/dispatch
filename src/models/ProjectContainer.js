@@ -119,6 +119,10 @@ class ProjectContainer extends Container {
     return this.save(active);
   }
 
+  saveToFile(filePath, data) {
+    return this.fileUtil.writeFile(filePath, data);
+  }
+
   updateMostRecent(path) {
     const files = R.uniq(R.prepend(path, this.state.files));
     this.setState({ recentIsActive: true, files });
