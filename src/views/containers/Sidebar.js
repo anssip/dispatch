@@ -47,7 +47,8 @@ class Sidebar extends React.Component {
       selectRequest,
       methods,
       selectMethod,
-      moveRequest
+      moveRequest,
+      moveMethod
     } = this.props;
     console.log(`Sidebar: selectedEnv: ${selectEnv}`);
 
@@ -99,6 +100,7 @@ class Sidebar extends React.Component {
               title="Auth"
               panel={
                 <SidebarList
+                  onSortEnd={moveMethod}
                   items={methods}
                   render={(method, i) => (
                     <AuthMethod
@@ -173,6 +175,10 @@ export default connect({
     methods: containers[2].getMethods(),
     selectMethod: R.bind(containers[2].select, containers[2]),
     moveRequest: R.bind(requestContainer.move, requestContainer),
+    moveMethod: R.compose(
+      R.bind(requestContainer.updateAuthMethods, requestContainer),
+      R.bind(authContainer.move, authContainer)
+    ),
     add: {
       requests: R.bind(containers[0].addNewRequest, containers[0]),
       env: R.bind(containers[1].addEmptyVariable, containers[1]),

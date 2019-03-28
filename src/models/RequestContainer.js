@@ -122,8 +122,15 @@ class RequestContainer extends Container {
   setAuthMethod(methodIndex) {
     return this.setProp("authMethod", methodIndex);
   }
-  updateAuthMethod(oldIndex, newIndex) {
-    // TODO: implement this
+  updateAuthMethods(methods) {
+    const getNewAuthMethod = oldIndex =>
+      R.findIndex(R.propEq("oldIndex", oldIndex), methods);
+    const requests = this.state.requests.map(r => ({
+      ...r,
+      authMethod: getNewAuthMethod(parseInt(r.authMethod))
+    }));
+    this.setState({ requests });
+    return requests;
   }
   setName(value) {
     return this.setProp("name", value);
@@ -201,6 +208,7 @@ class RequestContainer extends Container {
   deleteParam(index) {
     this._deleteComp(index, "params");
   }
+  // @ts-ignore
   getPreview(ctx, env, authMethods, format = "curl") {
     const req = this.getSelected();
     const auth = req.authMethod >= 0 ? authMethods[req.authMethod] : null;

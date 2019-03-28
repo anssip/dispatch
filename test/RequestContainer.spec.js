@@ -12,13 +12,7 @@ describe("RequestContainer", () => {
       url: "http://echo.dispatch.rest",
       selected: false,
       body: "Heippa homot!",
-      auth: {
-        selected: "basic",
-        basic: {
-          username: "anssi",
-          password: "secretx"
-        }
-      }
+      authMethod: 0
     },
     {
       name: "Create test source",
@@ -33,7 +27,8 @@ describe("RequestContainer", () => {
         { name: "param2", value: "value2" }
       ],
       body: '{req1_config:"{{ctx.source.config}}"}',
-      selected: false
+      selected: false,
+      authMethod: 2
     },
     {
       name: "Create foobar sink",
@@ -41,20 +36,35 @@ describe("RequestContainer", () => {
       url: "https://localhost:8000/connectors/gt-sink",
       body:
         '{\n  anotherConfig: "{{source.config}}",\n  numFoos:{"foo":1001}\n}',
-      selected: true
+      selected: true,
+      authMethod: 0
     },
     {
       method: "DELETE",
       name: "testX",
       url: "http://echo.dispatch.rest",
       selected: false,
-      body: '{\n\tblob: "blob1"\n}'
+      body: '{\n\tblob: "blob1"\n}',
+      authMethod: 1
     }
   ];
 
   beforeEach(() => {
     container.init(testRequests);
   });
+
+  it("Should update the authMethod", () => {
+    const methods = [
+      { oldIndex: 0 },
+      { oldIndex: 3 },
+      { oldIndex: 1 },
+      { oldIndex: 2 }
+    ];
+    const requests = container.updateAuthMethods(methods);
+    console.log(requests);
+    // TODO: add expectations
+  });
+
   it("Should add a new request header", () => {
     container.select(0);
     const req = container.addHeader();

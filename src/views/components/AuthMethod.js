@@ -10,9 +10,11 @@ const Type = styled.span`
 `;
 
 const Wrapper = styled.div`
-  padding: 10px;
-  margin-left: -10px;
+  padding: 5px 0 5px 0;
+  padding-left: 5px;
   cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid #5c7080;
 `;
 
 const AuthMethod = props => (

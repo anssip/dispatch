@@ -13,6 +13,21 @@ describe("AuthContainer", () => {
     },
     {
       type: "basic",
+      username: "anssdfi",
+      password: "secrasdfetx"
+    },
+    {
+      type: "basic",
+      username: "anssip",
+      password: "secregggtx"
+    },
+    {
+      type: "basic",
+      username: "anssijp",
+      password: "secretsadfx"
+    },
+    {
+      type: "basic",
       username: "anssi"
     }
   ];
@@ -21,6 +36,16 @@ describe("AuthContainer", () => {
     container.init(testMethods);
   });
 
+  it("should move a method", () => {
+    const methods = container.move({ oldIndex: 1, newIndex: 3 });
+    console.log(methods);
+    expect(methods[0].oldIndex).to.be.eq(0);
+    expect(methods[0].username).to.be.eq("anssi");
+    expect(methods[1].oldIndex).to.be.eq(2);
+    expect(methods[1].username).to.be.eq("anssip");
+    expect(methods[3].oldIndex).to.be.eq(1);
+    expect(methods[3].username).to.be.eq("anssdfi");
+  });
   it("should add basic auth username to a request without any existing auth", () => {
     container.select(1);
     const method = container.setProp("username", "carlos");

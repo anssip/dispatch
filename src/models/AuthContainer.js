@@ -86,6 +86,18 @@ class AuthContainer extends Container {
     );
     return this.setState({ methods });
   }
+  move({ oldIndex, newIndex }) {
+    console.log(`AuthContainer: move ${oldIndex} -> ${newIndex}`);
+    const oldMethods = this.state.methods.map((m, i) => ({
+      ...m,
+      oldIndex: i
+    }));
+    const methods = R.move(oldIndex, newIndex, oldMethods);
+    this.setState({
+      methods
+    });
+    return methods;
+  }
   getSelected() {
     console.log("AuthContainer.getSelected");
     if (this.isEmpty()) return {};
