@@ -54,6 +54,8 @@ curl --request POST \
 
 next:
 
+POST Create foobar test should return error message: {"error_code":409,"message":"Connector myDbConnector already exists"}
+
 - Request sending
   - Response view: shows headers & response (raw & JSON tabs)
 

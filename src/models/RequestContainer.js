@@ -100,6 +100,12 @@ class RequestContainer extends Container {
     );
     return this.setState({ requests });
   }
+  move({ oldIndex, newIndex }) {
+    console.log(`move ${oldIndex} -> ${newIndex}`);
+    return this.setState({
+      requests: R.move(oldIndex, newIndex, this.state.requests)
+    });
+  }
   getSelected() {
     console.log("getSelected");
     if (this.isEmpty()) return {};
@@ -115,6 +121,9 @@ class RequestContainer extends Container {
   }
   setAuthMethod(methodIndex) {
     return this.setProp("authMethod", methodIndex);
+  }
+  updateAuthMethod(oldIndex, newIndex) {
+    // TODO: implement this
   }
   setName(value) {
     return this.setProp("name", value);

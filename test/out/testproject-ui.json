@@ -2,6 +2,15 @@
   "requests": [
     {
       "method": "GET",
+      "name": "List connectors",
+      "url": "http://localhost:8083/connectors",
+      "selected": false,
+      "body": "",
+      "contentType": "Other",
+      "authMethod": "4"
+    },
+    {
+      "method": "GET",
       "name": "Get weclapp",
       "url": "https://augment-sports.com/wp-json/wc/v2/products",
       "selected": false,
@@ -20,6 +29,45 @@
             "expires": "Wed, 11 Jan 1984 05:00:00 GMT"
           },
           "body": "{\"id\":7105,\"name\":\"Product\",\"slug\":\"product-22\",\"permalink\":\"https:\\/\\/augment-sports.com\\/p\\/uncategorized\\/product-22\\/\",\"date_created\":\"2019-03-27T12:02:15\",\"date_created_gmt\":\"2019-03-27T10:02:15\",\"date_modified\":\"2019-03-27T12:02:15\",\"date_modified_gmt\":\"2019-03-27T10:02:15\",\"type\":\"simple\",\"status\":\"publish\",\"featured\":false,\"catalog_visibility\":\"visible\",\"description\":\"\",\"short_description\":\"\",\"sku\":\"\",\"price\":\"\",\"regular_price\":\"\",\"sale_price\":\"\",\"date_on_sale_from\":null,\"date_on_sale_from_gmt\":null,\"date_on_sale_to\":null,\"date_on_sale_to_gmt\":null,\"price_html\":\"\",\"on_sale\":false,\"purchasable\":false,\"total_sales\":0,\"virtual\":false,\"downloadable\":false,\"downloads\":[],\"download_limit\":-1,\"download_expiry\":-1,\"external_url\":\"\",\"button_text\":\"\",\"tax_status\":\"taxable\",\"tax_class\":\"\",\"manage_stock\":false,\"stock_quantity\":null,\"in_stock\":true,\"backorders\":\"no\",\"backorders_allowed\":false,\"backordered\":false,\"sold_individually\":false,\"weight\":\"\",\"dimensions\":{\"length\":\"\",\"width\":\"\",\"height\":\"\"},\"shipping_required\":true,\"shipping_taxable\":true,\"shipping_class\":\"\",\"shipping_class_id\":0,\"reviews_allowed\":true,\"average_rating\":\"0\",\"rating_count\":0,\"related_ids\":[7087,7093,7101,7096,7100],\"upsell_ids\":[],\"cross_sell_ids\":[],\"parent_id\":0,\"purchase_note\":\"\",\"categories\":[{\"id\":310,\"name\":\"Uncategorized\",\"slug\":\"uncategorized\"}],\"tags\":[],\"images\":[{\"id\":0,\"date_created\":\"2019-03-27T14:02:16\",\"date_created_gmt\":\"2019-03-27T10:02:16\",\"date_modified\":\"2019-03-27T14:02:16\",\"date_modified_gmt\":\"2019-03-27T10:02:16\",\"src\":\"https:\\/\\/augment-sports.com\\/app\\/plugins\\/woocommerce\\/assets\\/images\\/placeholder.png\",\"name\":\"Placeholder\",\"alt\":\"Placeholder\",\"position\":0}],\"attributes\":[],\"default_attributes\":[],\"variations\":[],\"grouped_products\":[],\"menu_order\":0,\"meta_data\":[{\"id\":161110,\"key\":\"_wpml_word_count\",\"value\":\"{\\\"total\\\":0,\\\"to_translate\\\":{\\\"en\\\":3,\\\"de\\\":3}}\"},{\"id\":161111,\"key\":\"_alp_processed\",\"value\":\"1553680935\"}],\"bundle_layout\":\"\",\"bundled_by\":[],\"bundled_items\":[],\"translations\":[],\"lang\":\"en\",\"_links\":{\"self\":[{\"href\":\"https:\\/\\/augment-sports.com\\/wp-json\\/wc\\/v2\\/products\\/7105\"}],\"collection\":[{\"href\":\"https:\\/\\/augment-sports.com\\/wp-json\\/wc\\/v2\\/products\"}]}}"
+        }
+      }
+    },
+    {
+      "name": "Create foobar source",
+      "method": "POST",
+      "url": "http://localhost:8083/connectors/",
+      "body": "fill(\n  \"{{dbSource}}\",\n  { \n\tconnectorName: \"myDbConnector\",    \n\tjdbcUrl: \"jdbc:mysql://localhost:3306/augment?user=root&password=zymes_FL1\", \n    tableName: \"deposit\",\n  \ttopicPrefix: \"v1_\"\n})\n",
+      "selected": true,
+      "auth": {
+        "basic": {
+          "username": "anssssip",
+          "password": "asssldfjoiweqgeb"
+        },
+        "oAuth2": {
+          "clientId": "e1d3feefab9a06198e33",
+          "clientSecret": "e5e33fd730ad073494513bb4e003af0237d80212",
+          "authorizationUrl": "https://github.com/login/oauth/authorize",
+          "accessTokenUrl": "https://github.com/login/oauth/access_token",
+          "redirectUrl": "https://dispatch.rest/welcome",
+          "access_token": "62eafb282fd02c99831626a1c066861488bcf120",
+          "token_type": "bearer",
+          "token_scope": "",
+          "scope": "",
+          "redirectUri": "https://dispatch.rest/callback"
+        },
+        "selected": "oAuth2"
+      },
+      "headers": [],
+      "params": [],
+      "authMethod": "-1",
+      "contentType": "application/json",
+      "response": {
+        "response": {
+          "statusCode": 409,
+          "headers": {
+            "content-type": "application/json"
+          },
+          "body": "{\"error_code\":409,\"message\":\"Connector myDbConnector already exists\"}"
         }
       }
     },
@@ -51,63 +99,6 @@
       "selected": false,
       "contentType": "application/json",
       "authMethod": "1"
-    },
-    {
-      "name": "Create foobar source",
-      "method": "POST",
-      "url": "http://localhost:8083/connectors/{{headerElem}}",
-      "body": "fill(\n  \"{{dbSource}}\",\n  { \n\tconnectorName: \"myDbConnector\",    \n\tjdbcUrl: \"jdbc:mysql://localhost:3306/augment?user=root&password=zymes_FL1\", \n    tableName: \"deposit\",\n  \ttopicPrefix: \"v1_\"\n})\n",
-      "selected": true,
-      "auth": {
-        "basic": {
-          "username": "anssssip",
-          "password": "asssldfjoiweqgeb"
-        },
-        "oAuth2": {
-          "clientId": "e1d3feefab9a06198e33",
-          "clientSecret": "e5e33fd730ad073494513bb4e003af0237d80212",
-          "authorizationUrl": "https://github.com/login/oauth/authorize",
-          "accessTokenUrl": "https://github.com/login/oauth/access_token",
-          "redirectUrl": "https://dispatch.rest/welcome",
-          "access_token": "62eafb282fd02c99831626a1c066861488bcf120",
-          "token_type": "bearer",
-          "token_scope": "",
-          "scope": "",
-          "redirectUri": "https://dispatch.rest/callback"
-        },
-        "selected": "oAuth2"
-      },
-      "headers": [
-        {
-          "name": "Accept",
-          "value": "application/json"
-        },
-        {
-          "name": "Test",
-          "value": "foobar-next/{{headerElem}}"
-        }
-      ],
-      "params": [
-        {
-          "name": "foobar{{headerElem}}",
-          "value": "{{version}}"
-        }
-      ],
-      "authMethod": "2",
-      "contentType": "application/json",
-      "response": {
-        "error": {},
-        "response": null
-      }
-    },
-    {
-      "method": "GET",
-      "name": "List connectors",
-      "url": "http://localhost:8083/connectors",
-      "selected": false,
-      "body": "",
-      "contentType": "Other",
-      "authMethod": "4"
     }
   ],
   "context": "{\n  source: { \n    config: {\n      whatever: \"sourceconfig, username: {{username}}\",\n      nicest: 104\n    }\n  },\n  dbSource: {\n    name: \"{{connectorName}}\",\n    config: {\n      \"connector.class\": \"io.confluent.connect.jdbc.JdbcSourceConnector\",\n      \"key.converter\": \"io.confluent.connect.avro.AvroConverter\",\n      \"key.converter.schema.registry.url\": \"http://localhost:8081\",\n      \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n      \"value.converter.schemas.enable\": \"false\",\n      \"connection.url\": \"{{jdbcUrl}}\",\n      \"table.whitelist\": \"{{tableName}}\",\n      \"mode\": \"incrementing\",\n      \"incrementing.column.name\": \"id\",\n      \"validate.non.null\": \"false\",\n      \"topic.prefix\": \"{{topicPrefix}}\",\n      \"table.types\": \"VIEW\",\n      \"batch.max.rows\": 100\n    }\n  }\n}",

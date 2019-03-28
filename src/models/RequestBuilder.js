@@ -130,6 +130,7 @@ class RequestBuilder {
 
   // TODO: memoize previous value, and return that if evaluation fails
   getCurl() {
+    if (!this.req.method) return "";
     const methodPart =
       this.req.method === "GET" ? "" : `-X "${this.req.method}"`;
     const body = this.getBody();

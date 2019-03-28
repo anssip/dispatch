@@ -1,16 +1,29 @@
 import React from "react";
 import styled from "styled-components";
 import { InputGroup } from "@blueprintjs/core";
-import connect from "unstated-connect2";
-import requestContainer from "../../models/RequestContainer";
+import { SortableContainer, SortableElement } from "react-sortable-hoc";
 
 const R = require("ramda");
-
 const Wrapper = styled.div`
   cursor: pointer;
+  margin-left: -40px;
+  margin-right: 10px;
 `;
-
-const SidebarList = ({ items, render }) => (
+const SortableItem = SortableElement(({ value }) => <Wrapper>{value}</Wrapper>);
+const SortableList = SortableContainer(({ render, items }) => {
+  return (
+    <ul>
+      {items.map((value, index) => (
+        <SortableItem
+          key={`item-${index}`}
+          index={index}
+          value={render(value, index)}
+        />
+      ))}
+    </ul>
+  );
+});
+const SidebarList = ({ items, render, onSortEnd }) => (
   <div>
     <InputGroup
       className="search"
@@ -24,18 +37,13 @@ const SidebarList = ({ items, render }) => (
       small={true}
       value={""}
     />
-    {(items || []).map((item, index) => (
-      <Wrapper>{render(item, index)}</Wrapper>
-    ))}
+    <SortableList
+      render={render}
+      items={items}
+      onSortEnd={onSortEnd}
+      distance={10}
+    />
   </div>
 );
-
-// export default connect({
-//   container: requestContainer,
-//    selector: ({ container }) => ({
-//      requests: container.getRequests(),
-//      select: R.bind(container.select, container)
-//   })
-// })(SidebarList);
 
 export default SidebarList;

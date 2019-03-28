@@ -46,7 +46,8 @@ class Sidebar extends React.Component {
       requests,
       selectRequest,
       methods,
-      selectMethod
+      selectMethod,
+      moveRequest
     } = this.props;
     console.log(`Sidebar: selectedEnv: ${selectEnv}`);
 
@@ -73,6 +74,7 @@ class Sidebar extends React.Component {
               title="Requests"
               panel={
                 <SidebarList
+                  onSortEnd={moveRequest}
                   items={requests}
                   render={(request, i) => (
                     <Request
@@ -170,6 +172,7 @@ export default connect({
     selectRequest: R.bind(containers[0].select, containers[0]),
     methods: containers[2].getMethods(),
     selectMethod: R.bind(containers[2].select, containers[2]),
+    moveRequest: R.bind(requestContainer.move, requestContainer),
     add: {
       requests: R.bind(containers[0].addNewRequest, containers[0]),
       env: R.bind(containers[1].addEmptyVariable, containers[1]),

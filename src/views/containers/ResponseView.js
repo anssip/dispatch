@@ -24,9 +24,9 @@ const Overview = styled.div`
 
 const Title = styled.div`
   padding: 10px 10px 2px 10px;
-  border-bottom: 1px solid #a7b6c2;
+  border-bottom: 1px solid #394b59;
   font-size: 12px;
-  color: #a7b6c2;
+  color: #738694;
 `;
 
 const Headers = styled.div`
@@ -38,7 +38,6 @@ const Body = styled.div`
 `;
 
 const Header = styled.div`
-  border-bottom: 1px solid #8a9ba8;
   font-size: 14px;
   display: flex;
   justify-content: space-between;
@@ -70,18 +69,6 @@ const ResponseView = props => {
   // TODO: render something meaningful if no response available (like Blueprint's non-ideal state)
   if (!props.response) return "";
   console.log("ResponseView", props);
-
-  // const { error } = props;
-  // let response = null;
-  // if (error) {
-  //   response = { headers: {}, body: error.message };
-  // } else {
-  //   response = props.response
-  //     ? props.response.response || { headers: {}, body: {} }
-  //     : { headers: {}, body: {} };
-  // }
-  // if (!response) return "";
-
   const {
     response: { response, error }
   } = props;
