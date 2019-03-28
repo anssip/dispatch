@@ -89,7 +89,7 @@ const ResponseView = props => {
     console.log("ResponseView rendering response", response);
   }
   const statusText = error
-    ? error.message
+    ? error.message || ""
     : response
     ? response.statusCode
     : "";
@@ -115,7 +115,7 @@ const ResponseView = props => {
       <Wrapper>
         <Overview>
           <Text>200 ms</Text>
-          <StatusCode>{statusText}</StatusCode>
+          {statusText !== "" ? <StatusCode>{statusText}</StatusCode> : ""}
         </Overview>
         <Title>Response headers</Title>
         <Headers>

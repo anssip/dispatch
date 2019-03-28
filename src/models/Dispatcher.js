@@ -4,11 +4,9 @@ class Dispatcher {
   constructor(requestBuilder) {
     this.builder = requestBuilder;
   }
-
   req() {
     return this.builder.req;
   }
-
   dispatch() {
     const options = {
       method: "POST",
@@ -22,6 +20,10 @@ class Dispatcher {
 
     return new Promise((resolve, reject) => {
       request(options, (error, resp, responseBody) => {
+        console.log("Dispatcher: error", error);
+        console.log("Dispatcher: resp", resp);
+        console.log("Dispatcher: responseBody", responseBody);
+
         const response = resp
           ? {
               statusCode: resp.statusCode,
@@ -32,13 +34,11 @@ class Dispatcher {
 
         if (error) {
           console.log(
-            `request failed with error: ${JSON.stringify(error)}`,
+            `Dispatcher: request failed with error: ${JSON.stringify(error)}`,
             error
           );
           return resolve({ error: new Error(error), response });
         }
-        console.log("resp", response);
-        console.log("responseBody", responseBody);
         resolve({ response });
       });
     });
