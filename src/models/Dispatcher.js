@@ -31,11 +31,15 @@ class Dispatcher {
           : null;
 
         if (error) {
-          console.log(`request failed with error: ${JSON.stringify(error)}`);
+          console.log(
+            `request failed with error: ${JSON.stringify(error)}`,
+            error
+          );
+          return resolve({ error: new Error(error), response });
         }
         console.log("resp", response);
         console.log("responseBody", responseBody);
-        resolve({ error, response });
+        resolve({ response });
       });
     });
   }

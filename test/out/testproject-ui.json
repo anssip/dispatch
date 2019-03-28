@@ -4,7 +4,7 @@
       "method": "GET",
       "name": "Get weclapp",
       "url": "https://augment-sports.com/wp-json/wc/v2/products",
-      "selected": true,
+      "selected": false,
       "body": "",
       "headers": [],
       "params": [],
@@ -57,7 +57,7 @@
       "method": "POST",
       "url": "http://localhost:8083/connectors/{{headerElem}}",
       "body": "fill(\n  \"{{dbSource}}\",\n  { \n\tconnectorName: \"myDbConnector\",    \n\tjdbcUrl: \"jdbc:mysql://localhost:3306/augment?user=root&password=zymes_FL1\", \n    tableName: \"deposit\",\n  \ttopicPrefix: \"v1_\"\n})\n",
-      "selected": false,
+      "selected": true,
       "auth": {
         "basic": {
           "username": "anssssip",
@@ -94,7 +94,11 @@
         }
       ],
       "authMethod": "2",
-      "contentType": "application/json"
+      "contentType": "application/json",
+      "response": {
+        "error": {},
+        "response": null
+      }
     },
     {
       "method": "GET",

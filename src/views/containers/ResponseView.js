@@ -62,24 +62,43 @@ const betterBodies = (body, headers) => {
   if (doPrettify) {
     return JSON.stringify(JSON.parse(body), null, 2);
   }
-  return body;
+  return body || "";
 };
 
 const ResponseView = props => {
   const [paneHeight, setPaneHeight] = useState(0);
   // TODO: render something meaningful if no response available (like Blueprint's non-ideal state)
   if (!props.response) return "";
+  console.log("ResponseView", props);
+
+  // const { error } = props;
+  // let response = null;
+  // if (error) {
+  //   response = { headers: {}, body: error.message };
+  // } else {
+  //   response = props.response
+  //     ? props.response.response || { headers: {}, body: {} }
+  //     : { headers: {}, body: {} };
+  // }
+  // if (!response) return "";
+
   const {
     response: { response, error }
   } = props;
   if (response) {
     console.log("ResponseView rendering response", response);
   }
+  const statusText = error
+    ? error.message
+    : response
+    ? response.statusCode
+    : "";
   const StatusCode = styled.div`
-    color: ${response.statusCode >= 400 ? "#F55656" : "#3DCC91"};
-    border: 1px solid ${response.statusCode >= 400 ? "#F55656" : "#3DCC91"};
+    color: ${error || response.statusCode >= 400 ? "#F55656" : "#3DCC91"};
+    border: 1px solid
+      ${error || response.statusCode >= 400 ? "#F55656" : "#3DCC91"};
     padding: 4px;
-    width: 4em;
+    max-width: ${statusText.length + 1}em;
     text-align: center;
     border-radius: 3px;
   `;
@@ -96,41 +115,47 @@ const ResponseView = props => {
       <Wrapper>
         <Overview>
           <Text>200 ms</Text>
-          <StatusCode>{response.statusCode}</StatusCode>
+          <StatusCode>{statusText}</StatusCode>
         </Overview>
         <Title>Response headers</Title>
         <Headers>
-          {Object.keys(response.headers).map((key, i) => (
-            <Header key={i}>
-              <HeaderName>
-                <Text ellipsize={true}>{key}</Text>
-              </HeaderName>
-              <HeaderValue>
-                <Text ellipsize={true}>{response.headers[key]}</Text>
-              </HeaderValue>
-            </Header>
-          ))}
+          {response && response.headers
+            ? Object.keys(response.headers).map((key, i) => (
+                <Header key={i}>
+                  <HeaderName>
+                    <Text ellipsize={true}>{key}</Text>
+                  </HeaderName>
+                  <HeaderValue>
+                    <Text ellipsize={true}>{response.headers[key]}</Text>
+                  </HeaderValue>
+                </Header>
+              ))
+            : ""}
         </Headers>
         <Title>Response body</Title>
         <Body>
-          <CodeEditor
-            // TODO: separate button & menu item to trigger prerrify
-            id="response"
-            paneHeight={paneHeight - 170}
-            value={betterBodies(response.body, response.headers)}
-            autoScroll={true}
-            className="CodeMirror-context"
-            options={{
-              mode: "javascript",
-              json: true,
-              lineNumbers: false,
-              theme: "context",
-              lineWrapping: false,
-              tabSize: 2,
-              indentWithTabs: false,
-              readOnly: true
-            }}
-          />
+          {response && response.body ? (
+            <CodeEditor
+              // TODO: separate button & menu item to trigger prerrify
+              id="response"
+              paneHeight={paneHeight - 170}
+              value={betterBodies(response.body, response.headers)}
+              autoScroll={true}
+              className="CodeMirror-context"
+              options={{
+                mode: "javascript",
+                json: true,
+                lineNumbers: false,
+                theme: "context",
+                lineWrapping: false,
+                tabSize: 2,
+                indentWithTabs: false,
+                readOnly: true
+              }}
+            />
+          ) : (
+            ""
+          )}
         </Body>
       </Wrapper>
     </ResizeSensor>

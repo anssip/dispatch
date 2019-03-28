@@ -57,7 +57,6 @@ next:
 - Request sending
   - Response view: shows headers & response (raw & JSON tabs)
 
-* copy button for the curl preview
 * Ordering of requests in the sidebar list
 * Context menu for sidebar requestList --> delete, duplicate
 * UI polish
