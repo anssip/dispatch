@@ -9,20 +9,47 @@ import {
   MenuDivider
 } from "@blueprintjs/core";
 const R = require("ramda");
+const { clipboard, remote } = window.require("electron");
 
 // blueprint Indogo5
 const Method = styled.span`
   color: #ad99ff;
   margin-right: 5px;
 `;
+const exportRequest = (request, getPreview) => {
+  remote
+    .getCurrentWindow()
+    .webContents.send(
+      "export-request",
+      `${request.name.replace(/ /g, "-")}.sh`,
+      getPreview()
+    );
+};
+const copyToClipboard = getData => clipboard.writeText(getData());
 
-const showContextMenu = (setIsContextMenuOpen, e) => {
+const showContextMenu = (
+  setIsContextMenuOpen,
+  request,
+  duplicate,
+  deleteRequest,
+  getPreview,
+  e
+) => {
   e.preventDefault();
   ContextMenu.show(
     <Menu>
-      <MenuItem icon="duplicate" text="Duplicate" />
-      <MenuItem icon="export" text="Copy as CURL command" />
-      <MenuItem icon="delete" text="Delete" />
+      <MenuItem icon="duplicate" text="Duplicate" onClick={duplicate} />
+      <MenuItem
+        icon="share"
+        text="Copy as CURL command"
+        onClick={R.partial(copyToClipboard, [getPreview])}
+      />
+      <MenuItem
+        icon="export"
+        text="Export as CURL command"
+        onClick={R.partial(exportRequest, [request, getPreview])}
+      />
+      <MenuItem icon="delete" text="Delete" onClick={deleteRequest} />
       <MenuDivider />
       <MenuItem disabled={true} text="Settings" />
     </Menu>,
@@ -35,6 +62,13 @@ const showContextMenu = (setIsContextMenuOpen, e) => {
 
 const Request = props => {
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(0);
+  const {
+    model,
+    handleClick,
+    duplicateRequest,
+    deleteRequest,
+    getPreview
+  } = props;
 
   const RequestCard = styled.div`
     padding: 5px 0 5px 0;
@@ -48,17 +82,23 @@ const Request = props => {
 
   return (
     <RequestCard
-      onContextMenu={R.partial(showContextMenu, [setIsContextMenuOpen])}
+      onContextMenu={R.partial(showContextMenu, [
+        setIsContextMenuOpen,
+        model,
+        duplicateRequest,
+        deleteRequest,
+        getPreview
+      ])}
       style={
-        props.model.selected
+        model.selected
           ? { color: "#fff", backgroundColor: "#394B59" }
           : { color: "#aaa" }
       }
-      onClick={props.handleClick}
+      onClick={handleClick}
     >
       <Text ellipsize={true}>
-        <Method>{props.model.method}</Method>
-        {props.model.name}
+        <Method>{model.method}</Method>
+        {model.name}
       </Text>
     </RequestCard>
   );

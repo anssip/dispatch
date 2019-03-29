@@ -47,8 +47,8 @@ In OAuth 2.0, the term “grant type” refers to the way an application gets an
 
 curl --request POST \
  --url https://dispatch-rest-dev.eu.auth0.com/oauth/token \
- --header 'content-type: application/json' \
- --data '{"client_id":"a9lqkFe4IfYQExWVHo4jBXpiESSXZxYq","client_secret":"Bhoz9vTSSJwKoqvSkXPgY3b2uNSY3NEtQCAgF39cgyd9z3fdQzi7SITlXO4VoOt2","audience":"http","grant_type":"client_credentials"}'
+ --header 'content-type: application/json' \*\*\*\*
+--data '{"client_id":"a9lqkFe4IfYQExWVHo4jBXpiESSXZxYq","client_secret":"Bhoz9vTSSJwKoqvSkXPgY3b2uNSY3NEtQCAgF39cgyd9z3fdQzi7SITlXO4VoOt2","audience":"http","grant_type":"client_credentials"}'
 
 ## TODO
 
@@ -69,5 +69,5 @@ Website: https://templates.netlify.com/template/gatsby-blog-with-netlify-cms/
 ## Revenue model
 
 - Completely free at launch.
-- After reaching v 1.0 status, an automatic update turns it to a free trial.
+- After reaching v 1.0 status, an \***\*automatic\*\*** update turns it to a free trial.
 - Free trial. At trial end a subsription purchase is required to continue.

@@ -41,6 +41,24 @@ class RequestContainer extends Container {
       )
     });
   }
+  deleteRequest(index) {
+    console.log(`deleteRequest ${index}`);
+    const requests = R.remove(index, 1, this.state.requests);
+    this.setState({ requests });
+    return requests;
+  }
+  duplicateRequest(index) {
+    console.log(`duplicate ${index}`);
+    const req = this.state.requests[index];
+    if (!req) return null;
+    const requests = R.insert(
+      index + 1,
+      R.assoc("name", `${req.name} (copy)`, R.assoc("selected", false, req)),
+      this.state.requests
+    );
+    this.setState({ requests });
+    return requests;
+  }
   replaceSelectedRequest(replaceWith) {
     return this.setState({
       isModified: true,
@@ -209,10 +227,11 @@ class RequestContainer extends Container {
     this._deleteComp(index, "params");
   }
   // @ts-ignore
-  getPreview(ctx, env, authMethods, format = "curl") {
-    const req = this.getSelected();
+  getPreview(ctx, env, authMethods, format = "curl", index = -1) {
+    console.log(`getPreview() ${index}`);
+    const req = index >= 0 ? this.state.requests[index] : this.getSelected();
     const auth = req.authMethod >= 0 ? authMethods[req.authMethod] : null;
-    return new RequestBuilder(ctx, env, this.getSelected(), auth).getCurl();
+    return new RequestBuilder(ctx, env, req, auth).getCurl();
   }
 }
 

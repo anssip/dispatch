@@ -21,6 +21,7 @@ import authContainer from "../../models/AuthContainer";
 import projectContainer from "../../models/ProjectContainer";
 import Request from "../components/Request";
 import AuthMethod from "../components/AuthMethod";
+import RequestContainer from "../../models/RequestContainer";
 
 const R = require("ramda");
 
@@ -48,7 +49,10 @@ class Sidebar extends React.Component {
       methods,
       selectMethod,
       moveRequest,
-      moveMethod
+      moveMethod,
+      deleteRequest,
+      duplicateRequest,
+      getPreview
     } = this.props;
     console.log(`Sidebar: selectedEnv: ${selectEnv}`);
 
@@ -82,6 +86,9 @@ class Sidebar extends React.Component {
                       handleClick={R.partial(selectRequest, [i])}
                       id={i}
                       model={request}
+                      deleteRequest={R.partial(deleteRequest, [i])}
+                      duplicateRequest={R.partial(duplicateRequest, [i])}
+                      getPreview={R.partial(getPreview, [i])}
                     />
                   )}
                 />
@@ -167,27 +174,44 @@ export default connect({
     authContainer,
     projectContainer
   ],
-  selector: ({ containers }) => ({
-    activeTab: containers[3].getActiveSidebarTab(),
-    setActiveTab: R.bind(containers[3].setActiveSidebarTab, containers[3]),
-    requests: containers[0].getRequests(),
-    selectRequest: R.bind(containers[0].select, containers[0]),
-    methods: containers[2].getMethods(),
-    selectMethod: R.bind(containers[2].select, containers[2]),
-    moveRequest: R.bind(requestContainer.move, requestContainer),
-    moveMethod: R.compose(
-      R.bind(requestContainer.updateAuthMethods, requestContainer),
-      R.bind(authContainer.move, authContainer)
-    ),
-    add: {
-      requests: R.bind(containers[0].addNewRequest, containers[0]),
-      env: R.bind(containers[1].addEmptyVariable, containers[1]),
-      methods: R.bind(containers[2].addNewMethod, containers[2])
-    },
-    selectEnv: R.bind(containers[1].selectEnv, containers[1]),
-    selectedEnv:
-      containers[1].getSelectedEnvName() || containers[1].getFirstEnvName(),
-    addEnv: R.bind(containers[1].addNewEnvironment, containers[1]),
-    environments: containers[1].getEnvs()
-  })
+  selector: ({ containers }) => {
+    const selectedEnv =
+      containers[1].getSelectedEnvName() || containers[1].getFirstEnvName();
+    return {
+      activeTab: containers[3].getActiveSidebarTab(),
+      setActiveTab: R.bind(containers[3].setActiveSidebarTab, containers[3]),
+      requests: containers[0].getRequests(),
+      selectRequest: R.bind(containers[0].select, containers[0]),
+      methods: authContainer.getMethods(),
+      selectMethod: R.bind(containers[2].select, containers[2]),
+      moveRequest: R.bind(requestContainer.move, requestContainer),
+      deleteRequest: R.bind(requestContainer.deleteRequest, requestContainer),
+      duplicateRequest: R.bind(
+        requestContainer.duplicateRequest,
+        requestContainer
+      ),
+      getPreview: R.partial(
+        R.bind(requestContainer.getPreview, requestContainer),
+        [
+          contextContainer.getValue(),
+          selectedEnv,
+          authContainer.getMethods(),
+          "curl"
+        ]
+      ),
+      moveMethod: R.compose(
+        R.bind(requestContainer.updateAuthMethods, requestContainer),
+        R.bind(authContainer.move, authContainer)
+      ),
+      add: {
+        requests: R.bind(containers[0].addNewRequest, containers[0]),
+        env: R.bind(containers[1].addEmptyVariable, containers[1]),
+        methods: R.bind(containers[2].addNewMethod, containers[2])
+      },
+      selectEnv: R.bind(containers[1].selectEnv, containers[1]),
+      selectedEnv,
+      addEnv: R.bind(containers[1].addNewEnvironment, containers[1]),
+      environments: containers[1].getEnvs()
+    };
+  }
 })(Sidebar);
