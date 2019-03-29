@@ -65,3 +65,9 @@ POST Create foobar test should return error message: {"error_code":409,"message"
 * UI polish
 
 Website: https://templates.netlify.com/template/gatsby-blog-with-netlify-cms/
+
+## Revenue model
+
+- Completely free at launch.
+- After reaching v 1.0 status, an automatic update turns it to a free trial.
+- Free trial. At trial end a subsription purchase is required to continue.
