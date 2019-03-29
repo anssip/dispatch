@@ -59,6 +59,9 @@ POST Create foobar test should return error message: {"error_code":409,"message"
 - Request sending
   - Response view: shows headers & response (raw & JSON tabs)
 
-* Ordering of requests in the sidebar list
 * Context menu for sidebar requestList --> delete, duplicate
+* restore window state
+* automatic updates
 * UI polish
+
+Website: https://templates.netlify.com/template/gatsby-blog-with-netlify-cms/
