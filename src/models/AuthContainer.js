@@ -35,6 +35,29 @@ class AuthContainer extends Container {
       ]
     });
   }
+  deleteMethod(index) {
+    console.log(`deleteMethod ${index}`);
+    const methods = R.remove(index, 1, this.methodsWithOldIndexes());
+    this.setState({ methods });
+    return methods;
+  }
+  duplicateMethod(index) {
+    console.log(`duplicate ${index}`);
+    const oldMethods = this.methodsWithOldIndexes();
+    const method = oldMethods[index];
+    if (!method) return null;
+    const methods = R.insert(
+      index + 1,
+      R.assoc(
+        "name",
+        `${method.name} (copy)`,
+        R.assoc("selected", false, method)
+      ),
+      oldMethods
+    );
+    this.setState({ methods });
+    return methods;
+  }
   replaceSelectedMethod(replaceWith) {
     return this.setState({
       isModified: true,
@@ -86,12 +109,15 @@ class AuthContainer extends Container {
     );
     return this.setState({ methods });
   }
-  move({ oldIndex, newIndex }) {
-    console.log(`AuthContainer: move ${oldIndex} -> ${newIndex}`);
-    const oldMethods = this.state.methods.map((m, i) => ({
+  methodsWithOldIndexes() {
+    return this.state.methods.map((m, i) => ({
       ...m,
       oldIndex: i
     }));
+  }
+  move({ oldIndex, newIndex }) {
+    console.log(`AuthContainer: move ${oldIndex} -> ${newIndex}`);
+    const oldMethods = this.methodsWithOldIndexes();
     const methods = R.move(oldIndex, newIndex, oldMethods);
     this.setState({
       methods

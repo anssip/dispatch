@@ -73,6 +73,7 @@ class MainWindow extends React.PureComponent {
         >
           <Sidebar />
 
+          {/* TODO: hide preview pane using a toggle button */}
           <SplitPane
             className="bp3-dark"
             split="vertical"
@@ -127,6 +128,8 @@ class MainWindow extends React.PureComponent {
                 </>
               </ResizeSensor>
             </SplitPane>
+
+            {/* TODO: hide preview pane using a toggle button */}
             <ResponseView />
           </SplitPane>
         </SplitPane>

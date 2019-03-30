@@ -141,6 +141,7 @@ class RequestContainer extends Container {
     return this.setProp("authMethod", methodIndex);
   }
   updateAuthMethods(methods) {
+    console.log("updateAuthMethods", methods);
     const getNewAuthMethod = oldIndex =>
       R.findIndex(R.propEq("oldIndex", oldIndex), methods);
     const requests = this.state.requests.map(r => ({

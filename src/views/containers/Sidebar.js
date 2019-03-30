@@ -52,6 +52,8 @@ class Sidebar extends React.Component {
       moveMethod,
       deleteRequest,
       duplicateRequest,
+      deleteMethod,
+      duplicateMethod,
       getPreview
     } = this.props;
     console.log(`Sidebar: selectedEnv: ${selectEnv}`);
@@ -114,6 +116,8 @@ class Sidebar extends React.Component {
                       handleClick={R.partial(selectMethod, [i])}
                       id={i}
                       model={method}
+                      deleteMethod={R.partial(deleteMethod, [i])}
+                      duplicateMethod={R.partial(duplicateMethod, [i])}
                     />
                   )}
                 />
@@ -175,6 +179,10 @@ export default connect({
     projectContainer
   ],
   selector: ({ containers }) => {
+    const updateAuthMethods = R.bind(
+      requestContainer.updateAuthMethods,
+      requestContainer
+    );
     const selectedEnv =
       containers[1].getSelectedEnvName() || containers[1].getFirstEnvName();
     return {
@@ -190,6 +198,14 @@ export default connect({
         requestContainer.duplicateRequest,
         requestContainer
       ),
+      deleteMethod: R.compose(
+        updateAuthMethods,
+        R.bind(authContainer.deleteMethod, authContainer)
+      ),
+      duplicateMethod: R.compose(
+        updateAuthMethods,
+        R.bind(authContainer.duplicateMethod, authContainer)
+      ),
       getPreview: R.partial(
         R.bind(requestContainer.getPreview, requestContainer),
         [
@@ -200,7 +216,7 @@ export default connect({
         ]
       ),
       moveMethod: R.compose(
-        R.bind(requestContainer.updateAuthMethods, requestContainer),
+        updateAuthMethods,
         R.bind(authContainer.move, authContainer)
       ),
       add: {

@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import {
-  Card,
-  Text,
-  ContextMenu,
-  Menu,
-  MenuItem,
-  MenuDivider
-} from "@blueprintjs/core";
+import { Text, ContextMenu, Menu, MenuItem } from "@blueprintjs/core";
 const R = require("ramda");
 const { clipboard, remote } = window.require("electron");
 
@@ -50,11 +43,10 @@ const showContextMenu = (
         onClick={R.partial(exportRequest, [request, getPreview])}
       />
       <MenuItem icon="delete" text="Delete" onClick={deleteRequest} />
-      <MenuDivider />
-      <MenuItem disabled={true} text="Settings" />
     </Menu>,
     { left: e.clientX, top: e.clientY },
-    () => setIsContextMenuOpen(false)
+    () => setIsContextMenuOpen(false),
+    true // isDarkTheme?
   );
   // indicate that context menu is open so we can add a CSS class to this element
   setIsContextMenuOpen(true);
@@ -69,7 +61,6 @@ const Request = props => {
     deleteRequest,
     getPreview
   } = props;
-
   const RequestCard = styled.div`
     padding: 5px 0 5px 0;
     padding-left: 5px;
@@ -79,7 +70,6 @@ const Request = props => {
     border-bottom: 1px solid
       ${isContextMenuOpen ? "1px solid #48AFF0" : "#5c7080"};
   `;
-
   return (
     <RequestCard
       onContextMenu={R.partial(showContextMenu, [
