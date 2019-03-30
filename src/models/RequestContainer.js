@@ -78,7 +78,7 @@ class RequestContainer extends Container {
     return this.getRequests().length;
   }
   isEmpty() {
-    return this.getRequests().length == 0;
+    return (this.getRequests() || []).length == 0;
   }
   createEmptyRequest(selected = true) {
     return {

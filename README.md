@@ -52,17 +52,11 @@ curl --request POST \
 
 ## TODO
 
-next:
-
-POST Create foobar test should return error message: {"error_code":409,"message":"Connector myDbConnector already exists"}
-
-- Request sending
-  - Response view: shows headers & response (raw & JSON tabs)
-
-* Context menu for sidebar requestList --> delete, duplicate
-* restore window state
-* automatic updates
-* UI polish
+- restore window state
+- automatic updates
+- Finalize menus: add "About Dispatch"
+- UI polish
+- non-ideal states
 
 Website: https://templates.netlify.com/template/gatsby-blog-with-netlify-cms/
 
