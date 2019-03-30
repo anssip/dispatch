@@ -82,7 +82,7 @@ class Sidebar extends React.Component {
               panel={
                 <SidebarList
                   onSortEnd={moveRequest}
-                  items={requests}
+                  items={requests || []}
                   render={(request, i) => (
                     <Request
                       handleClick={R.partial(selectRequest, [i])}
@@ -110,7 +110,7 @@ class Sidebar extends React.Component {
               panel={
                 <SidebarList
                   onSortEnd={moveMethod}
-                  items={methods}
+                  items={methods || []}
                   render={(method, i) => (
                     <AuthMethod
                       handleClick={R.partial(selectMethod, [i])}

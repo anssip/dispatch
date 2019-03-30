@@ -9,4 +9,4 @@ extraMetadata:
 publish:
   provider: github
 extends: react-cra
-electronVersion: 4.1.0
+electronVersion: 4.1.3

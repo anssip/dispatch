@@ -8,12 +8,20 @@ class MenuBuilder {
     ipcMain.on("recent-files", (event, data) => {
       console.log("MenuBuilder recent-files");
       if (data.filename) {
-        this.window.setTitle(this.getTitle(data.filename));
+        try {
+          this.window.setTitle(this.getTitle(data.filename));
+        } catch (e) {
+          console.error(e);
+        }
       }
       if (data.recentFiles && data.recentFiles.length > 0) {
         this.createMenus(data.recentFiles);
       }
     });
+  }
+
+  setWindow(window) {
+    this.window = window;
   }
 
   getTitle(filename) {

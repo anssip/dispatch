@@ -1,3 +1,4 @@
+const MenuBuilder = require("./MenuBuilder");
 const electron = require("electron");
 const windowStateKeeper = require("electron-window-state");
 const app = electron.app;
@@ -5,20 +6,21 @@ const BrowserWindow = electron.BrowserWindow;
 
 const path = require("path");
 const isDev = require("electron-is-dev");
-const MenuBuilder = require("../src/services/MenuBuilder");
 
 let mainWindow;
 let mainWindowState;
+let menuBuilder;
 
 const DEFAULT_WINDOW_STATE = {
   defaultWidth: 1000,
   defaultHeight: 800
 };
+
 // @ts-ignore
-require("update-electron-app")({
-  repo: "kitze/react-electron-example",
-  updateInterval: "1 hour"
-});
+// require("update-electron-app")({
+//   repo: "kitze/react-electron-example",
+//   updateInterval: "1 hour"
+// });
 
 const createWindow = () => {
   mainWindowState = windowStateKeeper(DEFAULT_WINDOW_STATE);
@@ -42,12 +44,15 @@ const createWindow = () => {
 };
 
 const createMenu = () => {
-  new MenuBuilder(mainWindow).createMenus();
+  if (!menuBuilder) {
+    menuBuilder = new MenuBuilder(mainWindow).createMenus();
+  } else {
+    menuBuilder.setWindow(mainWindow);
+  }
 };
 
 app.on("ready", () => {
   createWindow();
-
   createMenu();
 });
 

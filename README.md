@@ -52,8 +52,10 @@ curl --request POST \
 
 ## TODO
 
-- restore window state
+- does not automatically open the previously open project
+- spinner when request in progress
 - automatic updates
+- windows & linux dist builds
 - Finalize menus: add "About Dispatch"
 - UI polish
 - non-ideal states
