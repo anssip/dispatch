@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Text, ContextMenu, Menu, MenuItem } from "@blueprintjs/core";
+import { Text, ContextMenu, Menu, MenuItem, Spinner } from "@blueprintjs/core";
 const R = require("ramda");
 const { clipboard, remote } = window.require("electron");
 
@@ -8,6 +8,11 @@ const { clipboard, remote } = window.require("electron");
 const Method = styled.span`
   color: #ad99ff;
   margin-right: 5px;
+`;
+const DispatchSpinner = styled.div`
+  margin-top: -19px;
+  padding: 0;
+  float: right;
 `;
 const exportRequest = (request, getPreview) => {
   remote
@@ -90,6 +95,13 @@ const Request = props => {
         <Method>{model.method}</Method>
         {model.name}
       </Text>
+      {model.isDispatching ? (
+        <DispatchSpinner>
+          <Spinner size={Spinner.SIZE_SMALL} />
+        </DispatchSpinner>
+      ) : (
+        ""
+      )}
     </RequestCard>
   );
 };

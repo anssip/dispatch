@@ -9,7 +9,8 @@ import {
   Button,
   Tabs,
   Tab,
-  Icon
+  Icon,
+  Spinner
 } from "@blueprintjs/core";
 import styled from "styled-components";
 import RequestViewComponent from "./RequestViewCompoent";
@@ -94,13 +95,21 @@ class RequestView extends React.Component {
                 options={METHODS}
                 className={Classes.FIXED}
               />
-              <UrlInput value={request.url} onChange={setUrl} />
-
-              <Button
-                icon="arrow-right"
-                className={Classes.FIXED}
-                onClick={dispatchSelected}
+              <UrlInput
+                style={request.isDispatching ? { marginRight: "5px" } : {}}
+                value={request.url}
+                onChange={setUrl}
               />
+
+              {request.isDispatching ? (
+                <Spinner size={Spinner.SIZE_SMALL} className={Classes.FIXED} />
+              ) : (
+                <Button
+                  icon="arrow-right"
+                  className={Classes.FIXED}
+                  onClick={dispatchSelected}
+                />
+              )}
             </ControlGroup>
 
             <ControlGroup fill={true}>
@@ -214,8 +223,10 @@ export default connect({
       )
     );
     const dispatchSelected = async () => {
+      requestContainer.setIsDispatching(true);
       const resp = await dispatcher.dispatch();
       requestContainer.setResponse(resp);
+      requestContainer.setIsDispatching(false);
     };
 
     return {

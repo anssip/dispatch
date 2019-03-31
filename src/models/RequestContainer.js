@@ -167,6 +167,15 @@ class RequestContainer extends Container {
   setResponse(response) {
     return this.setProp("response", response);
   }
+  setIsDispatching(value) {
+    if (value) {
+      setTimeout(
+        R.partial(R.bind(this.setIsDispatching, this), [false]),
+        20000
+      );
+    }
+    return this.setProp("isDispatching", value);
+  }
   _addReqComponent({ component = "headers", name = null, value = null }) {
     const req = this.getSelected();
     if (!req) throw new Error("No request selected");
