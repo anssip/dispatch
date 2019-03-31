@@ -52,7 +52,7 @@ curl --request POST \
 
 ## TODO
 
-- does not automatically open the previously open project
+- another tab for request specific fill variables!!
 - spinner when request in progress
 - automatic updates
 - windows & linux dist builds

@@ -10,24 +10,22 @@ class ApplicationController {
         recentFiles: this.projectContainer.getFiles()
       });
     });
-
     ipcRenderer.on("save-project-as", event => {
       this.askFileAndSaveProject(event);
     });
-
     ipcRenderer.on("new-project", event => {
       this.newProject();
     });
-
     ipcRenderer.on("open-project", event => {
       this.openProject(event);
     });
-
+    ipcRenderer.on("close-project", event => {
+      this.closeProject();
+    });
     ipcRenderer.on("export-request", (event, filename, data) => {
       console.log("export-request");
       this.askFileAndexportRequest(filename, data);
     });
-
     ipcRenderer.on("open-recent", async (event, filename) => {
       console.log(
         `ApplicationController: open-project ${projectContainer.isModified()}`
@@ -125,6 +123,10 @@ class ApplicationController {
         console.error(err);
       }
     }
+  }
+
+  closeProject() {
+    return this.projectContainer.closeActive();
   }
 
   saveActive() {

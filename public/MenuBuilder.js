@@ -53,6 +53,7 @@ class MenuBuilder {
       }
     ];
     const restItems = [
+      { type: "separator" },
       {
         label: "Save",
         accelerator: "CommandOrControl+S",
@@ -62,6 +63,12 @@ class MenuBuilder {
         label: "Save As...",
         accelerator: "CommandOrControl+Shift+S",
         click: () => this.window.webContents.send("save-project-as")
+      },
+      { type: "separator" },
+      {
+        label: "Close Project",
+        accelerator: "CommandOrControl+W",
+        click: () => this.window.webContents.send("close-project")
       },
       { role: "toggleDevTools" }
     ];

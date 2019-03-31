@@ -28,7 +28,10 @@ class ProjectContainer extends Container {
 
     await this.loadSettings();
     const activeProjectFile = this.getActive();
-    if (!activeProjectFile) return;
+    if (!activeProjectFile) {
+      console.log("No active project");
+      return;
+    }
 
     const project = await this.load(activeProjectFile);
     if (project) {
@@ -82,24 +85,36 @@ class ProjectContainer extends Container {
     this.updateMostRecent(path);
   }
 
+  newProject() {
+    this.closeActive();
+  }
+
   closeActive() {
     this.setState({ recentIsActive: false });
+    requestContainer.reset();
+    contextContainer.reset();
+    authContainer.reset();
+    return this.saveSettings();
   }
 
   async save(path) {
     console.log(`Saving projet to path ${path}`);
     await this.fileUtil.writeFile(path, this.getProjectFileData());
     const files = this.updateMostRecent(path);
-    console.log(`We have ${files.length} recent files`);
-    console.log(`Saving settings to ${this.SETTINGS_FILE}`);
-    await this.fileUtil.writeFile(
-      this.SETTINGS_FILE,
-      JSON.stringify({ files, activeSidebarTab: this.state.activeSidebarTab })
-    );
+
+    await this.saveSettings();
     requestContainer.setModified(false);
     contextContainer.setModified(false);
     authContainer.setModified(false);
     return files;
+  }
+
+  saveSettings() {
+    console.log(`Saving settings to ${this.SETTINGS_FILE}`);
+    return this.fileUtil.writeFile(
+      this.SETTINGS_FILE,
+      JSON.stringify(this.state)
+    );
   }
 
   async open(path) {
@@ -126,6 +141,7 @@ class ProjectContainer extends Container {
   updateMostRecent(path) {
     const files = R.uniq(R.prepend(path, this.state.files));
     this.setState({ recentIsActive: true, files });
+    this.saveSettings();
     console.log(`updateMostRecent(): returning recent files ${files}`);
     return files;
   }
@@ -142,12 +158,6 @@ class ProjectContainer extends Container {
       null,
       2
     );
-  }
-
-  newProject() {
-    requestContainer.reset();
-    contextContainer.reset();
-    this.closeActive();
   }
 
   addRequest(request) {
