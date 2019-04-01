@@ -79,6 +79,10 @@ class RequestView extends React.Component {
       setHeaderValue,
       deleteHeader,
       setAuthMethod,
+      addVariable,
+      setVariableName,
+      setVariableValue,
+      deleteVariable,
       authMethods,
       setContentType
     } = this.props;
@@ -146,6 +150,23 @@ class RequestView extends React.Component {
                           paneHeight={paneHeight}
                           contentType={request.contentType}
                           onChange={setContentType}
+                        />
+                      }
+                    />
+                  }
+                />
+                <Tab
+                  id="variables"
+                  title="Variables"
+                  panel={
+                    <RequestViewComponent
+                      render={
+                        <ItemList
+                          items={request.variables || []}
+                          add={addVariable}
+                          del={deleteVariable}
+                          setName={setVariableName}
+                          setValue={setVariableValue}
                         />
                       }
                     />
@@ -243,6 +264,16 @@ export default connect({
       setHeaderName: R.bind(requestContainer.setHeaderName, requestContainer),
       setHeaderValue: R.bind(requestContainer.setHeaderValue, requestContainer),
       deleteHeader: R.bind(requestContainer.deleteHeader, requestContainer),
+      addVariable: R.bind(requestContainer.addVariable, requestContainer),
+      setVariableName: R.bind(
+        requestContainer.setVariableName,
+        requestContainer
+      ),
+      setVariableValue: R.bind(
+        requestContainer.setVariableValue,
+        requestContainer
+      ),
+      deleteVariable: R.bind(requestContainer.deleteVariable, requestContainer),
       dispatchSelected,
       setMethod: setToRequestFromEvent(requestContainer.setMethod),
       setAuthMethod: setToRequestFromEvent(

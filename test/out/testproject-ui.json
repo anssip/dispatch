@@ -36,7 +36,7 @@
       "name": "Create foobar source",
       "method": "POST",
       "url": "http://localhost:8083/connectors/",
-      "body": "fill(\n  \"{{dbSource}}\",\n  { \n\tconnectorName: \"myDbConnector\",    \n\tjdbcUrl: \"jdbc:mysql://localhost:3306/augment?user=root&password=zymes_FL1\", \n    tableName: \"deposit\",\n  \ttopicPrefix: \"v1_\"\n})\n",
+      "body": "\"{{dbSource}}\"",
       "selected": true,
       "auth": {
         "basic": {
@@ -69,7 +69,25 @@
           },
           "body": "{\"error_code\":409,\"message\":\"Connector myDbConnector already exists\"}"
         }
-      }
+      },
+      "variables": [
+        {
+          "name": "connectorName",
+          "value": "myDbConn1"
+        },
+        {
+          "name": "jdbcUrl",
+          "value": "jdbc://myDBhere:675"
+        },
+        {
+          "name": "tableName",
+          "value": "fuusers"
+        },
+        {
+          "name": "topicPrefix",
+          "value": "prefix1"
+        }
+      ]
     },
     {
       "name": "Create my source",

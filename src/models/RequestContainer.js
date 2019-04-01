@@ -188,7 +188,6 @@ class RequestContainer extends Container {
   _setCompProp(index, prop, value, component = "headers") {
     const req = this.getSelected();
     if (!req) throw new Error("No request selected");
-    // if (!req[component] || req[component].length < index) return;
     if (!req[component] || req[component].length <= index) {
       return this._addReqComponent({ component, [prop]: value });
     }
@@ -235,6 +234,19 @@ class RequestContainer extends Container {
   }
   deleteParam(index) {
     this._deleteComp(index, "params");
+  }
+  addVariable() {
+    return this._addReqComponent({ component: "variables" });
+  }
+  setVariableName(index, name) {
+    console.log(`setVariableName ${index}: `, name);
+    return this._setCompProp(index, "name", name, "variables");
+  }
+  setVariableValue(index, value) {
+    return this._setCompProp(index, "value", value, "variables");
+  }
+  deleteVariable(index) {
+    this._deleteComp(index, "variables");
   }
   // @ts-ignore
   getPreview(ctx, env, authMethods, format = "curl", index = -1) {

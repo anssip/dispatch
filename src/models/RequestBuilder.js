@@ -1,3 +1,5 @@
+import { access } from "fs";
+
 const R = require("ramda");
 const object = require("json-templater").object;
 const string = require("json-templater").string;
@@ -20,15 +22,26 @@ class RequestBuilder {
     return tmpValue;
   }
 
+  getVariablesFromRequest() {
+    const vars = (this.req.variables || []).reduce(
+      (acc, curr) => ({ ...acc, [curr.name]: curr.value }),
+      {}
+    );
+    console.log("RequestBuilder:: variables in request", vars);
+    return vars;
+  }
+
   /*
    * Renders context, objects passed as parameters, and environment variables, in this order,
    * to the specified template string.
    */
   fill(tmpl, ...rest) {
-    return [this.evalObject(this.ctx), ...rest, this.env].reduce(
-      (acc, curr) => object(acc, curr),
-      tmpl
-    );
+    return [
+      this.evalObject(this.ctx),
+      ...rest,
+      this.env,
+      this.getVariablesFromRequest()
+    ].reduce((acc, curr) => object(acc, curr), tmpl);
   }
 
   /*
@@ -54,6 +67,7 @@ class RequestBuilder {
       console.log(`RequestBuilder:: afer initial eval`, tmpValue);
       tmpValue = this.fill(tmpValue);
       console.log(`RequestBuilder:: after ctx fill`, tmpValue);
+
       const result = JSON.stringify(tmpValue, null, 2);
       console.log(`RequestBuilder:: result ${JSON.stringify(result)}`);
       return result;

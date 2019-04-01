@@ -53,7 +53,6 @@ curl --request POST \
 ## TODO
 
 - another tab for request specific fill variables!!
-- spinner when request in progress
 - automatic updates
 - windows & linux dist builds
 - Finalize menus: add "About Dispatch"
