@@ -1,29 +1,29 @@
-import React from "react";
-import styled from "styled-components";
-import connect from "unstated-connect2";
-import requestContainer from "../../../models/RequestContainer";
-import CodeEditor from "../../components/CodeEditor";
+import React from "react"
+import styled from "styled-components"
+import connect from "unstated-connect2"
+import requestContainer from "../../../models/RequestContainer"
+import CodeEditor from "../../components/CodeEditor"
 
-const R = require("ramda");
+const R = require("ramda")
 
 const Wrapper = styled.div`
   margin-left: -20px;
   margin-right: -20px;
-`;
+`
 
 class BodyEditor extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
   render() {
-    console.log(this.props);
-    const { request, setBody, paneHeight, paneWidth } = this.props;
+    console.log(this.props)
+    const { request, setBody, paneHeight, paneWidth } = this.props
 
     return (
       <Wrapper>
         <CodeEditor
           id="body"
-          paneHeight={paneHeight - 272}
+          paneHeight={paneHeight - 232}
           value={request.body}
           options={{
             mode: "javascript",
@@ -31,16 +31,16 @@ class BodyEditor extends React.Component {
             theme: "midnight"
           }}
           onBeforeChange={(editor, data, value) => {
-            console.log("CodeEditor, onBeforeChange", value);
+            console.log("CodeEditor, onBeforeChange", value)
             // this.setState({ value });
-            setBody(value);
+            setBody(value)
           }}
           onChange={(editor, data, value) => {
-            console.log("onChange");
+            console.log("onChange")
           }}
         />
       </Wrapper>
-    );
+    )
   }
 }
 
@@ -53,4 +53,4 @@ export default connect({
     request: container.getSelected(),
     setBody: R.bind(container.setBody, container)
   })
-})(BodyEditor);
+})(BodyEditor)

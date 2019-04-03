@@ -55,7 +55,8 @@ const MainPane = styled.div`
 const AuthMethodWrapper = styled.div`
   text-align: right;
   padding-top: 20px;
-  min-width: 180px;
+  width: 200px;
+  min-width: 150px;
 `
 
 class RequestView extends React.Component {

@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import {
   FormGroup,
   Text,
@@ -10,17 +10,13 @@ import {
   Button,
   Tabs,
   Tab
-} from "@blueprintjs/core";
-import styled from "styled-components";
-import BodyEditor from "./BodyEditor";
+} from "@blueprintjs/core"
+import styled from "styled-components"
+import BodyEditor from "./BodyEditor"
 
-const BodyWrapper = styled.div`
-  padding-top: 10px;
-`;
+const BodyWrapper = styled.div``
 
-const Divider = styled.div`
-  margin-top: 20px;
-`;
+const Divider = styled.div``
 
 const BodyView = props => (
   <>
@@ -46,6 +42,6 @@ const BodyView = props => (
       </BodyWrapper>
     </Divider>
   </>
-);
+)
 
-export default BodyView;
+export default BodyView

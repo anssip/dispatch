@@ -122,10 +122,10 @@ const ResponseView = props => {
             <CodeEditor
               // TODO: separate button & menu item to trigger prerrify
               id="response"
-              paneHeight={paneHeight - 170}
               value={betterBodies(response.body, response.headers)}
               autoScroll={true}
               className="CodeMirror-context"
+              paneHeight={paneHeight - 170}
               options={{
                 mode: "javascript",
                 json: true,
