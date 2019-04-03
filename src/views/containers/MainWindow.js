@@ -1,11 +1,11 @@
-import React from "react";
-import connect from "unstated-connect2";
-import SplitPane from "react-split-pane";
-import Sidebar from "./Sidebar";
-import "./splitpane.css";
-import RequestView from "./RequestView";
-import ResponseView from "./ResponseView";
-import AuthView from "./auth/AuthView";
+import React from "react"
+import connect from "unstated-connect2"
+import SplitPane from "react-split-pane"
+import Sidebar from "./Sidebar"
+import "./splitpane.css"
+import RequestView from "./RequestView"
+import ResponseView from "./ResponseView"
+import AuthView from "./auth/AuthView"
 import {
   ResizeSensor,
   Card,
@@ -16,38 +16,38 @@ import {
   Popover,
   Menu,
   MenuItem
-} from "@blueprintjs/core";
-import requestContainer from "../../models/RequestContainer";
-import contextContainer from "../../models/ContextContainer";
-import projectContainer from "../../models/ProjectContainer";
-import authContainer from "../../models/AuthContainer";
-import styled from "styled-components";
+} from "@blueprintjs/core"
+import requestContainer from "../../models/RequestContainer"
+import contextContainer from "../../models/ContextContainer"
+import projectContainer from "../../models/ProjectContainer"
+import authContainer from "../../models/AuthContainer"
+import styled from "styled-components"
 
-const { clipboard, remote } = window.require("electron");
-const R = require("ramda");
+const { clipboard, remote } = window.require("electron")
+const R = require("ramda")
 
 const Preview = styled.div`
   padding: 10px;
   word-wrap: break-all;
   overflow: visible;
-`;
+`
 
 const Buttons = styled.div`
   position: absolute;
   bottom: 0;
   right: 0;
-`;
+`
 
 class MainWindow extends React.PureComponent {
   constructor(props) {
-    super(props);
-    this.state = { paneWidth: 0, paneHeight: 0 };
-    this.copyToClipboard = R.bind(this.copyToClipboard, this);
-    this.export = R.bind(this.export, this);
+    super(props)
+    this.state = { paneWidth: 0, paneHeight: 0 }
+    this.copyToClipboard = R.bind(this.copyToClipboard, this)
+    this.export = R.bind(this.export, this)
   }
 
   copyToClipboard() {
-    clipboard.writeText(this.props.preview);
+    clipboard.writeText(this.props.preview)
   }
 
   export() {
@@ -57,11 +57,11 @@ class MainWindow extends React.PureComponent {
         "export-request",
         `${this.props.request.name.replace(/ /g, "-")}.sh`,
         this.props.preview
-      );
+      )
   }
 
   render() {
-    const { request, preview, activeSidebarTab } = this.props;
+    const { request, preview, activeSidebarTab } = this.props
 
     return request ? (
       <ResizeSensor onResize={entries => this.handleWrapperResize(entries)}>
@@ -81,7 +81,7 @@ class MainWindow extends React.PureComponent {
             defaultSize={270}
           >
             <SplitPane
-              className="bp3-dark"
+              className="bodyeditor"
               split="horizontal"
               primary="second"
               minSize={0}
@@ -96,7 +96,6 @@ class MainWindow extends React.PureComponent {
                 />
               )}
               <ResizeSensor onResize={entries => this.handleResize(entries)}>
-                {/* <Preview>{preview}</Preview> */}
                 <>
                   <TextArea
                     value={preview}
@@ -136,20 +135,20 @@ class MainWindow extends React.PureComponent {
       </ResizeSensor>
     ) : (
       <Card>Open a project first!</Card>
-    );
+    )
   }
 
   handleResize(entries) {
     this.setState({
       paneWidth: entries[0].contentRect.width,
       paneHeight: entries[0].contentRect.height
-    });
+    })
   }
   handleWrapperResize(entries) {
     this.setState({
       contentHeight: entries[0].contentRect.height,
       contentWidth: entries[0].contentRect.width
-    });
+    })
   }
 }
 
@@ -170,6 +169,6 @@ export default connect({
         authContainer.getMethods()
       ),
       activeSidebarTab: projectContainer.getActiveSidebarTab()
-    };
+    }
   }
-})(MainWindow);
+})(MainWindow)

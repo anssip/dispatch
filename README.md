@@ -52,12 +52,13 @@ curl --request POST \
 
 ## TODO
 
-- another tab for request specific fill variables!!
+- UI polish
+- prettify command for the context editor
 - automatic updates
 - windows & linux dist builds
 - Finalize menus: add "About Dispatch"
-- UI polish
-- non-ideal states
+
+- Support ctx templating also for text bodies
 
 Website: https://templates.netlify.com/template/gatsby-blog-with-netlify-cms/
 

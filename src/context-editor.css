@@ -2,15 +2,15 @@
 
 /*<!--match-->*/
 .cm-s-context span.CodeMirror-matchhighlight {
-  background: #494949;
+  background: #293742;
 }
 .cm-s-context.CodeMirror-focused span.CodeMirror-matchhighlight {
-  background: #314d67 !important;
+  background: #293742 !important;
 }
 
 /*<!--activeline-->*/
 .cm-s-context .CodeMirror-activeline-background {
-  background: #253540;
+  background: #293742;
 }
 
 .cm-s-context.CodeMirror {
@@ -19,17 +19,17 @@
 }
 
 .cm-s-context div.CodeMirror-selected {
-  background: #314d67;
+  background: #293742;
 }
 .cm-s-context .CodeMirror-line::selection,
 .cm-s-context .CodeMirror-line > span::selection,
 .cm-s-context .CodeMirror-line > span > span::selection {
-  background: rgba(49, 77, 103, 0.99);
+  background: #293742;
 }
 .cm-s-context .CodeMirror-line::-moz-selection,
 .cm-s-context .CodeMirror-line > span::-moz-selection,
 .cm-s-context .CodeMirror-line > span > span::-moz-selection {
-  background: rgba(49, 77, 103, 0.99);
+  background: #293742;
 }
 .cm-s-context .CodeMirror-gutters {
   background: #0f192a;
