@@ -8,51 +8,10 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 ![Screenshot](https://i.imgur.com/7AHNyCT.png)
 
-### OAuth2Form
-
-- Logging to the output pane when fetching OAuth2 tokens!!
-
-- refactor this to be tied to the selected auth method
-
-In OAuth 2.0, the term “grant type” refers to the way an application gets an access token.
-
-### Authorization code flow
-
-[What is the OAuth 2.0 Authorization Code Grant Type?](https://developer.okta.com/blog/2018/04/10/oauth-authorization-code-grant-type)
-
-- Implicit
-
-  - Don't show the refresh_token field nor the Refresh button
-
-    - https://developer.okta.com/blog/2018/05/24/what-is-the-oauth2-implicit-grant-type
-
-  - Resource Owner Password grant
-
-    - fields: Username, password, accessTokenUrl
-    - request to the `token` URL
-    - https://developer.okta.com/authentication-guide/implementing-authentication/password
-
-  - Client Credentials grant
-    - fields: accessTokenUrl
-    - clientId / clientSecret sent in basic auth into the `token` URL
-    - https://developer.okta.com/authentication-guide/implementing-authentication/client-creds
-
-  * Render request methods (GET, POST, PUT) in different colors
-
-  - Auth: Basic auth, Bearer token, later: OAuth 2
-  - request sending
-  - non JSON requests?
-
-### working Client Credential request
-
-curl --request POST \
- --url https://dispatch-rest-dev.eu.auth0.com/oauth/token \
- --header 'content-type: application/json' \*\*\*\*
---data '{"client_id":"a9lqkFe4IfYQExWVHo4jBXpiESSXZxYq","client_secret":"Bhoz9vTSSJwKoqvSkXPgY3b2uNSY3NEtQCAgF39cgyd9z3fdQzi7SITlXO4VoOt2","audience":"http","grant_type":"client_credentials"}'
-
 ## TODO
 
 - UI polish
+- request search field
 - prettify command for the context editor
 - automatic updates
 - windows & linux dist builds
@@ -61,9 +20,3 @@ curl --request POST \
 - Support ctx templating also for text bodies
 
 Website: https://templates.netlify.com/template/gatsby-blog-with-netlify-cms/
-
-## Revenue model
-
-- Completely free at launch.
-- After reaching v 1.0 status, an \***\*automatic\*\*** update turns it to a free trial.
-- Free trial. At trial end a subsription purchase is required to continue.

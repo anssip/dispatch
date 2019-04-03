@@ -1,5 +1,5 @@
 {
-  "name": "dispatch",
+  "name": "Dispatch",
   "version": "1.0.0",
   "description": "A very talkative REST automation and testing tool for developers. The focus is on utilising templates for the requests to avoid duplication. Awesome Git integration and other features to make developers happy.",
   "repository": {
