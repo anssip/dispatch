@@ -128,7 +128,6 @@ class RequestContainer extends Container {
     console.log("getSelected");
     if (this.isEmpty()) return {};
     return R.find(R.prop("selected"))(this.state.requests) || {};
-    // return selected || this.state.requests[0];
   }
   setProp(prop, value) {
     const newReq = R.assoc(prop, value, R.clone(this.getSelected()));

@@ -10,7 +10,7 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 ## TODO
 
-- UI polish
+- UI polish: Variables tab can be improved when no variable nor environments exist
 - request search field
 - prettify command for the context editor
 - automatic updates

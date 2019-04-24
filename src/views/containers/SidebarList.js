@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { InputGroup } from "@blueprintjs/core";
+import { InputGroup, NonIdealState, Button } from "@blueprintjs/core";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 
 const R = require("ramda");
@@ -10,20 +10,36 @@ const Wrapper = styled.div`
   margin-right: 10px;
 `;
 const SortableItem = SortableElement(({ value }) => <Wrapper>{value}</Wrapper>);
-const SortableList = SortableContainer(({ render, items }) => {
-  return (
-    <ul>
-      {items.map((value, index) => (
-        <SortableItem
-          key={`item-${index}`}
-          index={index}
-          value={render(value, index)}
+const SortableList = SortableContainer(
+  ({ label, addClicked, render, items }) => {
+    if (items.length === 0)
+      return (
+        <NonIdealState
+          title={`No ${label}`}
+          action={
+            <Button
+              intent="primary"
+              icon="add"
+              text="Add"
+              onClick={addClicked}
+            />
+          }
         />
-      ))}
-    </ul>
-  );
-});
-const SidebarList = ({ items, render, onSortEnd }) => (
+      );
+    return (
+      <ul>
+        {items.map((value, index) => (
+          <SortableItem
+            key={`item-${index}`}
+            index={index}
+            value={render(value, index)}
+          />
+        ))}
+      </ul>
+    );
+  }
+);
+const SidebarList = ({ label, addClicked, items, render, onSortEnd }) => (
   <div>
     <InputGroup
       className="search"
@@ -38,6 +54,8 @@ const SidebarList = ({ items, render, onSortEnd }) => (
       value={""}
     />
     <SortableList
+      label={label}
+      addClicked={addClicked}
       render={render}
       items={items}
       onSortEnd={onSortEnd}

@@ -27,7 +27,7 @@ class ContextEditor extends React.Component {
   }
   render() {
     const { value, setValue, paneHeight } = this.props;
-    console.log(`ContextEditor, paneHeight ${paneHeight}`);
+    console.log(`ContextEditor, value == ${JSON.stringify(value)}`);
 
     return (
       <Wrapper>

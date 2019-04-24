@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import {
   ResizeSensor,
   Card,
@@ -9,31 +9,31 @@ import {
   Popover,
   Menu,
   MenuItem
-} from "@blueprintjs/core"
-import styled from "styled-components"
-import SidebarList from "./SidebarList"
-import ContextEditor from "./context/ContextEditor"
-import EnvironmentEditor from "./EnvironmentEditor"
-import connect from "unstated-connect2"
-import requestContainer from "../../models/RequestContainer"
-import contextContainer from "../../models/ContextContainer"
-import authContainer from "../../models/AuthContainer"
-import projectContainer from "../../models/ProjectContainer"
-import Request from "../components/Request"
-import AuthMethod from "../components/AuthMethod"
-import RequestContainer from "../../models/RequestContainer"
+} from "@blueprintjs/core";
+import styled from "styled-components";
+import SidebarList from "./SidebarList";
+import ContextEditor from "./context/ContextEditor";
+import EnvironmentEditor from "./EnvironmentEditor";
+import connect from "unstated-connect2";
+import requestContainer from "../../models/RequestContainer";
+import contextContainer from "../../models/ContextContainer";
+import authContainer from "../../models/AuthContainer";
+import projectContainer from "../../models/ProjectContainer";
+import Request from "../components/Request";
+import AuthMethod from "../components/AuthMethod";
+import RequestContainer from "../../models/RequestContainer";
 
-const R = require("ramda")
+const R = require("ramda");
 
 const BottomBar = styled.div`
   position: fixed;
   bottom: 0;
-`
+`;
 
 class Sidebar extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = { contentHeight: 0 }
+    super(props);
+    this.state = { contentHeight: 0 };
   }
   render() {
     const {
@@ -55,17 +55,18 @@ class Sidebar extends React.Component {
       deleteMethod,
       duplicateMethod,
       getPreview
-    } = this.props
-    console.log(`Sidebar: selectedEnv: ${selectEnv}`)
+    } = this.props;
+    console.log(`Sidebar: selectedEnv: ${selectEnv}`);
 
     const addClicked = () => {
+      console.log("addClicked");
       if (activeTab === "context") {
-        setActiveTab("requests")
-        add.requests()
+        setActiveTab("requests");
+        add.requests();
       } else {
-        add[activeTab]()
+        add[activeTab]();
       }
-    }
+    };
 
     return (
       <ResizeSensor onResize={entries => this.handleResize(entries)}>
@@ -81,6 +82,8 @@ class Sidebar extends React.Component {
               title="Requests"
               panel={
                 <SidebarList
+                  label="requests"
+                  addClicked={addClicked}
                   onSortEnd={moveRequest}
                   items={requests || []}
                   render={(request, i) => (
@@ -109,6 +112,8 @@ class Sidebar extends React.Component {
               title="Auth"
               panel={
                 <SidebarList
+                  label="auth methods"
+                  addClicked={addClicked}
                   onSortEnd={moveMethod}
                   items={methods || []}
                   render={(method, i) => (
@@ -146,11 +151,11 @@ class Sidebar extends React.Component {
           </BottomBar>
         </Card>
       </ResizeSensor>
-    )
+    );
   }
   handleResize(entries) {
-    console.log(`SideBar contentHeight = ${entries[0].contentRect.height}`)
-    this.setState({ contentHeight: entries[0].contentRect.height })
+    console.log(`SideBar contentHeight = ${entries[0].contentRect.height}`);
+    this.setState({ contentHeight: entries[0].contentRect.height });
   }
 }
 
@@ -164,7 +169,7 @@ const EnvMenu = props => (
     ))}
     <MenuItem text="Add new environment" onClick={props.add} />
   </Menu>
-)
+);
 
 // @ts-ignore
 export default connect({
@@ -178,9 +183,9 @@ export default connect({
     const updateAuthMethods = R.bind(
       requestContainer.updateAuthMethods,
       requestContainer
-    )
+    );
     const selectedEnv =
-      containers[1].getSelectedEnvName() || containers[1].getFirstEnvName()
+      containers[1].getSelectedEnvName() || containers[1].getFirstEnvName();
     return {
       activeTab: containers[3].getActiveSidebarTab(),
       setActiveTab: R.bind(containers[3].setActiveSidebarTab, containers[3]),
@@ -224,6 +229,6 @@ export default connect({
       selectedEnv,
       addEnv: R.bind(containers[1].addNewEnvironment, containers[1]),
       environments: containers[1].getEnvs()
-    }
+    };
   }
-})(Sidebar)
+})(Sidebar);

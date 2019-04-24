@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import {
   EditableText,
   Classes,
@@ -14,28 +14,28 @@ import {
   Tab,
   Icon,
   Spinner
-} from "@blueprintjs/core"
-import styled from "styled-components"
-import RequestViewComponent from "./RequestViewCompoent"
-import ItemList from "./ItemList"
-import BodyView from "./body/BodyView"
-import AuthView from "./auth/AuthView"
-import connect from "unstated-connect2"
-import requestContainer from "../../models/RequestContainer"
-import contextContainer from "../../models/ContextContainer"
-import authContainer from "../../models/AuthContainer"
-import withValueChangeDetection from "../components/Input"
-import Dispatcher from "../../models/Dispatcher"
-import RequestBuilder from "../../models/RequestBuilder"
+} from "@blueprintjs/core";
+import styled from "styled-components";
+import RequestViewComponent from "./RequestViewCompoent";
+import ItemList from "./ItemList";
+import BodyView from "./body/BodyView";
+import AuthView from "./auth/AuthView";
+import connect from "unstated-connect2";
+import requestContainer from "../../models/RequestContainer";
+import contextContainer from "../../models/ContextContainer";
+import authContainer from "../../models/AuthContainer";
+import withValueChangeDetection from "../components/Input";
+import Dispatcher from "../../models/Dispatcher";
+import RequestBuilder from "../../models/RequestBuilder";
 
-const R = require("ramda")
+const R = require("ramda");
 const UrlInput = withValueChangeDetection(
   props => <input className="bp3-input" {...props} />,
   R.compose(
     R.prop("value"),
     R.prop("target")
   )
-)
+);
 const NameInput = withValueChangeDetection(
   props => (
     <h3>
@@ -43,27 +43,27 @@ const NameInput = withValueChangeDetection(
     </h3>
   ),
   R.identity
-)
-const METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+);
+const METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
 
 const TabContainer = styled.div`
   margin-top 0px;
-`
+`;
 const MainPane = styled.div`
   height: 100%;
-`
+`;
 const AuthMethodWrapper = styled.div`
   text-align: right;
   padding-top: 20px;
   width: 200px;
   min-width: 150px;
-`
+`;
 
 class RequestView extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = { prevReq: {}, name: null }
-    this.prevRequest = {}
+    super(props);
+    this.state = { prevReq: {}, name: null };
+    this.prevRequest = {};
   }
   render() {
     const {
@@ -89,10 +89,10 @@ class RequestView extends React.Component {
       deleteVariable,
       authMethods,
       setContentType
-    } = this.props
+    } = this.props;
 
-    console.log("RequestView, authMethods", request.authMethod)
-    if (request) {
+    console.log("RequestView, authMethods", request.authMethod);
+    if (request && request.method) {
       return (
         <MainPane>
           <Card style={{ margin: 0, paddingBottom: 0, height: "100%" }}>
@@ -241,9 +241,9 @@ class RequestView extends React.Component {
             </TabContainer>
           </Card>
         </MainPane>
-      )
+      );
     } else {
-      return <div>Select a request</div>
+      return <div>Select a request</div>;
     }
   }
 }
@@ -258,12 +258,12 @@ export default connect({
         valueMapper,
         R.prop("value"),
         R.prop("currentTarget")
-      )
-    const request = requestContainer.getSelected()
+      );
+    const request = requestContainer.getSelected();
     const auth =
       request.authMethod >= 0
         ? authContainer.getMethods()[request.authMethod]
-        : null
+        : null;
     const dispatcher = new Dispatcher(
       new RequestBuilder(
         contextContainer.getValue(),
@@ -271,13 +271,13 @@ export default connect({
         request,
         auth
       )
-    )
+    );
     const dispatchSelected = async () => {
-      requestContainer.setIsDispatching(true)
-      const resp = await dispatcher.dispatch()
-      requestContainer.setResponse(resp)
-      requestContainer.setIsDispatching(false)
-    }
+      requestContainer.setIsDispatching(true);
+      const resp = await dispatcher.dispatch();
+      requestContainer.setResponse(resp);
+      requestContainer.setIsDispatching(false);
+    };
 
     return {
       paneWidth,
@@ -312,6 +312,6 @@ export default connect({
       //   { label: "no auth", value: -1 },
       //   authContainer.getMethods().map((m, i) => ({ label: m.name, value: i }))
       // )
-    }
+    };
   }
-})(RequestView)
+})(RequestView);

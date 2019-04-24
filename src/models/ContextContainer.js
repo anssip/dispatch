@@ -3,11 +3,11 @@ import { Container } from "overstated";
 const R = require("ramda");
 
 class ContextContainer extends Container {
-  constructor(ctx = {}, vars) {
+  constructor(ctx = "", vars) {
     super();
     this.state = {
       isModified: false,
-      ctx: ctx || {},
+      ctx: ctx || "",
       vars: vars || [],
       selectedEnv: -1,
       selectedVariable: -1
@@ -17,7 +17,7 @@ class ContextContainer extends Container {
   init(ctx, vars) {
     this.setState({
       isModified: false,
-      ctx: ctx || {},
+      ctx: ctx || "",
       vars: vars || [],
       selectedEnv: -1,
       selectedVariable: -1
