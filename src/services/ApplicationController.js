@@ -59,6 +59,13 @@ class ApplicationController {
     );
 
     ipcRenderer.on(
+      "delete-request",
+      R.partial(R.bind(requestContainer.deleteRequest, requestContainer), [
+        undefined
+      ])
+    );
+
+    ipcRenderer.on(
       "copy-curl-request",
       R.bind(this.copyRequestToClipboard, this)
     );

@@ -1,33 +1,33 @@
-import React from "react"
+import React from "react";
 import {
   Popover,
   Button,
   ButtonGroup,
   Drawer,
   Position
-} from "@blueprintjs/core"
-import styled from "styled-components"
-import connect from "unstated-connect2"
-import container from "../../../models/ContextContainer"
-import CodeEditor from "../../components/CodeEditor"
-import jsonPrettify from "../../../models/json-pretty"
+} from "@blueprintjs/core";
+import styled from "styled-components";
+import connect from "unstated-connect2";
+import container from "../../../models/ContextContainer";
+import CodeEditor from "../../components/CodeEditor";
+import jsonPrettify from "../../../models/json-pretty";
 
-const R = require("ramda")
+const R = require("ramda");
 
 const Wrapper = styled.div`
   height: 100%;
   margin-left: -12px;
   margin-right: -4px;
-`
+`;
 
 class ContextEditor extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = { isOpen: false }
+    super(props);
+    this.state = { isOpen: false };
   }
   render() {
-    const { value, setValue, paneHeight } = this.props
-    console.log(`ContextEditor, value == ${JSON.stringify(value)}`)
+    const { value, setValue, paneHeight } = this.props;
+    console.log(`ContextEditor, value == ${JSON.stringify(value)}`);
 
     return (
       <Wrapper>
@@ -60,11 +60,10 @@ class ContextEditor extends React.Component {
           {this.renderEditor("context-2", value, setValue, paneHeight)}
         </Drawer>
       </Wrapper>
-    )
+    );
   }
 
   renderEditor(key, value, setValue, paneHeight) {
-    console.log("renderEditor", value)
     return (
       <CodeEditor
         // TODO: separate button & menu item to trigger prerrify
@@ -85,28 +84,28 @@ class ContextEditor extends React.Component {
           //          smartIndent: false,
           extraKeys: {
             Tab: function(cm) {
-              var spaces = Array(cm.getOption("indentUnit") + 1).join(" ")
-              cm.replaceSelection(spaces, "end", "+input")
+              var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+              cm.replaceSelection(spaces, "end", "+input");
             }
           }
         }}
         onBeforeChange={(editor, data, value) => {
-          console.log("onBeforeChange")
+          console.log("onBeforeChange");
           // this.setState({ value });
-          setValue(value)
+          setValue(value);
         }}
         onChange={(editor, data, value) => {
-          console.log("onChange")
+          console.log("onChange");
         }}
       />
-    )
+    );
   }
 
   expand() {
-    this.setState({ isOpen: true })
+    this.setState({ isOpen: true });
   }
   collapse() {
-    this.setState({ isOpen: false })
+    this.setState({ isOpen: false });
   }
 }
 
@@ -119,4 +118,4 @@ export default connect({
     setValue: R.bind(container.setValue, container)
     // addContext: R.bind(container.addContext, container)
   })
-})(ContextEditor)
+})(ContextEditor);

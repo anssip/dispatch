@@ -110,6 +110,7 @@ class ContextContainer extends Container {
   }
 
   getNamePlaceholder(prefix = "env-") {
+    if (!(this.state.vars && this.state.vars.length > 0)) return "env-0";
     const values = this.state.vars[0].values;
     const oldWithNum = values.reverse().find(v => v.env.indexOf(prefix) >= 0);
     return oldWithNum

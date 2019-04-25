@@ -53,7 +53,7 @@ class RequestBuilder {
     return string(tmpl, this.env);
   }
 
-  getBody() {
+  getBody(stringify = true) {
     if (!this.req.body || this.req.body === "") return null;
     if (this.req.contentType !== "application/json") {
       // TODO: also fill in this case
@@ -64,13 +64,10 @@ class RequestBuilder {
     try {
       console.log(`======> about to fill`, this.req.body);
       let tmpValue = this.evalObject(this.req.body);
-      console.log(`RequestBuilder:: afer initial eval`, tmpValue);
+      console.log(`RequestBuilder:: afer initial eval:`, tmpValue);
       tmpValue = this.fill(tmpValue);
       console.log(`RequestBuilder:: after ctx fill`, tmpValue);
-
-      const result = JSON.stringify(tmpValue, null, 2);
-      console.log(`RequestBuilder:: result ${JSON.stringify(result)}`);
-      return result;
+      return stringify ? JSON.stringify(tmpValue, null, 2) : tmpValue;
     } catch (e) {
       // TODO: show an error indicator when evaluation fails
       // 1st make sure the context object is valid JSON

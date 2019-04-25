@@ -9,12 +9,13 @@ class Dispatcher {
   }
   dispatch() {
     const options = {
-      method: "POST",
+      method: this.req().method,
       url: this.builder.getUrl(),
+      json: this.req().contentType === "application/json",
       headers: this.builder
         .getHeaders()
         .reduce((acc, h) => ({ ...acc, [h.name]: h.value }), {}),
-      body: this.builder.getBody()
+      body: this.builder.getBody(false)
     };
     console.log("Dispatching with options", options);
 

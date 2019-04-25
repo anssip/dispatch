@@ -90,6 +90,7 @@ class RequestContainer extends Container {
   createEmptyRequest(selected = true) {
     return {
       method: "GET",
+      contentType: "application/json",
       name: this.getNamePlaceholder(),
       url: "http://echo.dispatch.rest",
       selected,
