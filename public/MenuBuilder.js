@@ -120,6 +120,11 @@ class MenuBuilder {
             label: "Copy as CURL command",
             accelerator: "CmdOrCtrl+/",
             click: () => this.window.webContents.send("copy-curl-request")
+          },
+          {
+            label: "Export as CURL command",
+            accelerator: "CmdOrCtrl+=",
+            click: () => this.window.webContents.send("export-request-selected")
           }
         ]
       }

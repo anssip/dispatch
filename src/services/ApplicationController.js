@@ -31,10 +31,6 @@ class ApplicationController {
     ipcRenderer.on("close-project", event => {
       this.closeProject();
     });
-    ipcRenderer.on("export-request", (event, filename, data) => {
-      console.log("export-request");
-      this.askFileAndexportRequest(filename, data);
-    });
     ipcRenderer.on("open-recent", async (event, filename) => {
       console.log(
         `ApplicationController: open-project ${projectContainer.isModified()}`
@@ -62,7 +58,17 @@ class ApplicationController {
       ])
     );
 
-    ipcRenderer.on("copy-curl-request", R.bind(this.copyToClipboard, this));
+    ipcRenderer.on(
+      "copy-curl-request",
+      R.bind(this.copyRequestToClipboard, this)
+    );
+
+    ipcRenderer.on("export-request-selected", R.bind(this.exportRequest, this));
+
+    ipcRenderer.on("export-request", (event, filename, data) => {
+      console.log("export-request");
+      this.askFileAndexportRequest(filename, data);
+    });
   }
 
   showOpenDialog() {
@@ -161,13 +167,22 @@ class ApplicationController {
     }
   }
 
-  copyToClipboard() {
-    const preview = this.requestContainer.getPreview(
+  copyRequestToClipboard() {
+    clipboard.writeText(this.getRequestPreview());
+  }
+
+  getRequestPreview() {
+    return this.requestContainer.getPreview(
       this.contextContainer.getValue(),
       this.contextContainer.getSelectedEnvironment(),
       this.authContainer.getMethods()
     );
-    clipboard.writeText(preview);
+  }
+
+  exportRequest() {
+    const request = this.requestContainer.getSelected();
+    const filename = `${request.name.replace(/ /g, "-")}.sh`;
+    this.askFileAndexportRequest(filename, this.getRequestPreview());
   }
 }
 
