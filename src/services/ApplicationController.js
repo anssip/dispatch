@@ -1,8 +1,17 @@
-const { ipcRenderer, remote } = window.require("electron");
+const { ipcRenderer, remote, clipboard } = window.require("electron");
+const R = require("ramda");
 
 class ApplicationController {
-  constructor(projectContainer) {
+  constructor(
+    projectContainer,
+    requestContainer,
+    authContainer,
+    contextContainer
+  ) {
     this.projectContainer = projectContainer;
+    this.requestContainer = requestContainer;
+    this.authContainer = authContainer;
+    this.contextContainer = contextContainer;
 
     ipcRenderer.on("save-project", async event => {
       await this.saveActive();
@@ -40,6 +49,20 @@ class ApplicationController {
         // TODO: dispatch error and handle it in the MainWindow and show an error flash
       }
     });
+
+    ipcRenderer.on(
+      "new-request",
+      R.bind(requestContainer.addNewRequest, requestContainer)
+    );
+
+    ipcRenderer.on(
+      "duplicate-request",
+      R.partial(R.bind(requestContainer.duplicateRequest, requestContainer), [
+        undefined
+      ])
+    );
+
+    ipcRenderer.on("copy-curl-request", R.bind(this.copyToClipboard, this));
   }
 
   showOpenDialog() {
@@ -136,6 +159,15 @@ class ApplicationController {
     } else {
       this.projectContainer.saveActiveProject();
     }
+  }
+
+  copyToClipboard() {
+    const preview = this.requestContainer.getPreview(
+      this.contextContainer.getValue(),
+      this.contextContainer.getSelectedEnvironment(),
+      this.authContainer.getMethods()
+    );
+    clipboard.writeText(preview);
   }
 }
 

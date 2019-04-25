@@ -3,6 +3,9 @@ import "./App.css";
 import MainWindow from "./views/containers/MainWindow";
 import { Provider } from "overstated";
 import projectContainer from "./models/ProjectContainer";
+import requestContainer from "./models/RequestContainer";
+import authContainer from "./models/AuthContainer";
+import contextContainer from "./models/ContextContainer";
 import fileUtil from "./models/file_util";
 import ApplicationController from "./services/ApplicationController";
 
@@ -10,7 +13,12 @@ const { ipcRenderer } = window.require("electron");
 const { homedir } = window.require("os");
 
 console.log(`homedir ${homedir()}`);
-const controller = new ApplicationController(projectContainer);
+const controller = new ApplicationController(
+  projectContainer,
+  requestContainer,
+  authContainer,
+  contextContainer
+);
 
 // TODO: emit the files using IPC and catch em in main.js/menu.js
 

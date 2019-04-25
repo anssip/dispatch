@@ -69,13 +69,13 @@ class MenuBuilder {
         label: "Close Project",
         accelerator: "CommandOrControl+W",
         click: () => this.window.webContents.send("close-project")
-      },
-      { role: "toggleDevTools" }
+      }
     ];
     const items = recentFilesItem
       ? [...firstItems, recentFilesItem, ...restItems]
       : [...firstItems, ...restItems];
     return [
+      { label: "Dispatch", submenu: [{ role: "toggleDevTools" }] },
       { label: "File", submenu: items },
       {
         label: "Edit",
@@ -94,6 +94,32 @@ class MenuBuilder {
             label: "Select All",
             accelerator: "CmdOrCtrl+A",
             selector: "selectAll:"
+          }
+        ]
+      },
+      {
+        label: "Request",
+        submenu: [
+          {
+            label: "New Request",
+            accelerator: "CmdOrCtrl+N",
+            click: () => this.window.webContents.send("new-request")
+          },
+          {
+            label: "Duplicate Request",
+            accelerator: "CmdOrCtrl+D",
+            click: () => this.window.webContents.send("duplicate-request")
+          },
+          {
+            label: "Delete Request",
+            accelerator: "CmdOrCtrl+Backspace",
+            click: () => this.window.webContents.send("delete-request")
+          },
+          { type: "separator" },
+          {
+            label: "Copy as CURL command",
+            accelerator: "CmdOrCtrl+/",
+            click: () => this.window.webContents.send("copy-curl-request")
           }
         ]
       }

@@ -11,8 +11,6 @@ import {
   NonIdealState,
   TextArea,
   Button,
-  Tooltip,
-  Position,
   Popover,
   Menu,
   MenuItem
@@ -25,12 +23,6 @@ import styled from "styled-components";
 
 const { clipboard, remote } = window.require("electron");
 const R = require("ramda");
-
-const Preview = styled.div`
-  padding: 10px;
-  word-wrap: break-all;
-  overflow: visible;
-`;
 
 const Buttons = styled.div`
   position: absolute;
@@ -61,7 +53,7 @@ class MainWindow extends React.PureComponent {
   }
 
   render() {
-    const { request, preview, activeSidebarTab } = this.props;
+    const { method, preview, activeSidebarTab } = this.props;
 
     return (
       <ResizeSensor onResize={entries => this.handleWrapperResize(entries)}>
@@ -73,81 +65,76 @@ class MainWindow extends React.PureComponent {
         >
           <Sidebar />
           {/* TODO: hide preview pane using a toggle button */}
-          {request.method ? (
+          <SplitPane
+            className="bp3-dark"
+            split="vertical"
+            primary="second"
+            defaultSize={270}
+          >
             <SplitPane
-              className="bp3-dark"
-              split="vertical"
+              className="bodyeditor"
+              split="horizontal"
               primary="second"
-              defaultSize={270}
+              minSize={0}
+              defaultSize={200}
             >
-              <SplitPane
-                className="bodyeditor"
-                split="horizontal"
-                primary="second"
-                minSize={0}
-                defaultSize={200}
-              >
-                {activeSidebarTab === "methods" ? (
+              {activeSidebarTab === "methods" ? (
+                method && method.name ? (
                   <AuthView />
                 ) : (
-                  <RequestView
-                    paneWidth={this.state.paneWidth}
-                    paneHeight={
-                      this.state.contentHeight - this.state.paneHeight
+                  <NonIdealState
+                    icon="add-to-artifact"
+                    title="No authentication methods"
+                    description={
+                      <>
+                        Add a new method by clicking the <strong>Add</strong>{" "}
+                        button on the left-hand pane.
+                      </>
                     }
                   />
-                )}
-                <ResizeSensor onResize={entries => this.handleResize(entries)}>
-                  <>
-                    <TextArea
-                      value={preview}
-                      fill={true}
-                      readOnly={true}
-                      style={{
-                        margin: 0,
-                        width: "100%",
-                        color: "#8A9BA8",
-                        fontSize: 13,
-                        resize: "none"
-                      }}
-                    />
-                    <Buttons>
-                      <Popover
-                        content={
-                          <Menu>
-                            <MenuItem
-                              text="Copy"
-                              onClick={this.copyToClipboard}
-                            />
-                            <MenuItem text="Export..." onClick={this.export} />
-                          </Menu>
-                        }
-                      >
-                        <Button icon="export" />
-                      </Popover>
-                    </Buttons>
-                  </>
-                </ResizeSensor>
-              </SplitPane>
-
-              {/* TODO: hide the response pane using a toggle button */}
-              <ResponseView />
-            </SplitPane>
-          ) : (
-            <NonIdealState
-              icon="add"
-              title="No requests"
-              description={
+                )
+              ) : (
+                <RequestView
+                  paneWidth={this.state.paneWidth}
+                  paneHeight={this.state.contentHeight - this.state.paneHeight}
+                />
+              )}
+              <ResizeSensor onResize={entries => this.handleResize(entries)}>
                 <>
-                  Add a new request by clicking the <strong>Add</strong> button
-                  on the left pane or by selecting 'New Request' from the File
-                  menu. <br />
-                  <br /> You can also open one of your recent projects from the
-                  File menu.
+                  <TextArea
+                    value={preview}
+                    fill={true}
+                    readOnly={true}
+                    style={{
+                      margin: 0,
+                      width: "100%",
+                      color: "#8A9BA8",
+                      fontSize: 13,
+                      resize: "none"
+                    }}
+                  />
+                  <Buttons>
+                    <Popover
+                      content={
+                        <Menu>
+                          <MenuItem
+                            text="Copy"
+                            onClick={this.copyToClipboard}
+                          />
+                          <MenuItem text="Export..." onClick={this.export} />
+                        </Menu>
+                      }
+                    >
+                      <Button icon="export" />
+                    </Popover>
+                  </Buttons>
                 </>
-              }
-            />
-          )}
+              </ResizeSensor>
+            </SplitPane>
+
+            {/* TODO: hide the response pane using a toggle button */}
+            <ResponseView />
+          </SplitPane>
         </SplitPane>
       </ResizeSensor>
     );
@@ -178,6 +165,7 @@ export default connect({
   selector: ({ containers }) => {
     return {
       request: requestContainer.getSelected(),
+      method: authContainer.getSelected(),
       preview: requestContainer.getPreview(
         contextContainer.getValue(),
         contextContainer.getSelectedEnvironment(),

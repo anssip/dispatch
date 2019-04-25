@@ -92,38 +92,37 @@ class RequestView extends React.Component {
     } = this.props;
 
     console.log("RequestView, authMethods", request.authMethod);
-    if (request && request.method) {
-      return (
-        <MainPane>
-          <Card style={{ margin: 0, paddingBottom: 0, height: "100%" }}>
-            <ControlGroup fill={true}>
-              <HTMLSelect
-                value={request.method}
-                onChange={setMethod}
-                options={METHODS}
+    return (
+      <MainPane>
+        <Card style={{ margin: 0, paddingBottom: 0, height: "100%" }}>
+          <ControlGroup fill={true}>
+            <HTMLSelect
+              value={request.method}
+              onChange={setMethod}
+              options={METHODS}
+              className={Classes.FIXED}
+            />
+            <UrlInput
+              style={request.isDispatching ? { marginRight: "5px" } : {}}
+              value={request.url}
+              onChange={setUrl}
+            />
+
+            {request.isDispatching ? (
+              <Spinner size={Spinner.SIZE_SMALL} className={Classes.FIXED} />
+            ) : (
+              <Button
+                icon="arrow-right"
                 className={Classes.FIXED}
+                onClick={dispatchSelected}
               />
-              <UrlInput
-                style={request.isDispatching ? { marginRight: "5px" } : {}}
-                value={request.url}
-                onChange={setUrl}
-              />
+            )}
+          </ControlGroup>
 
-              {request.isDispatching ? (
-                <Spinner size={Spinner.SIZE_SMALL} className={Classes.FIXED} />
-              ) : (
-                <Button
-                  icon="arrow-right"
-                  className={Classes.FIXED}
-                  onClick={dispatchSelected}
-                />
-              )}
-            </ControlGroup>
-
-            <ControlGroup fill={true}>
-              <NameInput value={request.name} onChange={setName} />
-              <AuthMethodWrapper>
-                {/* <Icon
+          <ControlGroup fill={true}>
+            <NameInput value={request.name} onChange={setName} />
+            <AuthMethodWrapper>
+              {/* <Icon
                   icon="blocked-person"
                   style={{ marginRight: 8 }}
                   iconSize={16}
@@ -134,117 +133,114 @@ class RequestView extends React.Component {
                   options={authMethods}
                   className={Classes.FIXED}
                 /> */}
-                <Popover
-                  content={
-                    <Menu>
+              <Popover
+                content={
+                  <Menu>
+                    <MenuItem
+                      text="no auth"
+                      onClick={R.partial(setAuthMethod, [-1])}
+                    />
+                    {authMethods.map((m, i) => (
                       <MenuItem
-                        text="no auth"
-                        onClick={R.partial(setAuthMethod, [-1])}
+                        text={m.name}
+                        onClick={R.partial(setAuthMethod, [i])}
                       />
-                      {authMethods.map((m, i) => (
-                        <MenuItem
-                          text={m.name}
-                          onClick={R.partial(setAuthMethod, [i])}
-                        />
-                      ))}
-                    </Menu>
+                    ))}
+                  </Menu>
+                }
+              >
+                <Button
+                  icon="eye-open"
+                  text={
+                    request.authMethod >= 0
+                      ? authMethods[request.authMethod].name
+                      : "no auth"
                   }
-                >
-                  <Button
-                    icon="eye-open"
-                    text={
-                      request.authMethod >= 0
-                        ? authMethods[request.authMethod].name
-                        : "no auth"
+                />
+              </Popover>
+            </AuthMethodWrapper>
+          </ControlGroup>
+
+          <TabContainer>
+            <Tabs
+              id="mainTabs"
+              onChange={_ => console.log("request tab changed")}
+              defaultSelectedTabId="body"
+            >
+              <Tab
+                id="body"
+                title="Body"
+                panel={
+                  <RequestViewComponent
+                    render={
+                      <BodyView
+                        paneWidth={paneWidth}
+                        paneHeight={paneHeight}
+                        contentType={request.contentType}
+                        onChange={setContentType}
+                      />
                     }
                   />
-                </Popover>
-              </AuthMethodWrapper>
-            </ControlGroup>
-
-            <TabContainer>
-              <Tabs
-                id="mainTabs"
-                onChange={_ => console.log("request tab changed")}
-                defaultSelectedTabId="body"
-              >
-                <Tab
-                  id="body"
-                  title="Body"
-                  panel={
-                    <RequestViewComponent
-                      render={
-                        <BodyView
-                          paneWidth={paneWidth}
-                          paneHeight={paneHeight}
-                          contentType={request.contentType}
-                          onChange={setContentType}
-                        />
-                      }
-                    />
-                  }
-                />
-                <Tab
-                  id="variables"
-                  title="Variables"
-                  panel={
-                    <RequestViewComponent
-                      render={
-                        <ItemList
-                          items={request.variables || []}
-                          add={addVariable}
-                          del={deleteVariable}
-                          setName={setVariableName}
-                          setValue={setVariableValue}
-                        />
-                      }
-                    />
-                  }
-                />
-                <Tab
-                  id="query"
-                  title="Query"
-                  panel={
-                    <RequestViewComponent
-                      render={
-                        // @ts-ignore
-                        <ItemList
-                          items={request.params || []}
-                          add={addParam}
-                          del={deleteParam}
-                          setName={setParamName}
-                          setValue={setParamValue}
-                        />
-                      }
-                    />
-                  }
-                />
-                <Tab
-                  id="headers"
-                  title="Headers"
-                  panel={
-                    <RequestViewComponent
-                      render={
-                        // @ts-ignore
-                        <ItemList
-                          items={request.headers || []}
-                          add={addHeader}
-                          del={deleteHeader}
-                          setName={setHeaderName}
-                          setValue={setHeaderValue}
-                        />
-                      }
-                    />
-                  }
-                />
-              </Tabs>
-            </TabContainer>
-          </Card>
-        </MainPane>
-      );
-    } else {
-      return <div>Select a request</div>;
-    }
+                }
+              />
+              <Tab
+                id="variables"
+                title="Variables"
+                panel={
+                  <RequestViewComponent
+                    render={
+                      <ItemList
+                        items={request.variables || []}
+                        add={addVariable}
+                        del={deleteVariable}
+                        setName={setVariableName}
+                        setValue={setVariableValue}
+                      />
+                    }
+                  />
+                }
+              />
+              <Tab
+                id="query"
+                title="Query"
+                panel={
+                  <RequestViewComponent
+                    render={
+                      // @ts-ignore
+                      <ItemList
+                        items={request.params || []}
+                        add={addParam}
+                        del={deleteParam}
+                        setName={setParamName}
+                        setValue={setParamValue}
+                      />
+                    }
+                  />
+                }
+              />
+              <Tab
+                id="headers"
+                title="Headers"
+                panel={
+                  <RequestViewComponent
+                    render={
+                      // @ts-ignore
+                      <ItemList
+                        items={request.headers || []}
+                        add={addHeader}
+                        del={deleteHeader}
+                        setName={setHeaderName}
+                        setValue={setHeaderValue}
+                      />
+                    }
+                  />
+                }
+              />
+            </Tabs>
+          </TabContainer>
+        </Card>
+      </MainPane>
+    );
   }
 }
 

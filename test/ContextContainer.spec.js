@@ -27,15 +27,11 @@ describe("ContextContainer", () => {
     },
     {
       name: "version",
-      values: [
-        { env: "prod", value: "1.0" }
-      ]
+      values: [{ env: "prod", value: "1.0" }]
     },
     {
       name: "license",
-      values: [
-        { env: "prod", value: "GPL" }
-      ]
+      values: [{ env: "prod", value: "GPL" }]
     }
   ];
 
@@ -62,7 +58,6 @@ describe("ContextContainer", () => {
     console.log(vars);
   });
 
-
   it("Should add a new variable", () => {
     const newVars = container.setVariable("prod", "added", "variable");
     const v = container.getVariableByName("prod", "added");
@@ -78,7 +73,7 @@ describe("ContextContainer", () => {
   });
 
   it("Should update a variable name in all envs", () => {
-    const newVars = container.setVariableNameAt(1, "authorName" );
+    const newVars = container.setVariableNameAt(1, "authorName");
     console.log(JSON.stringify(newVars, null, 2));
     expect(newVars[1].name).to.be.eq("authorName");
     // other vars should keep their orig values
@@ -100,7 +95,10 @@ describe("ContextContainer", () => {
     console.log(JSON.stringify(newVars, null, 2));
 
     const pos = newVars.length - 1;
-    newVars = container.setVariableAt("prod", pos, { name: 'foobar', value: "now" });
+    newVars = container.setVariableAt("prod", pos, {
+      name: "foobar",
+      value: "now"
+    });
     console.log(JSON.stringify(newVars, null, 2));
     expect(newVars[pos].name).to.be.eq("foobar");
     expect(newVars[pos].values.length).to.be.eq(1);
@@ -112,13 +110,13 @@ describe("ContextContainer", () => {
     const value = container.getVariableAt("prod", 1);
     console.log(value);
     expect(value).to.be.eq("Anssi Piirainen");
-  })
+  });
 
   it("should return null if var not found", () => {
     const value = container.getVariableAt("stage", 1);
     console.log(value);
     expect(value).to.be.null;
-  })
+  });
 
   it("should add a new environment", () => {
     const newVars = container.addNewEnvironment();
@@ -130,5 +128,21 @@ describe("ContextContainer", () => {
     const newVars = container.addNewEnvironment();
     console.log(`New vars: ${JSON.stringify(newVars)}`);
   });
-  
+});
+
+describe("Empty ContextContainer", () => {
+  beforeEach(() => {
+    container.init();
+  });
+  it("should add a new environment to an empty container", () => {
+    const newVars = container.addNewEnvironment();
+    console.log(`New vars: ${JSON.stringify(newVars)}`);
+    expect(newVars[0].values.length).to.be.eq(1);
+  });
+  it("should add a new variable to an empty container", () => {
+    const newVars = container.addEmptyVariable();
+    console.log(`New vars: ${JSON.stringify(newVars)}`);
+    expect(newVars[0].values.length).to.be.eq(0);
+    expect(newVars.length).to.be.eq(2);
+  });
 });

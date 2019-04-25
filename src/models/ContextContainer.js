@@ -8,7 +8,7 @@ class ContextContainer extends Container {
     this.state = {
       isModified: false,
       ctx: ctx || "",
-      vars: vars || [],
+      vars: vars || [{ name: "", values: [] }],
       selectedEnv: -1,
       selectedVariable: -1
     };
@@ -18,7 +18,7 @@ class ContextContainer extends Container {
     this.setState({
       isModified: false,
       ctx: ctx || "",
-      vars: vars || [],
+      vars: vars || [{ name: "", values: [] }],
       selectedEnv: -1,
       selectedVariable: -1
     });
@@ -109,23 +109,22 @@ class ContextContainer extends Container {
     return envIndex >= 0 ? this.getEnvironment(envIndex) : {};
   }
 
-  getNamePlaceholder(prefix = "environment-") {
-    if (!(this.state && this.state.envs)) return "Default";
-    // @ts-ignore
-    const oldWithNum = this.state.envs
-      .reverse()
-      .find(r => r.name.indexOf(prefix) >= 0);
+  getNamePlaceholder(prefix = "env-") {
+    const values = this.state.vars[0].values;
+    const oldWithNum = values.reverse().find(v => v.env.indexOf(prefix) >= 0);
     return oldWithNum
-      ? prefix + Number(oldWithNum.name.split(prefix)[1]) + 1
-      : `${prefix}-0`;
+      ? prefix + (Number(oldWithNum.env.split(prefix)[1]) + 1)
+      : `${prefix}0`;
   }
 
-  addNewEnvironment(name = this.getNamePlaceholder()) {
+  addNewEnvironment() {
+    const name = this.getNamePlaceholder();
     const newVariables = this.getVariables().map(v => ({
       ...v,
       values: [...v.values, { env: name, value: null }]
     }));
     this.setState({ isModified: true, vars: newVariables });
+    // console.log("addNewEnvironment", newVariables);
     return newVariables;
   }
 

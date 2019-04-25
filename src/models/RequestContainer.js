@@ -6,7 +6,10 @@ const R = require("ramda");
 class RequestContainer extends Container {
   constructor() {
     super();
-    this.state = { isModified: false, requests: [] };
+    this.state = {
+      isModified: false,
+      requests: [this.createEmptyRequest(true)]
+    };
   }
 
   // @ts-ignore
@@ -22,7 +25,10 @@ class RequestContainer extends Container {
     this.setState({ isModified: false, requests: this.mapRequests(requests) });
   }
   reset() {
-    this.setState({ isModified: false, requests: [] });
+    this.setState({
+      isModified: false,
+      requests: [this.createEmptyRequest(true)]
+    });
   }
   setModified(isModified) {
     this.setState({ isModified });
@@ -41,13 +47,14 @@ class RequestContainer extends Container {
       )
     });
   }
-  deleteRequest(index) {
+  deleteRequest(index = this.getSelectedIndex()) {
     console.log(`deleteRequest ${index}`);
     const requests = R.remove(index, 1, this.state.requests);
     this.setState({ requests });
     return requests;
   }
-  duplicateRequest(index) {
+  duplicateRequest(index = this.getSelectedIndex()) {
+    if (index < 0) return;
     console.log(`duplicate ${index}`);
     const req = this.state.requests[index];
     if (!req) return null;
@@ -90,6 +97,7 @@ class RequestContainer extends Container {
     };
   }
   getNamePlaceholder() {
+    if (!this.state) return "request-0";
     // @ts-ignore
     const oldWithNum = this.state.requests
       .reverse()
@@ -127,7 +135,10 @@ class RequestContainer extends Container {
   getSelected() {
     console.log("getSelected");
     if (this.isEmpty()) return {};
-    return R.find(R.prop("selected"))(this.state.requests) || {};
+    return R.find(R.prop("selected"), this.state.requests) || {};
+  }
+  getSelectedIndex() {
+    return R.findIndex(R.prop("selected"), this.state.requests);
   }
   setProp(prop, value) {
     const newReq = R.assoc(prop, value, R.clone(this.getSelected()));

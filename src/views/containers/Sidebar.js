@@ -228,7 +228,7 @@ export default connect({
       selectEnv: R.bind(containers[1].selectEnv, containers[1]),
       selectedEnv,
       addEnv: R.bind(containers[1].addNewEnvironment, containers[1]),
-      environments: containers[1].getEnvs()
+      environments: contextContainer.getEnvs()
     };
   }
 })(Sidebar);
