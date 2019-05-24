@@ -37,7 +37,7 @@
       "method": "POST",
       "url": "http://localhost:8083/connectors/",
       "body": "\"{{dbSource}}\"",
-      "selected": true,
+      "selected": false,
       "auth": {
         "basic": {
           "username": "anssssip",
@@ -91,6 +91,673 @@
     },
     {
       "name": "Create my source",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": true,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
+        }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
+    },
+    {
+      "name": "Create my source (copy)",
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-source",
       "body": "{req1_config:\"{{ctx.source.config}}\"}",
@@ -238,7 +905,7 @@
     {
       "method": "GET",
       "name": "WeClapp API",
-      "selected": true,
+      "selected": false,
       "type": "basic",
       "username": "ck_8a6760e4582f26a7ae95558d086689c9ca28d8d5",
       "password": "cs_f2ebe1d604e060662d95c345b34151a4cb80a52a"
@@ -254,7 +921,7 @@
     },
     {
       "name": "Client credentials",
-      "selected": false,
+      "selected": true,
       "type": "oAuth2",
       "grantType": "3",
       "clientId": "a9lqkFe4IfYQExWVHo4jBXpiESSXZxYq",

@@ -70,7 +70,12 @@ class Sidebar extends React.Component {
 
     return (
       <ResizeSensor onResize={entries => this.handleResize(entries)}>
-        <Card style={{ height: "100%" }} className="left-pane">
+        <Card
+          style={{
+            height: "100%"
+          }}
+          className="left-pane"
+        >
           <Tabs
             id="sidebarTabs"
             onChange={setActiveTab}
@@ -81,22 +86,29 @@ class Sidebar extends React.Component {
               id="requests"
               title="Requests"
               panel={
-                <SidebarList
-                  label="requests"
-                  addClicked={addClicked}
-                  onSortEnd={moveRequest}
-                  items={requests || []}
-                  render={(request, i) => (
-                    <Request
-                      handleClick={R.partial(selectRequest, [i])}
-                      id={i}
-                      model={request}
-                      deleteRequest={R.partial(deleteRequest, [i])}
-                      duplicateRequest={R.partial(duplicateRequest, [i])}
-                      getPreview={R.partial(getPreview, [i])}
-                    />
-                  )}
-                />
+                <div
+                  style={{
+                    height: this.state.contentHeight - 70,
+                    overflow: "scroll"
+                  }}
+                >
+                  <SidebarList
+                    label="requests"
+                    addClicked={addClicked}
+                    onSortEnd={moveRequest}
+                    items={requests || []}
+                    render={(request, i) => (
+                      <Request
+                        handleClick={R.partial(selectRequest, [i])}
+                        id={i}
+                        model={request}
+                        deleteRequest={R.partial(deleteRequest, [i])}
+                        duplicateRequest={R.partial(duplicateRequest, [i])}
+                        getPreview={R.partial(getPreview, [i])}
+                      />
+                    )}
+                  />
+                </div>
               }
             />
             <Tab

@@ -40,28 +40,14 @@ const SortableList = SortableContainer(
   }
 );
 const SidebarList = ({ label, addClicked, items, render, onSortEnd }) => (
-  <div>
-    <InputGroup
-      className="search"
-      disabled={false}
-      large={false}
-      leftIcon="search"
-      onChange={_ => {
-        console.log("search input");
-      }}
-      placeholder="Filter"
-      small={true}
-      value={""}
-    />
-    <SortableList
-      label={label}
-      addClicked={addClicked}
-      render={render}
-      items={items}
-      onSortEnd={onSortEnd}
-      distance={10}
-    />
-  </div>
+  <SortableList
+    label={label}
+    addClicked={addClicked}
+    render={render}
+    items={items}
+    onSortEnd={onSortEnd}
+    distance={10}
+  />
 );
 
 export default SidebarList;

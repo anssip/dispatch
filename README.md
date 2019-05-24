@@ -12,9 +12,12 @@ Dispatch is under development at the monent and is not ready for real use yet.
 
 OK: UI polish: Variables tab can be improved when no variable nor environments exist
 
+<!--
 - add File menu
 - add Request/Auth menu with the current context menu items
 - "New Request" adds the request to a random position in the list
+-->
+
 - request search field
 - prettify command for the context editor
 - automatic updates
