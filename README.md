@@ -18,7 +18,6 @@ OK: UI polish: Variables tab can be improved when no variable nor environments e
 - "New Request" adds the request to a random position in the list
 -->
 
-- request search field
 - prettify command for the context editor
 - automatic updates
 - windows & linux dist builds

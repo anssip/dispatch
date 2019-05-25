@@ -1,6 +1,8 @@
 const MenuBuilder = require("./MenuBuilder");
 const electron = require("electron");
+const { autoUpdater } = require("electron-updater");
 const windowStateKeeper = require("electron-window-state");
+const log = require("electron-log");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
@@ -15,12 +17,6 @@ const DEFAULT_WINDOW_STATE = {
   defaultWidth: 1000,
   defaultHeight: 800
 };
-
-// @ts-ignore
-// require("update-electron-app")({
-//   repo: "kitze/react-electron-example",
-//   updateInterval: "1 hour"
-// });
 
 const createWindow = () => {
   mainWindowState = windowStateKeeper(DEFAULT_WINDOW_STATE);
@@ -51,9 +47,18 @@ const createMenu = () => {
   }
 };
 
+const checkForUpdates = () => {
+  log.transports.file.level = "debug";
+  autoUpdater.logger = log;
+  log.info(`checkForUpdates(): Running version ${app.getVersion()}`);
+  autoUpdater.checkForUpdates();
+  // autoUpdater.checkForUpdatesAndNotify();
+};
+
 app.on("ready", () => {
   createWindow();
   createMenu();
+  checkForUpdates();
 });
 
 app.on("window-all-closed", () => {

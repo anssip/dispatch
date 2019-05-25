@@ -93,7 +93,7 @@
       "name": "Create my source",
       "method": "POST",
       "url": "https://localhost:8000/connectors/gt-source",
-      "body": "{req1_config:\"{{ctx.source.config}}\"}",
+      "body": "{req1_config:\"{{dbSource.config}}\"}",
       "headers": [
         {
           "name": "Cache-Control",
@@ -786,7 +786,7 @@
       "authMethod": "1"
     }
   ],
-  "context": "{\n  source: { \n    config: {\n      whatever: \"sourceconfig, username: {{username}}\",\n      nicest: 104\n    }\n  },\n  dbSource: {\n    name: \"{{connectorName}}\",\n    config: {\n      \"connector.class\": \"io.confluent.connect.jdbc.JdbcSourceConnector\",\n      \"key.converter\": \"io.confluent.connect.avro.AvroConverter\",\n  \"key.converter.schema.registry.url\": \"http://localhost:8081\",\n      \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n   \"value.converter.schemas.enable\": \"false\",\n      \"connection.url\": \"{{jdbcUrl}}\",\n    \"table.whitelist\": \"{{tableName}}\",\n      \"mode\": \"incrementing\",\n      \"incrementing.column.name\": \"id\",\n      \"validate.non.null\": \"false\",\n      \"topic.prefix\": \"{{topicPrefix}}\",\n      \"table.types\": \"VIEW\",\n      \"batch.max.rows\": 100\n    }\n  }\n}",
+  "context": "{\n  source: { \n    config: {\n      whatever: \"sourceconfig, username: {{username}}\",\n      nicest: 104\n    }\n  },\n  dbSource: {\n    name: \"{{connectorName}}\",\n    config: {\n      \"connector.class\": \"io.confluent.connect.jdbc.JdbcSourceConnector\",\n      \"key.converter\": \"io.confluent.connect.avro.AvroConverter\",\n      \"key.converter.schema.registry.url\": \"http://localhost:8081\",\n      \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n      \"value.converter.schemas.enable\": \"false\",\n      \"connection.url\": \"{{jdbcUrl}}\",\n      \"table.whitelist\": \"{{tableName}}\",\n      \"mode\": \"incrementing\",\n      \"incrementing.column.name\": \"id\",\n      \"validate.non.null\": \"false\",\n      \"topic.prefix\": \"{{topicPrefix}}\",\n      \"table.types\": \"VIEW\",\n      \"batch.max.rows\": 100\n    }\n  }\n}",
   "vars": [
     {
       "name": "appName",
@@ -868,6 +868,45 @@
         {
           "env": "prod",
           "value": "test"
+        }
+      ]
+    },
+    {
+      "name": "jdbcUrl",
+      "values": [
+        {
+          "env": "test",
+          "value": "jdbc://mydb.host"
+        },
+        {
+          "env": "prod",
+          "value": "jdbc://mydb.prod.host"
+        }
+      ]
+    },
+    {
+      "name": "tableName",
+      "values": [
+        {
+          "env": "test",
+          "value": "users"
+        },
+        {
+          "env": "prod",
+          "value": "users"
+        }
+      ]
+    },
+    {
+      "name": "topicPrefix",
+      "values": [
+        {
+          "env": "test",
+          "value": "views"
+        },
+        {
+          "env": "prod",
+          "value": "views_prod"
         }
       ]
     }

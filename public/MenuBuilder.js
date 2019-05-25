@@ -75,7 +75,10 @@ class MenuBuilder {
       ? [...firstItems, recentFilesItem, ...restItems]
       : [...firstItems, ...restItems];
     return [
-      { label: "Dispatch", submenu: [{ role: "toggleDevTools" }] },
+      {
+        label: "Dispatch",
+        submenu: [{ role: "toggleDevTools" }, { role: "quit" }]
+      },
       { label: "File", submenu: items },
       {
         label: "Edit",

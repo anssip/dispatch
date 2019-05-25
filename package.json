@@ -1,10 +1,11 @@
 {
   "name": "Dispatch",
-  "version": "1.0.0",
+  "version": "0.0.0",
+  "license": "MIT",
   "description": "A very talkative REST automation and testing tool for developers. The focus is on utilising templates for the requests to avoid duplication. Awesome Git integration and other features to make developers happy.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anssip/gasbag.git"
+    "url": "git+https://github.com/anssip/dispatch.git"
   },
   "keywords": [
     "REST",
@@ -16,9 +17,8 @@
     "node.js"
   ],
   "author": "Anssi Piirainen",
-  "license": "ISC",
   "bugs": {
-    "url": "https://github.com/anssip/gasbag/issues"
+    "url": "https://github.com/anssip/dispatch/issues"
   },
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
@@ -41,7 +41,9 @@
     "codemirror": "^5.43.0",
     "cross-env": "^5.2.0",
     "electron-is-dev": "^1.0.1",
-    "electron-log": "^3.0.0",
+    "electron-log": "^3.0.5",
+    "electron-osx-sign": "^0.4.11",
+    "electron-updater": "^4.0.6",
     "electron-window-state": "^5.0.3",
     "fork-ts-checker-webpack-plugin": "^0.5.2",
     "javascript-stringify": "^1.6.0",
@@ -56,10 +58,16 @@
     "react-sortable-hoc": "^1.8.3",
     "react-split-pane": "^0.1.85",
     "strip-json-comments": "^2.0.1",
-    "styled-components": "^4.1.3",
-    "update-electron-app": "^1.3.0"
+    "styled-components": "^4.1.3"
   },
   "build": {
+    "appId": "com.npd.dispatch",
+    "productName": "Dispatch.rest",
+    "copyright": "(c) 2019 Northern Peaks Development / Anssi Piirainen",
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "resources/logo/logo.png"
+    },
     "publish": {
       "provider": "github"
     }
@@ -72,8 +80,10 @@
     "react-test": "react-scripts test --env=jsdom",
     "react-eject": "react-scripts eject",
     "electron-build": "electron-builder",
-    "release": "yarn react-build && electron-builder --publish=always",
+    "pack": "yarn react-build && electron-builder --dir",
+    "release": "yarn react-build && electron-builder",
     "build": "yarn react-build && yarn electron-build",
+    "publish": "yarn react-build && yarn electron-build --publish always",
     "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "browserslist": [
