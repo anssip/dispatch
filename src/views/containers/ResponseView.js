@@ -138,7 +138,7 @@ const ResponseView = props => {
                 mode: "javascript",
                 json: true,
                 lineNumbers: false,
-                theme: "context",
+                theme: "ttcn",
                 lineWrapping: false,
                 tabSize: 2,
                 indentWithTabs: false,

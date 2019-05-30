@@ -42,7 +42,7 @@ class App extends Component {
 
   render() {
     return this.state.initialized ? (
-      <div className="App bp3-dark">
+      <div className="App">
         <Provider inject={[projectContainer]}>
           <MainWindow />
         </Provider>

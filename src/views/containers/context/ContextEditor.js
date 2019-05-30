@@ -47,7 +47,6 @@ class ContextEditor extends React.Component {
         {this.renderEditor("context-1", value, setValue, paneHeight)}
 
         <Drawer
-          className="bp3-dark"
           transitionName=""
           usePortal={true}
           transitionDuration={0}
@@ -76,7 +75,7 @@ class ContextEditor extends React.Component {
           mode: "javascript",
           json: true,
           lineNumbers: false,
-          theme: "context",
+          theme: "ttcn",
           lineWrapping: false,
           tabSize: 2,
           indentWithTabs: false,

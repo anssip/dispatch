@@ -6,7 +6,7 @@ const { clipboard, remote } = window.require("electron");
 
 // blueprint Indogo5
 const Method = styled.span`
-  color: #ad99ff;
+  color: #5642a6;
   margin-right: 5px;
 `;
 const DispatchSpinner = styled.div`
@@ -86,8 +86,8 @@ const Request = props => {
       ])}
       style={
         model.selected
-          ? { color: "#fff", backgroundColor: "#394B59" }
-          : { color: "#aaa" }
+          ? { color: "#fff", backgroundColor: "#B3CFFF" }
+          : { color: "#0" }
       }
       onClick={handleClick}
     >

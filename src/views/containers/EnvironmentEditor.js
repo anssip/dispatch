@@ -138,7 +138,7 @@ class EnvironmentEditor extends React.Component {
         {renderVariables()}
 
         <Drawer
-          className="bp3-dark"
+          className=""
           transitionName=""
           usePortal={true}
           transitionDuration={0}

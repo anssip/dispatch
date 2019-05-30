@@ -18,10 +18,11 @@ OK: UI polish: Variables tab can be improved when no variable nor environments e
 - "New Request" adds the request to a random position in the list
 -->
 
-- prettify command for the context editor
-- automatic updates
-- windows & linux dist builds
 - Finalize menus: add "About Dispatch"
+- automatic updates
+
+- prettify command for the context editor
+- windows & linux dist builds
 
 - Support ctx templating also for text bodies
 

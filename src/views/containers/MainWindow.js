@@ -58,7 +58,7 @@ class MainWindow extends React.PureComponent {
     return (
       <ResizeSensor onResize={entries => this.handleWrapperResize(entries)}>
         <SplitPane
-          className="bp3-dark"
+          className="bp3-light"
           split="vertical"
           minSize={200}
           defaultSize={350}
@@ -66,13 +66,13 @@ class MainWindow extends React.PureComponent {
           <Sidebar />
           {/* TODO: hide preview pane using a toggle button */}
           <SplitPane
-            className="bp3-dark"
+            className="bp3-light"
             split="vertical"
             primary="second"
             defaultSize={270}
           >
             <SplitPane
-              className="bodyeditor"
+              className="bp3-light"
               split="horizontal"
               primary="second"
               minSize={0}
@@ -108,7 +108,7 @@ class MainWindow extends React.PureComponent {
                     style={{
                       margin: 0,
                       width: "100%",
-                      color: "#8A9BA8",
+                      color: "#333",
                       fontSize: 13,
                       resize: "none"
                     }}

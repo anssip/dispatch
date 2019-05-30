@@ -3,7 +3,7 @@
 }
 
 .App-header {
-  background-color: #222;
+  background-color: rgb(214, 209, 209);
   height: 150px;
   padding: 20px;
   color: white;
@@ -11,8 +11,4 @@
 
 .App-intro {
   font-size: large;
-}
-
-.bp3-dark {
-  background-color: #293742;
 }

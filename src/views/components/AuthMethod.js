@@ -5,7 +5,7 @@ const R = require("ramda");
 
 // blueprint Indogo5
 const Type = styled.span`
-  color: #ad99ff;
+  color: #5642a6;
   margin-right: 5px;
 `;
 const showContextMenu = (setIsContextMenuOpen, duplicate, deleteMethod, e) => {
@@ -17,7 +17,7 @@ const showContextMenu = (setIsContextMenuOpen, duplicate, deleteMethod, e) => {
     </Menu>,
     { left: e.clientX, top: e.clientY },
     () => setIsContextMenuOpen(false),
-    true // isDarkTheme?
+    false // isDarkTheme?
   );
   // indicate that context menu is open so we can add a CSS class to this element
   setIsContextMenuOpen(true);
@@ -44,8 +44,8 @@ const AuthMethod = props => {
       ])}
       style={
         props.model.selected
-          ? { color: "#fff", backgroundColor: "#394B59" }
-          : { color: "#aaa" }
+          ? { color: "#fff", backgroundColor: "#B3CFFF" }
+          : { color: "#0" }
       }
       onClick={handleClick}
     >
