@@ -44,7 +44,16 @@ const NameInput = withValueChangeDetection(
   ),
   R.identity
 );
-const METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"];
+const METHODS = [
+  "GET",
+  "HEAD",
+  "POST",
+  "PUT",
+  "PATCH",
+  "DELETE",
+  "TRACE",
+  "OPTIONS"
+];
 
 const TabContainer = styled.div`
   margin-top 0px;
@@ -184,23 +193,6 @@ class RequestView extends React.Component {
                 }
               />
               <Tab
-                id="variables"
-                title="Variables"
-                panel={
-                  <RequestViewComponent
-                    render={
-                      <ItemList
-                        items={request.variables || []}
-                        add={addVariable}
-                        del={deleteVariable}
-                        setName={setVariableName}
-                        setValue={setVariableValue}
-                      />
-                    }
-                  />
-                }
-              />
-              <Tab
                 id="query"
                 title="Query"
                 panel={
@@ -213,6 +205,8 @@ class RequestView extends React.Component {
                         del={deleteParam}
                         setName={setParamName}
                         setValue={setParamValue}
+                        namePlaceholder="Set query param name"
+                        valuePlaceholder="Set query param value"
                       />
                     }
                   />
@@ -231,6 +225,27 @@ class RequestView extends React.Component {
                         del={deleteHeader}
                         setName={setHeaderName}
                         setValue={setHeaderValue}
+                        namePlaceholder="Set header name"
+                        valuePlaceholder="Set header value"
+                      />
+                    }
+                  />
+                }
+              />
+              <Tab
+                id="variables"
+                title="Variables"
+                panel={
+                  <RequestViewComponent
+                    render={
+                      <ItemList
+                        items={request.variables || []}
+                        add={addVariable}
+                        del={deleteVariable}
+                        setName={setVariableName}
+                        setValue={setVariableValue}
+                        namePlaceholder="Set variable name"
+                        valuePlaceholder="Set variable value"
                       />
                     }
                   />

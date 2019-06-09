@@ -1,41 +1,33 @@
 {
   "requests": [
     {
-      "method": "GET",
-      "name": "List Kafka connectors",
-      "url": "http://localhost:8083/connectors",
-      "selected": true,
-      "body": "",
-      "contentType": "Other",
-      "authMethod": -1,
-      "isDispatching": false,
-      "response": {
-        "error": {},
-        "response": null
-      }
-    },
-    {
-      "method": "GET",
-      "name": "Get stock saldo",
-      "url": "https://augment-sports.com/wp-json/wc/v2/products",
-      "selected": false,
-      "body": "",
-      "headers": [],
-      "params": [],
-      "contentType": "text/plain",
-      "authMethod": "2",
-      "response": {
-        "error": null,
-        "response": {
-          "statusCode": 201,
-          "headers": {
-            "cache-control": "no-cache, must-revalidate, max-age=0",
-            "content-type": "application/json; charset=UTF-8",
-            "expires": "Wed, 11 Jan 1984 05:00:00 GMT"
-          },
-          "body": "{\"id\":7105,\"name\":\"Product\",\"slug\":\"product-22\",\"permalink\":\"https:\\/\\/augment-sports.com\\/p\\/uncategorized\\/product-22\\/\",\"date_created\":\"2019-03-27T12:02:15\",\"date_created_gmt\":\"2019-03-27T10:02:15\",\"date_modified\":\"2019-03-27T12:02:15\",\"date_modified_gmt\":\"2019-03-27T10:02:15\",\"type\":\"simple\",\"status\":\"publish\",\"featured\":false,\"catalog_visibility\":\"visible\",\"description\":\"\",\"short_description\":\"\",\"sku\":\"\",\"price\":\"\",\"regular_price\":\"\",\"sale_price\":\"\",\"date_on_sale_from\":null,\"date_on_sale_from_gmt\":null,\"date_on_sale_to\":null,\"date_on_sale_to_gmt\":null,\"price_html\":\"\",\"on_sale\":false,\"purchasable\":false,\"total_sales\":0,\"virtual\":false,\"downloadable\":false,\"downloads\":[],\"download_limit\":-1,\"download_expiry\":-1,\"external_url\":\"\",\"button_text\":\"\",\"tax_status\":\"taxable\",\"tax_class\":\"\",\"manage_stock\":false,\"stock_quantity\":null,\"in_stock\":true,\"backorders\":\"no\",\"backorders_allowed\":false,\"backordered\":false,\"sold_individually\":false,\"weight\":\"\",\"dimensions\":{\"length\":\"\",\"width\":\"\",\"height\":\"\"},\"shipping_required\":true,\"shipping_taxable\":true,\"shipping_class\":\"\",\"shipping_class_id\":0,\"reviews_allowed\":true,\"average_rating\":\"0\",\"rating_count\":0,\"related_ids\":[7087,7093,7101,7096,7100],\"upsell_ids\":[],\"cross_sell_ids\":[],\"parent_id\":0,\"purchase_note\":\"\",\"categories\":[{\"id\":310,\"name\":\"Uncategorized\",\"slug\":\"uncategorized\"}],\"tags\":[],\"images\":[{\"id\":0,\"date_created\":\"2019-03-27T14:02:16\",\"date_created_gmt\":\"2019-03-27T10:02:16\",\"date_modified\":\"2019-03-27T14:02:16\",\"date_modified_gmt\":\"2019-03-27T10:02:16\",\"src\":\"https:\\/\\/augment-sports.com\\/app\\/plugins\\/woocommerce\\/assets\\/images\\/placeholder.png\",\"name\":\"Placeholder\",\"alt\":\"Placeholder\",\"position\":0}],\"attributes\":[],\"default_attributes\":[],\"variations\":[],\"grouped_products\":[],\"menu_order\":0,\"meta_data\":[{\"id\":161110,\"key\":\"_wpml_word_count\",\"value\":\"{\\\"total\\\":0,\\\"to_translate\\\":{\\\"en\\\":3,\\\"de\\\":3}}\"},{\"id\":161111,\"key\":\"_alp_processed\",\"value\":\"1553680935\"}],\"bundle_layout\":\"\",\"bundled_by\":[],\"bundled_items\":[],\"translations\":[],\"lang\":\"en\",\"_links\":{\"self\":[{\"href\":\"https:\\/\\/augment-sports.com\\/wp-json\\/wc\\/v2\\/products\\/7105\"}],\"collection\":[{\"href\":\"https:\\/\\/augment-sports.com\\/wp-json\\/wc\\/v2\\/products\"}]}}"
+      "name": "Create my source",
+      "method": "POST",
+      "url": "https://localhost:8000/connectors/gt-source",
+      "body": "{req1_config:\"{{dbSource.config}}\"}",
+      "headers": [
+        {
+          "name": "Cache-Control",
+          "value": "max-age=0"
+        },
+        {
+          "name": "Connection",
+          "value": "keep-alive"
         }
-      }
+      ],
+      "params": [
+        {
+          "name": "param1",
+          "value": "value1"
+        },
+        {
+          "name": "param2",
+          "value": "value2"
+        }
+      ],
+      "selected": false,
+      "contentType": "application/json",
+      "authMethod": "1"
     },
     {
       "name": "Create Kafka Connect source",
@@ -95,33 +87,65 @@
       ]
     },
     {
-      "name": "Create my source",
-      "method": "POST",
-      "url": "https://localhost:8000/connectors/gt-source",
-      "body": "{req1_config:\"{{dbSource.config}}\"}",
+      "method": "GET",
+      "name": "Get stock saldo",
+      "url": "https://augment-sports.com/wp-json/wc/v2/products",
+      "selected": false,
+      "body": "",
+      "headers": [],
+      "params": [],
+      "contentType": "text/plain",
+      "authMethod": "2",
+      "response": {
+        "error": null,
+        "response": {
+          "statusCode": 201,
+          "headers": {
+            "cache-control": "no-cache, must-revalidate, max-age=0",
+            "content-type": "application/json; charset=UTF-8",
+            "expires": "Wed, 11 Jan 1984 05:00:00 GMT"
+          },
+          "body": "{\"id\":7105,\"name\":\"Product\",\"slug\":\"product-22\",\"permalink\":\"https:\\/\\/augment-sports.com\\/p\\/uncategorized\\/product-22\\/\",\"date_created\":\"2019-03-27T12:02:15\",\"date_created_gmt\":\"2019-03-27T10:02:15\",\"date_modified\":\"2019-03-27T12:02:15\",\"date_modified_gmt\":\"2019-03-27T10:02:15\",\"type\":\"simple\",\"status\":\"publish\",\"featured\":false,\"catalog_visibility\":\"visible\",\"description\":\"\",\"short_description\":\"\",\"sku\":\"\",\"price\":\"\",\"regular_price\":\"\",\"sale_price\":\"\",\"date_on_sale_from\":null,\"date_on_sale_from_gmt\":null,\"date_on_sale_to\":null,\"date_on_sale_to_gmt\":null,\"price_html\":\"\",\"on_sale\":false,\"purchasable\":false,\"total_sales\":0,\"virtual\":false,\"downloadable\":false,\"downloads\":[],\"download_limit\":-1,\"download_expiry\":-1,\"external_url\":\"\",\"button_text\":\"\",\"tax_status\":\"taxable\",\"tax_class\":\"\",\"manage_stock\":false,\"stock_quantity\":null,\"in_stock\":true,\"backorders\":\"no\",\"backorders_allowed\":false,\"backordered\":false,\"sold_individually\":false,\"weight\":\"\",\"dimensions\":{\"length\":\"\",\"width\":\"\",\"height\":\"\"},\"shipping_required\":true,\"shipping_taxable\":true,\"shipping_class\":\"\",\"shipping_class_id\":0,\"reviews_allowed\":true,\"average_rating\":\"0\",\"rating_count\":0,\"related_ids\":[7087,7093,7101,7096,7100],\"upsell_ids\":[],\"cross_sell_ids\":[],\"parent_id\":0,\"purchase_note\":\"\",\"categories\":[{\"id\":310,\"name\":\"Uncategorized\",\"slug\":\"uncategorized\"}],\"tags\":[],\"images\":[{\"id\":0,\"date_created\":\"2019-03-27T14:02:16\",\"date_created_gmt\":\"2019-03-27T10:02:16\",\"date_modified\":\"2019-03-27T14:02:16\",\"date_modified_gmt\":\"2019-03-27T10:02:16\",\"src\":\"https:\\/\\/augment-sports.com\\/app\\/plugins\\/woocommerce\\/assets\\/images\\/placeholder.png\",\"name\":\"Placeholder\",\"alt\":\"Placeholder\",\"position\":0}],\"attributes\":[],\"default_attributes\":[],\"variations\":[],\"grouped_products\":[],\"menu_order\":0,\"meta_data\":[{\"id\":161110,\"key\":\"_wpml_word_count\",\"value\":\"{\\\"total\\\":0,\\\"to_translate\\\":{\\\"en\\\":3,\\\"de\\\":3}}\"},{\"id\":161111,\"key\":\"_alp_processed\",\"value\":\"1553680935\"}],\"bundle_layout\":\"\",\"bundled_by\":[],\"bundled_items\":[],\"translations\":[],\"lang\":\"en\",\"_links\":{\"self\":[{\"href\":\"https:\\/\\/augment-sports.com\\/wp-json\\/wc\\/v2\\/products\\/7105\"}],\"collection\":[{\"href\":\"https:\\/\\/augment-sports.com\\/wp-json\\/wc\\/v2\\/products\"}]}}"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "name": "List Kafka connectors",
+      "url": "http://localhost:8083/connectors",
+      "selected": false,
+      "body": "",
+      "contentType": "Other",
+      "authMethod": -1,
+      "isDispatching": false,
+      "response": {
+        "error": {},
+        "response": null
+      }
+    },
+    {
+      "method": "GET",
+      "contentType": "application/json",
+      "name": "List customers",
+      "url": "http://ecommerce.mystore.net/customers",
+      "selected": true,
+      "body": "",
       "headers": [
         {
-          "name": "Cache-Control",
-          "value": "max-age=0"
-        },
-        {
-          "name": "Connection",
-          "value": "keep-alive"
+          "name": "Accept",
+          "value": "application/json"
         }
       ],
       "params": [
         {
-          "name": "param1",
-          "value": "value1"
+          "name": "page",
+          "value": "2"
         },
         {
-          "name": "param2",
-          "value": "value2"
+          "name": "per_page",
+          "value": "100"
         }
-      ],
-      "selected": false,
-      "contentType": "application/json",
-      "authMethod": "1"
+      ]
     }
   ],
   "context": "{\n  source: { \n    config: {\n      whatever: \"sourceconfig, username: {{username}}\",\n      nicest: 104\n    }\n  },\n  dbSource: {\n    name: \"{{connectorName}}\",\n    config: {\n      \"connector.class\": \"io.confluent.connect.jdbc.JdbcSourceConnector\",\n      \"key.converter\": \"io.confluent.connect.avro.AvroConverter\",\n      \"key.converter.schema.registry.url\": \"http://localhost:8081\",\n      \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n      \"value.converter.schemas.enable\": \"false\",\n      \"connection.url\": \"{{jdbcUrl}}\",\n      \"table.whitelist\": \"{{tableName}}\",\n      \"mode\": \"incrementing\",\n      \"incrementing.column.name\": \"id\",\n      \"validate.non.null\": \"false\",\n      \"topic.prefix\": \"{{topicPrefix}}\",\n      \"table.types\": \"VIEW\",\n      \"batch.max.rows\": 100\n    }\n  }\n}",

@@ -48,8 +48,12 @@ class ItemList extends React.PureComponent {
   render() {
     const { items, setName, setValue, del, add } = this.props;
     const placeholderProps = [
-      { label: "Add parameter name", setter: setName, ref: this.nameRef },
-      { label: "Add parameter value", setter: setValue, ref: this.valueRef }
+      { label: this.props.namePlaceholder, setter: setName, ref: this.nameRef },
+      {
+        label: this.props.valuePlaceholder,
+        setter: setValue,
+        ref: this.valueRef
+      }
     ];
     return (
       <div>
@@ -83,12 +87,7 @@ class ItemList extends React.PureComponent {
               ])}
             />
           ))}
-          <Button
-            icon="add"
-            style={{ backgroundColor: "#293742" }}
-            className={Classes.FIXED}
-            onClick={add}
-          />
+          <Button icon="add" className={Classes.FIXED} onClick={add} />
           {/* onClick={R.partial(this.addItem, [items.length, null, setName, {target: { value: "" }}])}/> */}
         </ControlGroup>
       </div>

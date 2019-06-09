@@ -13,13 +13,16 @@ import {
   Button,
   Popover,
   Menu,
-  MenuItem
+  MenuItem,
+  FocusStyleManager
 } from "@blueprintjs/core";
 import requestContainer from "../../models/RequestContainer";
 import contextContainer from "../../models/ContextContainer";
 import projectContainer from "../../models/ProjectContainer";
 import authContainer from "../../models/AuthContainer";
 import styled from "styled-components";
+
+FocusStyleManager.onlyShowFocusOnTabs();
 
 const { clipboard, remote } = window.require("electron");
 const R = require("ramda");

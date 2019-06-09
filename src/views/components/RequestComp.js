@@ -44,12 +44,7 @@ const RequestComp = React.forwardRef((props, ref) => {
           value={component.value}
           onChange={setValue}
         />
-        <Button
-          icon="delete"
-          style={{ backgroundColor: "#293742" }}
-          className={Classes.FIXED}
-          onClick={del}
-        />
+        <Button icon="delete" className={Classes.FIXED} onClick={del} />
       </ControlGroup>
     </Wrapper>
   );
