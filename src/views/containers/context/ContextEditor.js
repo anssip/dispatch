@@ -36,8 +36,7 @@ class ContextEditor extends React.Component {
             zIndex: 10,
             position: "absolute",
             top: 70,
-            right: 5,
-            backgroundColor: "#000"
+            right: 5
           }}
           icon="fullscreen"
           small={true}

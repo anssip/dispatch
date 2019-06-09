@@ -31,7 +31,6 @@ const NameWrapper = styled.h2`
 const authOptions = [
   { type: "none", label: "none", component: "" },
   { type: "basic", label: "Basic", component: <BasicAuthForm /> },
-  { type: "bearer", label: "Bearer", component: "" },
   { type: "oAuth2", label: "OAuth 2.0", component: <OAuth2Form /> }
 ];
 const NameInput = withValueChangeDetection(

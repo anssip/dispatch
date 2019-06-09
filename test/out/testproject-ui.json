@@ -27,14 +27,14 @@
       ],
       "selected": false,
       "contentType": "application/json",
-      "authMethod": "1"
+      "authMethod": 2
     },
     {
       "name": "Create Kafka Connect source",
       "method": "POST",
       "url": "http://localhost:8083/connectors/",
       "body": "\"{{dbSource}}\"",
-      "selected": false,
+      "selected": true,
       "auth": {
         "basic": {
           "username": "anssssip",
@@ -56,7 +56,7 @@
       },
       "headers": [],
       "params": [],
-      "authMethod": "-1",
+      "authMethod": -1,
       "contentType": "application/json",
       "response": {
         "response": {
@@ -73,16 +73,8 @@
           "value": "myDbConn1"
         },
         {
-          "name": "jdbcUrl",
-          "value": "jdbc://myDBhere:675"
-        },
-        {
           "name": "tableName",
           "value": "fuusers"
-        },
-        {
-          "name": "topicPrefix",
-          "value": "prefix1"
         }
       ]
     },
@@ -95,7 +87,7 @@
       "headers": [],
       "params": [],
       "contentType": "text/plain",
-      "authMethod": "2",
+      "authMethod": 0,
       "response": {
         "error": null,
         "response": {
@@ -128,7 +120,7 @@
       "contentType": "application/json",
       "name": "List customers",
       "url": "http://ecommerce.mystore.net/customers",
-      "selected": true,
+      "selected": false,
       "body": "",
       "headers": [
         {
@@ -145,94 +137,12 @@
           "name": "per_page",
           "value": "100"
         }
-      ]
+      ],
+      "authMethod": -1
     }
   ],
-  "context": "{\n  source: { \n    config: {\n      whatever: \"sourceconfig, username: {{username}}\",\n      nicest: 104\n    }\n  },\n  dbSource: {\n    name: \"{{connectorName}}\",\n    config: {\n      \"connector.class\": \"io.confluent.connect.jdbc.JdbcSourceConnector\",\n      \"key.converter\": \"io.confluent.connect.avro.AvroConverter\",\n      \"key.converter.schema.registry.url\": \"http://localhost:8081\",\n      \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n      \"value.converter.schemas.enable\": \"false\",\n      \"connection.url\": \"{{jdbcUrl}}\",\n      \"table.whitelist\": \"{{tableName}}\",\n      \"mode\": \"incrementing\",\n      \"incrementing.column.name\": \"id\",\n      \"validate.non.null\": \"false\",\n      \"topic.prefix\": \"{{topicPrefix}}\",\n      \"table.types\": \"VIEW\",\n      \"batch.max.rows\": 100\n    }\n  }\n}",
+  "context": "{\n  dbSource: {\n    name: \"{{connectorName}}\",\n    config: {\n      \"connector.class\": \"io.confluent.connect.jdbc.JdbcSourceConnector\",\n      \"key.converter\": \"io.confluent.connect.avro.AvroConverter\",\n      \"key.converter.schema.registry.url\": \"http://localhost:8081\",\n      \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n      \"value.converter.schemas.enable\": \"false\",\n      \"connection.url\": \"{{jdbcUrl}}\",\n      \"table.whitelist\": \"{{tableName}}\",\n      \"mode\": \"incrementing\",\n      \"incrementing.column.name\": \"id\",\n      \"validate.non.null\": \"false\",\n      \"topic.prefix\": \"{{topicPrefix}}\",\n      \"table.types\": \"VIEW\",\n      \"batch.max.rows\": 100\n    }\n  },\n  source: { \n    config: {\n      desc: \"sourceconfig, username: {{username}}\",\n      nicest: 104\n    }\n  }\n}",
   "vars": [
-    {
-      "name": "appName",
-      "values": [
-        {
-          "env": "test",
-          "value": "Dispatch"
-        },
-        {
-          "env": "prod",
-          "value": "Dispatch"
-        }
-      ]
-    },
-    {
-      "name": "author",
-      "values": [
-        {
-          "env": "test",
-          "value": "Anssi"
-        },
-        {
-          "env": "prod",
-          "value": "Anssi Piirainen"
-        }
-      ]
-    },
-    {
-      "name": "email",
-      "values": [
-        {
-          "env": "test",
-          "value": "api@iki.fi"
-        },
-        {
-          "env": "prod",
-          "value": "anssi@dispatch.rest"
-        }
-      ]
-    },
-    {
-      "name": "version",
-      "values": [
-        {
-          "env": "prod",
-          "value": "1.0"
-        },
-        {
-          "env": "test",
-          "value": "1.0-test"
-        }
-      ]
-    },
-    {
-      "name": "license",
-      "values": [
-        {
-          "env": "prod",
-          "value": "GPL"
-        }
-      ]
-    },
-    {
-      "name": "username",
-      "values": [
-        {
-          "env": "test",
-          "value": "anssi"
-        }
-      ]
-    },
-    {
-      "name": "headerElem",
-      "values": [
-        {
-          "env": "test",
-          "value": "test"
-        },
-        {
-          "env": "prod",
-          "value": "test"
-        }
-      ]
-    },
     {
       "name": "jdbcUrl",
       "values": [
@@ -243,19 +153,6 @@
         {
           "env": "prod",
           "value": "jdbc://mydb.prod.host"
-        }
-      ]
-    },
-    {
-      "name": "tableName",
-      "values": [
-        {
-          "env": "test",
-          "value": "users"
-        },
-        {
-          "env": "prod",
-          "value": "users"
         }
       ]
     },
@@ -275,7 +172,16 @@
   ],
   "methods": [
     {
-      "name": "Resource owner pwd",
+      "method": "GET",
+      "name": "My Basic Authentication",
+      "selected": false,
+      "type": "basic",
+      "username": "ck_8a6760e4582f26a7ae95558d086689c9ca28d8d5",
+      "password": "cs_f2ebe1d604e060662d95c345b34151a4cb80a52a",
+      "oldIndex": 2
+    },
+    {
+      "name": "Resource owner password",
       "selected": false,
       "type": "oAuth2",
       "grantType": "2",
@@ -286,12 +192,13 @@
       "username": "api@iki.fi",
       "access_token": "rh37lySdCLeZOjwVvLBoOoatXWVTaj6D",
       "token_type": "Bearer",
-      "token_scope": "openid profile email address phone"
+      "token_scope": "openid profile email address phone",
+      "oldIndex": 0
     },
     {
       "method": "GET",
       "name": "Authorization code",
-      "selected": false,
+      "selected": true,
       "type": "oAuth2",
       "redirectUri": "https://dispatch.rest/callback",
       "authorizationUrl": "https://github.com/login/oauth/authorize",
@@ -301,15 +208,8 @@
       "access_token": "2f52faf3d4c628e2d6dbefdff4afe74cdfb19c92",
       "token_type": "bearer",
       "token_scope": "",
-      "grantType": "0"
-    },
-    {
-      "method": "GET",
-      "name": "WeClapp API",
-      "selected": false,
-      "type": "basic",
-      "username": "ck_8a6760e4582f26a7ae95558d086689c9ca28d8d5",
-      "password": "cs_f2ebe1d604e060662d95c345b34151a4cb80a52a"
+      "grantType": "0",
+      "oldIndex": 1
     },
     {
       "name": "Implicit",
@@ -318,11 +218,12 @@
       "redirectUri": "https://dispatch.rest/callback",
       "scope": "read",
       "access_token": "JhuOSbeBJtyER5tUvghg6T-tZB0PL0d_",
-      "token_type": "Bearer"
+      "token_type": "Bearer",
+      "oldIndex": 3
     },
     {
       "name": "Client credentials",
-      "selected": true,
+      "selected": false,
       "type": "oAuth2",
       "grantType": "3",
       "clientId": "a9lqkFe4IfYQExWVHo4jBXpiESSXZxYq",
@@ -332,7 +233,8 @@
       "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5rSTFPRUpCUlRnNU5VUXdOVVEyTTBVd016SkRNa0ZETWpZMU1qQkZSRE5DUmpSR00wRTVOQSJ9.eyJpc3MiOiJodHRwczovL2Rpc3BhdGNoLXJlc3QtZGV2LmV1LmF1dGgwLmNvbS8iLCJzdWIiOiJhOWxxa0ZlNElmWVFFeFdWSG80akJYcGlFU1NYWnhZcUBjbGllbnRzIiwiYXVkIjoiaHR0cCIsImlhdCI6MTU1MzI1NzE1OCwiZXhwIjoxNTUzMzQzNTU4LCJhenAiOiJhOWxxa0ZlNElmWVFFeFdWSG80akJYcGlFU1NYWnhZcSIsInNjb3BlIjoic3ByaW5nIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIn0.FCBLbQO7RACvVrXKgBMgOOuvqn8IXofdbUkVz4Cb7mY7rGNjnR8zT4m-aEXP0h4ioz7ESXeDHYa_Zt2BpQ3W6qTf48yG2Zinx7Ov7u2_8ilGdxRTlMBI2NCe6p70ubHIKqMOmi-ZlXi48-W_yn6m2q3s-7Y0uJvlR3El0Hti4k3T-5WqLnZ0LhIVkgcr5-SgKEFTjTfzEoLwCnZjxStnyNS3EMYtl7SqtUpFs0AjlG1D3Iq2_37227gKSya0feLzsjwNpShG46ZAkurCjgGYRKFF4g-P7e2lgfhQns5TvfJovojdOX4TT_59QJtdcI8vQdejkEpAURWcN8nvCWhA3A",
       "token_type": "Bearer",
       "token_scope": "spring",
-      "audience": "http"
+      "audience": "http",
+      "oldIndex": 4
     }
   ]
 }
