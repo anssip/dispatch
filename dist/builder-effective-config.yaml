@@ -12,7 +12,12 @@ copyright: (c) 2019 Northern Peaks Development / Anssi Piirainen
 mac:
   category: public.app-category.developer-tools
   icon: resources/logo/logo.png
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: mac/entitlements.plist
+  entitlementsInherit: mac/entitlements.plist
 publish:
   provider: github
+afterSign: mac/notarize.js
 extends: react-cra
 electronVersion: 4.1.3
