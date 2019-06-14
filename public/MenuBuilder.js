@@ -77,7 +77,11 @@ class MenuBuilder {
     return [
       {
         label: "Dispatch",
-        submenu: [{ role: "toggleDevTools" }, { role: "quit" }]
+        submenu: [
+          { role: "about" },
+          { role: "toggleDevTools" },
+          { role: "quit" }
+        ]
       },
       { label: "File", submenu: items },
       {

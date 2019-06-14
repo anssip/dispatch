@@ -76,8 +76,7 @@
     },
     "publish": {
       "provider": "github"
-    },
-    "afterSign": "mac/notarize.js"
+    }
   },
   "main": "public/electron.js",
   "homepage": "./",

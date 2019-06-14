@@ -78,7 +78,7 @@ class MainWindow extends React.PureComponent {
               className="bp3-light"
               split="horizontal"
               primary="second"
-              minSize={0}
+              // maxSize={this.state.contentHeight - 550}
               defaultSize={200}
             >
               {activeSidebarTab === "methods" ? (
@@ -112,11 +112,15 @@ class MainWindow extends React.PureComponent {
                       margin: 0,
                       width: "100%",
                       color: "#333",
-                      fontSize: 13,
-                      resize: "none"
+                      backgroundColor: "#eee",
+                      fontSize: 13
                     }}
                   />
-                  <Buttons>
+                  <Buttons
+                    style={{
+                      marginBottom: `${this.state.paneHeight - 10}px`
+                    }}
+                  >
                     <Popover
                       content={
                         <Menu>

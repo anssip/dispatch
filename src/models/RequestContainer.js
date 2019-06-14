@@ -76,6 +76,12 @@ class RequestContainer extends Container {
     });
   }
   getRequests() {
+    if (!this.state.requests || this.state.requests.length == 0) {
+      this.setState({
+        isModified: false,
+        requests: [this.createEmptyRequest(true)]
+      });
+    }
     return this.state.requests;
   }
   getItems() {
@@ -100,7 +106,7 @@ class RequestContainer extends Container {
   getNamePlaceholder() {
     if (!this.state) return "request-0";
     // @ts-ignore
-    const oldWithNum = this.state.requests
+    const oldWithNum = (this.state.requests || [])
       .reverse()
       .find(r => r.name.indexOf("request-") >= 0);
     return oldWithNum

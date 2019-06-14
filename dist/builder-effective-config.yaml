@@ -18,6 +18,5 @@ mac:
   entitlementsInherit: mac/entitlements.plist
 publish:
   provider: github
-afterSign: mac/notarize.js
 extends: react-cra
 electronVersion: 4.1.3
