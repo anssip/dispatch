@@ -59,13 +59,8 @@
       "authMethod": -1,
       "contentType": "application/json",
       "response": {
-        "response": {
-          "statusCode": 409,
-          "headers": {
-            "content-type": "application/json"
-          },
-          "body": "{\"error_code\":409,\"message\":\"Connector myDbConnector already exists\"}"
-        }
+        "error": {},
+        "response": null
       },
       "variables": [
         {
@@ -76,7 +71,8 @@
           "name": "tableName",
           "value": "fuusers"
         }
-      ]
+      ],
+      "isDispatching": false
     },
     {
       "method": "GET",

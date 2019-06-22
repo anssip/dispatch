@@ -16,6 +16,10 @@ mac:
   gatekeeperAssess: false
   entitlements: mac/entitlements.plist
   entitlementsInherit: mac/entitlements.plist
+win:
+  target: nsis
+  icon: resources/logo/logo.png
+  legalTrademarks: (c) 2019 Northern Peaks Development / Anssi Piirainen
 publish:
   provider: github
 extends: react-cra
