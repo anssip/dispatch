@@ -17,9 +17,8 @@ const Wrapper = styled.div``;
 class EnvironmentEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isOpen: false };
+    this.state = { isExpanded: false, columnWidths: new Map() };
   }
-
   render() {
     console.log("EnvironmentEditor", this.props);
     const {
@@ -32,6 +31,21 @@ class EnvironmentEditor extends React.Component {
       deleteVariable
     } = this.props;
 
+    const getColumnWidths = () => {
+      const widths = [
+        120,
+        ...environments.map(e =>
+          this.state.columnWidths.has(e) ? this.state.columnWidths.get(e) : 100
+        )
+      ];
+      // console.log("widths", widths);
+      return widths;
+    };
+    const onColumnWidthChanged = (index, size) => {
+      const env = environments[index - 1];
+      // console.log(`column width for env '${env}' changed to ${size}`);
+      this.state.columnWidths.set(env, size);
+    };
     const renderCell = (env, row, col) => {
       const value = container.getVariableAt(env, row);
       return (
@@ -96,8 +110,9 @@ class EnvironmentEditor extends React.Component {
       <Wrapper>
         <Table
           numRows={variables.length}
-          columnWidths={[120, ...environments.map(e => 100)]}
+          columnWidths={getColumnWidths()}
           onSelection={onSelection}
+          onColumnWidthChanged={onColumnWidthChanged}
         >
           <Column
             key="vars"

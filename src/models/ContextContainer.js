@@ -174,6 +174,8 @@ class ContextContainer extends Container {
   }
 
   setVariableAt(env, i, props) {
+    console.log(`setVariableAt() i == ${i}. props == ${JSON.stringify(props)}`);
+
     const varProps = typeof props === "string" ? { value: props } : props;
     const existingVar = this.getVariables()[i];
     if (!existingVar) return null;
@@ -184,6 +186,11 @@ class ContextContainer extends Container {
       )}`
     );
 
+    const valueFor = currentValue => {
+      if (varProps.value === "") return "";
+      return varProps.value || currentValue;
+    };
+
     // TODO: remove duplication with addOrUpdateVariable()
     const newVariables = this.getVariables().map((v, index) =>
       index == i
@@ -191,7 +198,12 @@ class ContextContainer extends Container {
             name: varProps.name || existingVar.name,
             values: existingVar.values.find(v => v.env == env)
               ? existingVar.values.map(v =>
-                  v.env == env ? { env, value: varProps.value || v.value } : v
+                  v.env == env
+                    ? {
+                        env,
+                        value: valueFor(v.value)
+                      }
+                    : v
                 )
               : [...existingVar.values, { env, value: varProps.value }]
           }

@@ -1,2 +1,2 @@
 #! /bin/sh
-open dist/mac/Dispatch.rest.app/ --args -AppCommandLineArg
+open dist/mac/Dispatch.app/ --args -AppCommandLineArg

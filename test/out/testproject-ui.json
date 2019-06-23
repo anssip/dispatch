@@ -34,7 +34,7 @@
       "method": "POST",
       "url": "http://localhost:8083/connectors/",
       "body": "\"{{dbSource}}\"",
-      "selected": true,
+      "selected": false,
       "auth": {
         "basic": {
           "username": "anssssip",
@@ -59,8 +59,33 @@
       "authMethod": -1,
       "contentType": "application/json",
       "response": {
-        "error": {},
-        "response": null
+        "response": {
+          "statusCode": 201,
+          "headers": {
+            "content-type": "application/json"
+          },
+          "body": {
+            "name": "myDbConn1",
+            "config": {
+              "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+              "key.converter": "io.confluent.connect.avro.AvroConverter",
+              "key.converter.schema.registry.url": "http://localhost:8081",
+              "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+              "value.converter.schemas.enable": "false",
+              "connection.url": "jdbc:mysql://localhost:3306/red5resellers?user=root&password=zymes_FL1",
+              "table.whitelist": "fuusers",
+              "mode": "incrementing",
+              "incrementing.column.name": "id",
+              "validate.non.null": "false",
+              "topic.prefix": "Users",
+              "table.types": "VIEW",
+              "batch.max.rows": "100",
+              "name": "myDbConn1"
+            },
+            "tasks": [],
+            "type": null
+          }
+        }
       },
       "variables": [
         {
@@ -101,14 +126,19 @@
       "method": "GET",
       "name": "List Kafka connectors",
       "url": "http://localhost:8083/connectors",
-      "selected": false,
+      "selected": true,
       "body": "",
       "contentType": "Other",
       "authMethod": -1,
       "isDispatching": false,
       "response": {
-        "error": {},
-        "response": null
+        "response": {
+          "statusCode": 200,
+          "headers": {
+            "content-type": "application/json"
+          },
+          "body": "[\"myDbConn1\"]"
+        }
       }
     },
     {
@@ -135,6 +165,21 @@
         }
       ],
       "authMethod": -1
+    },
+    {
+      "method": "DELETE",
+      "contentType": "application/json",
+      "name": "Delete connector",
+      "url": "http://localhost:8083/connectors/myDbConn1",
+      "selected": false,
+      "body": "",
+      "isDispatching": false,
+      "response": {
+        "response": {
+          "statusCode": 204,
+          "headers": {}
+        }
+      }
     }
   ],
   "context": "{\n  dbSource: {\n    name: \"{{connectorName}}\",\n    config: {\n      \"connector.class\": \"io.confluent.connect.jdbc.JdbcSourceConnector\",\n      \"key.converter\": \"io.confluent.connect.avro.AvroConverter\",\n      \"key.converter.schema.registry.url\": \"http://localhost:8081\",\n      \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n      \"value.converter.schemas.enable\": \"false\",\n      \"connection.url\": \"{{jdbcUrl}}\",\n      \"table.whitelist\": \"{{tableName}}\",\n      \"mode\": \"incrementing\",\n      \"incrementing.column.name\": \"id\",\n      \"validate.non.null\": \"false\",\n      \"topic.prefix\": \"{{topicPrefix}}\",\n      \"table.types\": \"VIEW\",\n      \"batch.max.rows\": 100\n    }\n  },\n  source: { \n    config: {\n      desc: \"sourceconfig, username: {{username}}\",\n      nicest: 104\n    }\n  }\n}",
@@ -144,7 +189,7 @@
       "values": [
         {
           "env": "test",
-          "value": "jdbc://mydb.host"
+          "value": "jdbc:mysql://localhost:3306/red5resellers?user=root&password=zymes_FL1"
         },
         {
           "env": "prod",
@@ -157,7 +202,7 @@
       "values": [
         {
           "env": "test",
-          "value": "views"
+          "value": "Users"
         },
         {
           "env": "prod",
@@ -178,7 +223,7 @@
     },
     {
       "name": "Resource owner password",
-      "selected": false,
+      "selected": true,
       "type": "oAuth2",
       "grantType": "2",
       "password": "beHzuf-3vadti-totveh",
@@ -194,7 +239,7 @@
     {
       "method": "GET",
       "name": "Authorization code",
-      "selected": true,
+      "selected": false,
       "type": "oAuth2",
       "redirectUri": "https://dispatch.rest/callback",
       "authorizationUrl": "https://github.com/login/oauth/authorize",

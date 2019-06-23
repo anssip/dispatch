@@ -7,7 +7,7 @@ files:
 extraMetadata:
   main: build/electron.js
 appId: com.npd.dispatch
-productName: Dispatch.rest
+productName: Dispatch
 copyright: (c) 2019 Northern Peaks Development / Anssi Piirainen
 mac:
   category: public.app-category.developer-tools
