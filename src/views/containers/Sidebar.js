@@ -79,7 +79,7 @@ class Sidebar extends React.Component {
           <Tabs
             id="sidebarTabs"
             onChange={setActiveTab}
-            renderActiveTabPanelOnly={true}
+            renderActiveTabPanelOnly={false}
             selectedTabId={activeTab}
           >
             <Tab
