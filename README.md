@@ -1,14 +1,16 @@
 # Dispatch
 
-A tool for REST API design, and for request testing and management. This is a tool similar to Postman, Insomnia and Paw, but better geared towards developers. It supports templates for request bodies and these templates can be used as building blocks in the requests.
+A tool for REST API design, and for request testing and management. This is a tool similar to Postman, Insomnia and Paw. It has unique templatating mechanism with reusable request building blocks.
+
+Available for Mac, Windows, and Linux.
 
 Learn more: https://www.dispatch.rest
 
 ## Status
 
-Public beta started June 20th 2019.
+Version 0.1 released June 24th 2019.
 
-![Screenshot](https://i.imgur.com/7AHNyCT.png)
+![Screenshot](https://i.imgur.com/kPDDkHE.png)
 
 ## TODO
 

@@ -83,7 +83,8 @@
     },
     "publish": {
       "provider": "github"
-    }
+    },
+    "afterSign": "mac/notarize.js"
   },
   "main": "public/electron.js",
   "homepage": "./",
@@ -94,11 +95,11 @@
     "react-eject": "react-scripts eject",
     "pack": "yarn react-build && electron-builder --dir",
     "release": "yarn react-build && electron-builder",
-    "build": "yarn react-build && yarn electron-builder",
-    "build-win": "yarn react-build && yarn electron-builder --win",
-    "build-linux": "yarn react-build && yarn electron-builder --linux",
-    "build-mwl": "yarn react-build && yarn electron-builder -w -l",
-    "publish": "yarn react-build && yarn electron-builder --publish always",
+    "build": "yarn react-build && electron-builder",
+    "build-win": "yarn react-build && electron-builder --win",
+    "build-linux": "yarn react-build && electron-builder --linux",
+    "build-mwl": "yarn react-build && electron-builder -w -l",
+    "publish": "electron-builder --publish always",
     "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "browserslist": [

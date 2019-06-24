@@ -22,5 +22,6 @@ win:
   legalTrademarks: (c) 2019 Northern Peaks Development / Anssi Piirainen
 publish:
   provider: github
+afterSign: mac/notarize.js
 extends: react-cra
 electronVersion: 4.1.3

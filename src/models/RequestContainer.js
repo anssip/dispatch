@@ -98,7 +98,7 @@ class RequestContainer extends Container {
       method: "GET",
       contentType: "application/json",
       name: this.getNamePlaceholder(),
-      url: "http://echo.dispatch.rest",
+      url: "https://echo-api.3scale.net/",
       selected,
       body: ""
     };
