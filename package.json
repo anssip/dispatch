@@ -16,7 +16,11 @@
     "JavaScript",
     "node.js"
   ],
-  "author": "Anssi Piirainen",
+  "author": {
+    "name": "Anssi Piirainen",
+    "email": "api@iki.fi",
+    "url": "https://anssipiirainen.com"
+  },
   "bugs": {
     "url": "https://github.com/anssip/dispatch/issues"
   },
