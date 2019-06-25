@@ -6,6 +6,8 @@ Available for Mac, Windows, and Linux.
 
 Learn more: https://www.dispatch.rest
 
+Dispatch is available for Linux, Mac and Windows. See [the download options](https://github.com/anssip/dispatch/releases).
+
 ## Status
 
 Version 0.1 released June 24th 2019.
