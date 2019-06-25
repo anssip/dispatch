@@ -77,12 +77,29 @@
       "entitlementsInherit": "mac/entitlements.plist"
     },
     "win": {
-      "target": "nsis",
       "icon": "resources/logo/logo.png",
-      "legalTrademarks": "(c) 2019 Northern Peaks Development / Anssi Piirainen"
+      "legalTrademarks": "(c) 2019 Northern Peaks Development / Anssi Piirainen",
+      "publish": "github",
+      "target": [
+        "nsis",
+        "portable",
+        "zip"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm",
+        "snap"
+      ],
+      "icon": "resources/logo/logo.png",
+      "category": "Utility"
     },
     "publish": {
-      "provider": "github"
+      "provider": "github",
+      "releaseType": "release",
+      "publishAutoUpdate": true
     },
     "afterSign": "mac/notarize.js"
   },
@@ -96,9 +113,6 @@
     "pack": "yarn react-build && electron-builder --dir",
     "release": "yarn react-build && electron-builder",
     "build": "yarn react-build && electron-builder",
-    "build-win": "yarn react-build && electron-builder --win",
-    "build-linux": "yarn react-build && electron-builder --linux",
-    "build-mwl": "yarn react-build && electron-builder -w -l",
     "publish": "electron-builder --publish always",
     "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
