@@ -14,7 +14,17 @@ Version 0.1 released June 24th 2019.
 
 ![Screenshot](https://i.imgur.com/kPDDkHE.png)
 
-## TODO
+## Roadmap
+
+### Next major release
+
+- Persist requests in some kind of DB
+- Requests to have IDs
+- GraphQl
+
+- Requests can pull data from other requests (response bodies, headers, etc.) and place them in the payload, URL, headers. This is done with Mixins.
+- Request chaining
+- Request body editor to show context entries in color, **Mixins** in color
 
 - persist variablers table column widths
 - request timing
