@@ -1,10 +1,46 @@
 import React from "react";
 import { Controlled as CodeMirror } from "react-codemirror2";
 
+import "codemirror/mode/javascript/javascript";
+
+import "codemirror/addon/display/autorefresh";
+import "codemirror/addon/dialog/dialog";
+import "codemirror/addon/dialog/dialog.css";
+import "codemirror/addon/fold/foldcode";
+import "codemirror/addon/fold/foldgutter";
+import "codemirror/addon/fold/foldgutter.css";
+import "codemirror/addon/fold/brace-fold";
+import "codemirror/addon/fold/comment-fold";
+import "codemirror/addon/fold/indent-fold";
+import "codemirror/addon/fold/xml-fold";
+import "codemirror/addon/hint/show-hint";
+import "codemirror/addon/hint/show-hint.css";
+import "codemirror/addon/comment/comment";
+import "codemirror/addon/search/search";
+import "codemirror/addon/search/searchcursor";
+import "codemirror/addon/edit/matchbrackets";
+import "codemirror/addon/edit/closebrackets";
+import "codemirror/addon/search/matchesonscrollbar";
+import "codemirror/addon/search/matchesonscrollbar.css";
+import "codemirror/addon/selection/active-line";
+import "codemirror/addon/selection/selection-pointer";
+import "codemirror/addon/display/placeholder";
+import "codemirror/addon/lint/lint";
+import "codemirror/addon/lint/json-lint";
+import "codemirror/addon/lint/lint.css";
+
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/ttcn.css";
-import "../../context-editor.css";
-require("codemirror/mode/javascript/javascript");
+// import "../../context-editor.css";
+// import "codemirror/addon/lint/lint.css";
+// import "codemirror/addon/edit/closebrackets";
+
+// require("codemirror").registerHelper("lint", "json", function(text) {
+//   console.log("LINTING");
+// });
+
+const jsonlint = require("jsonlint-mod").parser;
+window.jsonlint = jsonlint;
 
 class CodeEditor extends React.Component {
   constructor(props) {
@@ -22,6 +58,7 @@ class CodeEditor extends React.Component {
       <CodeMirror
         editorDidMount={editor => {
           this[this.props.id] = editor;
+          editor.setOption("lint", true);
         }}
         {...this.props}
         key={this.props.id}

@@ -10,7 +10,6 @@ import styled from "styled-components";
 import connect from "unstated-connect2";
 import container from "../../../models/ContextContainer";
 import CodeEditor from "../../components/CodeEditor";
-import jsonPrettify from "../../../models/json-pretty";
 
 const R = require("ramda");
 

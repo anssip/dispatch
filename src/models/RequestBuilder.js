@@ -71,8 +71,8 @@ class RequestBuilder {
     } catch (e) {
       // TODO: show an error indicator when evaluation fails
       // 1st make sure the context object is valid JSON
-      console.error(e);
-      return null;
+      // console.error(e);
+      return "";
     }
   }
 
