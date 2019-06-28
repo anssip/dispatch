@@ -4,6 +4,7 @@ import RequestBuilder from "./RequestBuilder";
 const R = require("ramda");
 
 class RequestContainer extends Container {
+  // TODO: add IDs to requests, and allow looking up with ID
   constructor() {
     super();
     this.state = {

@@ -26,6 +26,7 @@ Version 0.1 released June 24th 2019.
 - Request chaining
 - Request body editor to show context entries in color, **Mixins** in color
 
+- filtering of reponse rows (search/filter field)
 - persist variablers table column widths
 - request timing
 - prettify command for the context editor

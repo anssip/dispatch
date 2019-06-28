@@ -52,7 +52,7 @@ const checkForUpdates = () => {
   autoUpdater.logger = log;
   log.info(`checkForUpdates(): Running version ${app.getVersion()}`);
   autoUpdater.checkForUpdates();
-  // autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdatesAndNotify();
 };
 
 app.on("ready", () => {
