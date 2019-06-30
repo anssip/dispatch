@@ -6,9 +6,6 @@ const log = require("electron-log");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
-const jsonlint = require("jsonlint").parser;
-global.jsonlint = jsonlint;
-
 const path = require("path");
 const isDev = require("electron-is-dev");
 

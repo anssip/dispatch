@@ -55,6 +55,7 @@ class BodyEditor extends React.Component {
             lineWrapping: false,
             scrollbarStyle: "native",
             matchBrackets: true,
+            autoCloseBrackets: true,
             tabSize: 2,
             indentUnit: 2,
             hintOptions: null,

@@ -1,5 +1,6 @@
 import React from "react";
-import { Controlled as CodeMirror } from "react-codemirror2";
+import { Controlled as CodeMirrorComponent } from "react-codemirror2";
+import CodeMirror from "codemirror";
 
 import "codemirror/mode/javascript/javascript";
 
@@ -31,16 +32,18 @@ import "codemirror/addon/lint/lint.css";
 
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/ttcn.css";
-// import "../../context-editor.css";
-// import "codemirror/addon/lint/lint.css";
-// import "codemirror/addon/edit/closebrackets";
-
-// require("codemirror").registerHelper("lint", "json", function(text) {
-//   console.log("LINTING");
-// });
 
 const jsonlint = require("jsonlint-mod").parser;
 window.jsonlint = jsonlint;
+
+CodeMirror.defineExtension("dispatchTags", function() {
+  console.log("In dispatch extension");
+  this.on("change", (cm, change) => {
+    console.log("CodeMirror.change", cm.getValue());
+
+    // loop through this.getViewport() and set marks for all {{}} occurrences
+  });
+});
 
 class CodeEditor extends React.Component {
   constructor(props) {
@@ -55,10 +58,11 @@ class CodeEditor extends React.Component {
       }px`
     );
     return (
-      <CodeMirror
+      <CodeMirrorComponent
         editorDidMount={editor => {
           this[this.props.id] = editor;
           editor.setOption("lint", true);
+          editor.dispatchTags();
         }}
         {...this.props}
         key={this.props.id}
@@ -78,12 +82,12 @@ class CodeEditor extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log(
-      `CodeEditor.componentDidUpdate:: ${this.props.id} paneHeight ${
-        this.props.paneHeight
-      }px`,
-      this[this.props.id]
-    );
+    // console.log(
+    //   `CodeEditor.componentDidUpdate:: ${this.props.id} paneHeight ${
+    //     this.props.paneHeight
+    //   }px`,
+    //   this[this.props.id]
+    // );
     this.resize();
   }
 }
