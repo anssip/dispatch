@@ -73,3 +73,13 @@ body {
   height: 100%;
   min-height: 100;
  } */
+
+.cm-dispatch-variable {
+  color: #d04845;
+  background-color: #b3cfff;
+}
+
+.cm-dispatch-tag {
+  color: #d04845;
+  background-color: #b3cfff;
+}

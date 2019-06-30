@@ -3,6 +3,7 @@ import { Controlled as CodeMirrorComponent } from "react-codemirror2";
 import CodeMirror from "codemirror";
 
 import "codemirror/mode/javascript/javascript";
+import jinja2 from "codemirror/mode/jinja2/jinja2";
 
 import "codemirror/addon/display/autorefresh";
 import "codemirror/addon/dialog/dialog";
@@ -26,6 +27,8 @@ import "codemirror/addon/search/matchesonscrollbar.css";
 import "codemirror/addon/selection/active-line";
 import "codemirror/addon/selection/selection-pointer";
 import "codemirror/addon/display/placeholder";
+import "codemirror/addon/mode/overlay";
+
 import "codemirror/addon/lint/lint";
 import "codemirror/addon/lint/json-lint";
 import "codemirror/addon/lint/lint.css";
@@ -41,9 +44,46 @@ CodeMirror.defineExtension("dispatchTags", function() {
   this.on("change", (cm, change) => {
     console.log("CodeMirror.change", cm.getValue());
 
+    const viewport = this.getViewport();
+    for (let line = viewport.from; line < viewport.to; line++) {
+      const tokens = this.getLineTokens(line);
+      console.log("CodeMirror.tokens", tokens);
+    }
     // loop through this.getViewport() and set marks for all {{}} occurrences
   });
 });
+
+CodeMirror.defineMode("dispatch", (config, parserConfig) => {
+  const baseMode = CodeMirror.getMode(
+    config,
+    parserConfig.baseMode || "text/plain"
+  );
+  return CodeMirror.overlayMode(baseMode, customTagsMode(), false);
+});
+
+function customTagsMode() {
+  const variableRegex = /^{{\s*([^ }]+)\s*[^}]*\s*}}/;
+  const tagRegex = /^{%\s*([^ }]+)\s*[^%]*\s*%}/;
+
+  return {
+    startState() {
+      return {};
+    },
+    token(stream, state) {
+      if (stream.match(tagRegex, true)) {
+        return `dispatch-tag`;
+      }
+      if (stream.match(variableRegex, true)) {
+        return `dispatch-variable`;
+      }
+      while (stream.next() != null) {
+        if (stream.match(variableRegex, false)) break;
+        if (stream.match(tagRegex, false)) break;
+      }
+      return null;
+    }
+  };
+}
 
 class CodeEditor extends React.Component {
   constructor(props) {

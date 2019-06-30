@@ -46,7 +46,8 @@ class BodyEditor extends React.Component {
           options={{
             gutters: ["CodeMirror-lint-markers"],
             lint: true,
-            mode: "application/json",
+            mode: { name: "dispatch", baseMode: "application/json" },
+            // mode: "application/json",
             lineNumbers: true,
             placeholder: "Your request body goes here...",
             foldGutter: true,
@@ -55,7 +56,7 @@ class BodyEditor extends React.Component {
             lineWrapping: false,
             scrollbarStyle: "native",
             matchBrackets: true,
-            autoCloseBrackets: true,
+            // autoCloseBrackets: true,
             tabSize: 2,
             indentUnit: 2,
             hintOptions: null,
