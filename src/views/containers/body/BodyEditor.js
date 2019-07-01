@@ -3,6 +3,7 @@ import styled from "styled-components";
 import connect from "unstated-connect2";
 import requestContainer from "../../../models/RequestContainer";
 import CodeEditor from "../../components/CodeEditor";
+import "./intellisense";
 
 const JSON_SPACE = 2;
 const prettify = jsonText => {
@@ -67,7 +68,8 @@ class BodyEditor extends React.Component {
             indentWithTabs: true,
             showCursorWhenSelecting: false,
             cursorScrollMargin: 12, // NOTE: This is px
-            keyMap: "default"
+            keyMap: "default",
+            intellisense: true
           }}
         />
       </Wrapper>
