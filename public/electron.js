@@ -58,7 +58,7 @@ const checkForUpdates = () => {
 app.on("ready", () => {
   createWindow();
   createMenu();
-  checkForUpdates();
+  // checkForUpdates();
 });
 
 app.on("window-all-closed", () => {

@@ -66,25 +66,36 @@ class ContextEditor extends React.Component {
         // TODO: separate button & menu item to trigger prerrify
         id={key}
         paneHeight={paneHeight}
-        value={typeof value === "string" ? value : JSON.stringify(value)}
+        value={value}
         autoScroll={true}
         className="CodeMirror-context"
         options={{
-          mode: "javascript",
-          json: true,
-          lineNumbers: false,
+          gutters: ["CodeMirror-lint-markers"],
+          // mode: { name: "dispatch", baseMode: "application/json" },
+          mode: "application/json",
           theme: "ttcn",
+          lint: true,
+          // mode: "application/json",
+          lineNumbers: true,
+          placeholder: "Your request body goes here...",
+          foldGutter: true,
+          height: "auto",
+          autoRefresh: 2000,
           lineWrapping: false,
+          scrollbarStyle: "native",
+          matchBrackets: true,
+          // autoCloseBrackets: true,
           tabSize: 2,
-          indentWithTabs: false,
-          //          electricChars: false,
-          //          smartIndent: false,
-          extraKeys: {
-            Tab: function(cm) {
-              var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
-              cm.replaceSelection(spaces, "end", "+input");
-            }
-          }
+          indentUnit: 2,
+          hintOptions: null,
+          dragDrop: true,
+          viewportMargin: 30, // default 10
+          selectionPointer: "default",
+          styleActiveLine: true,
+          indentWithTabs: true,
+          showCursorWhenSelecting: false,
+          cursorScrollMargin: 12, // NOTE: This is px
+          keyMap: "default"
         }}
         onBeforeChange={(editor, data, value) => {
           console.log("onBeforeChange");

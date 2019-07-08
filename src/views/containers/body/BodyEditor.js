@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import connect from "unstated-connect2";
 import requestContainer from "../../../models/RequestContainer";
+import contextContainer from "../../../models/ContextContainer";
 import CodeEditor from "../../components/CodeEditor";
 import "./intellisense";
 
@@ -27,7 +28,7 @@ class BodyEditor extends React.Component {
   }
   render() {
     console.log(this.props);
-    const { request, setBody, paneHeight, paneWidth } = this.props;
+    const { request, setBody, paneHeight, context, environment } = this.props;
 
     return (
       <Wrapper>
@@ -69,7 +70,10 @@ class BodyEditor extends React.Component {
             showCursorWhenSelecting: false,
             cursorScrollMargin: 12, // NOTE: This is px
             keyMap: "default",
-            intellisense: true
+            intellisense: {
+              context: context,
+              environment
+            }
           }}
         />
       </Wrapper>
@@ -79,11 +83,13 @@ class BodyEditor extends React.Component {
 
 // @ts-ignore
 export default connect({
-  container: requestContainer,
+  containers: [requestContainer, contextContainer],
   selector: ({ container, paneHeight, paneWidth }) => ({
     paneHeight,
     paneWidth,
     request: container.getSelected(),
-    setBody: R.bind(container.setBody, container)
+    setBody: R.bind(container.setBody, container),
+    context: contextContainer.getValue(),
+    environment: contextContainer.getSelectedEnvironment()
   })
 })(BodyEditor);

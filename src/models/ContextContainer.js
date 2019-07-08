@@ -7,7 +7,7 @@ class ContextContainer extends Container {
     super();
     this.state = {
       isModified: false,
-      ctx: ctx || "",
+      ctx: ctx || {},
       vars: vars || [{ name: "", values: [] }],
       selectedEnv: -1,
       selectedVariable: -1
@@ -17,7 +17,7 @@ class ContextContainer extends Container {
   init(ctx, vars) {
     this.setState({
       isModified: false,
-      ctx: ctx || "",
+      ctx: ctx || {},
       vars: vars || [{ name: "", values: [] }],
       selectedEnv: -1,
       selectedVariable: -1
