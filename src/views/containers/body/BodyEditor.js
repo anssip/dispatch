@@ -4,7 +4,7 @@ import connect from "unstated-connect2";
 import requestContainer from "../../../models/RequestContainer";
 import contextContainer from "../../../models/ContextContainer";
 import CodeEditor from "../../components/CodeEditor";
-import "./intellisense";
+import "../../../models/intellisense";
 
 const JSON_SPACE = 2;
 const prettify = jsonText => {
