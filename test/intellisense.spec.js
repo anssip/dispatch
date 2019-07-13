@@ -1,4 +1,4 @@
-import { getCompletions } from "../src/models/intellisense";
+import { getCompletions, collectKeys } from "../src/models/intellisense";
 
 const environment = {
   jdbcUrl: "jdbc://mydb.cloud/users",
@@ -11,19 +11,19 @@ const context = {
     jdbcTemplate: "nope",
     name: "{{connectorName}}",
     config: {
-      "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
-      "key.converter": "io.confluent.connect.avro.AvroConverter",
-      "key.converter.schema.registry.url": "http://localhost:8081",
-      "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-      "value.converter.schemas.enable": "false",
-      "connection.url": "{{jdbcUrl}}",
-      "table.whitelist": "{{tableName}}",
+      connector_class: "io.confluent.connect.jdbc.JdbcSourceConnector",
+      key_converter: "io.confluent.connect.avro.AvroConverter",
+      key_converter_schema_registry_url: "http://localhost:8081",
+      value_converter: "org.apache.kafka.connect.json.JsonConverter",
+      value_converter_schemas_enable: "false",
+      connection_url: "{{jdbcUrl}}",
+      table_whitelist: "{{tableName}}",
       mode: "incrementing",
-      "incrementing.column.name": "id",
-      "validate.non.null": "false",
-      "topic.prefix": "{{topicPrefix}}",
-      "table.types": "VIEW",
-      "batch.max.rows": 100
+      incrementing_column_name: "id",
+      validate_non_null: "false",
+      topic_prefix: "{{topicPrefix}}",
+      table_types: "VIEW",
+      batch_max_rows: 100
     }
   },
   source: {
@@ -34,7 +34,10 @@ const context = {
   }
 };
 
-it("Should collect all matching autocomplete matches", () => {});
+it("Should collect all keys from context", () => {
+  const keys = collectKeys(context);
+  console.log("got keys", keys);
+});
 
 it("should return completions", () => {
   const completions = getCompletions("jdbc", context, environment);

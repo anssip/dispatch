@@ -17,7 +17,7 @@ class RequestBuilder {
     const fill = R.bind(this.fill, this); // make fill also available to be used in the body editor UI
     const env = R.bind(this.renderEnv, this); // make env also available to be used in the body editor UI
     let tmpValue = `let __x = ${value}; __x;`;
-    console.log(`RequestBuilder:: eval`, tmpValue);
+    // console.log(`RequestBuilder:: eval`, tmpValue);
     tmpValue = eval(tmpValue);
     return tmpValue;
   }
@@ -41,7 +41,13 @@ class RequestBuilder {
       ...rest,
       this.env,
       this.getVariablesFromRequest()
-    ].reduce((acc, curr) => object(acc, curr), tmpl);
+    ].reduce(
+      (acc, curr) =>
+        object(acc, curr, (value, data, key) =>
+          string(value.replace(/{{\s/, "{{").replace(/\s}}/, "}}"), data)
+        ),
+      tmpl
+    );
   }
 
   /*
@@ -62,7 +68,7 @@ class RequestBuilder {
 
     // @ts-ignore
     try {
-      console.log(`======> about to fill`, this.req.body);
+      console.log(`RequestBuilder:: ======> about to fill`, this.req.body);
       let tmpValue = this.evalObject(this.req.body);
       console.log(`RequestBuilder:: afer initial eval:`, tmpValue);
       tmpValue = this.fill(tmpValue);
@@ -71,7 +77,7 @@ class RequestBuilder {
     } catch (e) {
       // TODO: show an error indicator when evaluation fails
       // 1st make sure the context object is valid JSON
-      // console.error(e);
+      console.error("RequestBuilder::", e);
       return "";
     }
   }
