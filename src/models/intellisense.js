@@ -1,35 +1,29 @@
 import CodeMirror from "codemirror";
 import RequestBuilder from "./RequestBuilder";
-const NAME_MATCH_FLEXIBLE = /[\w.\][\-/]+$/;
 const NAME_MATCH = /[\w.\][]+$/;
-const AFTER_VARIABLE_MATCH = /{{\s*[\w.\][]*$/;
-const AFTER_TAG_MATCH = /{%\s*[\w.\][]*$/;
-const COMPLETE_AFTER_WORD = /[\w.\][-]+/;
-const COMPLETE_AFTER_CURLIES = /[^{]*{[{%]\s*/;
-const COMPLETION_CLOSE_KEYS = /[}|-]/;
-const TYPE_VARIABLE = "variable";
-const TYPE_TAG = "tag";
-const TYPE_CONSTANT = "constant";
-const MAX_CONSTANTS = -1;
-const MAX_VARIABLES = -1;
-const MAX_TAGS = -1;
 const R = require("ramda");
 
 const pos = CodeMirror.Pos;
 
-export function getCompletions(history, context, environment) {
+export function getCompletions(type, history, objectWithCompleteValues) {
   const nameMatch = history.match(NAME_MATCH);
   // const nameMatchLong = history.match(NAME_MATCH_FLEXIBLE);
   const matchedName = nameMatch && nameMatch[0];
 
-  const allKeys = [...collectKeys(environment), ...collectKeys(context)];
+  const allKeys = collectKeys(objectWithCompleteValues);
   const matchedKeys = matchedName
     ? R.filter(k => k.includes(matchedName), allKeys)
     : allKeys;
 
-  return matchedKeys.map(k => ({
-    matchedName,
+  const valueFor = path => {
+    const parts = path.split(".");
+    return parts.reduce((acc, key) => acc[key], objectWithCompleteValues);
+  };
 
+  return matchedKeys.map(k => ({
+    type,
+    matchedName,
+    fillValue: valueFor(k),
     text: k,
     displayText: k,
     render: renderHint,
@@ -38,7 +32,16 @@ export function getCompletions(history, context, environment) {
 }
 
 function renderHint(element, self, data) {
-  element.innerHTML = `<b>${data.text}</b>`;
+  const fillValue = data.fillValue
+    ? typeof data.fillValue === "string"
+      ? data.fillValue
+      : JSON.stringify(data.fillValue)
+    : "";
+
+  // TODO: render differently based on data.type: "env" or "context"
+  element.innerHTML = `<em class="dp-hint-label">${
+    data.text
+  }</em> <em class="dp-hint-value">${fillValue.substring(0, 20)}</em>`;
 }
 
 function hint(cm, self, data) {
@@ -95,7 +98,10 @@ CodeMirror.defineOption("intellisense", null, (cm, options) => {
 
     const hint = (cm, self, data) => {
       return {
-        list: getCompletions(history, context, environment),
+        list: [
+          ...getCompletions("context", history, context),
+          getCompletions("env", history, environment)
+        ],
         from: pos(cursor.line, cursor.ch),
         // from: pos(cur.line, cur.ch - prefix.length),
         to: pos(cursor.line, cursor.ch)

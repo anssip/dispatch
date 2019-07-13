@@ -83,3 +83,14 @@ body {
   color: #d04845;
   background-color: yellow;
 }
+
+.dp-hint-label {
+  font-style: normal;
+  font-weight: normal;
+}
+
+.dp-hint-value {
+  float: right;
+  padding-right: 5px;
+  color: green;
+}

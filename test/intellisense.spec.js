@@ -40,6 +40,6 @@ it("Should collect all keys from context", () => {
 });
 
 it("should return completions", () => {
-  const completions = getCompletions("jdbc", context, environment);
+  const completions = getCompletions("", context);
   console.log("got completions", completions);
 });
