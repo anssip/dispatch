@@ -39,7 +39,8 @@ function renderHint(element, self, data) {
     : "";
 
   // TODO: render differently based on data.type: "env" or "context"
-  element.innerHTML = `<em class="dp-hint-label">${
+  const hintClass = data.type === "env" ? "dp-hint-env" : "dp-hint-ctx";
+  element.innerHTML = `<em class="${hintClass}">${
     data.text
   }</em> <em class="dp-hint-value">${fillValue.substring(0, 20)}</em>`;
 }
@@ -99,8 +100,8 @@ CodeMirror.defineOption("intellisense", null, (cm, options) => {
     const hint = (cm, self, data) => {
       return {
         list: [
-          ...getCompletions("context", history, context),
-          getCompletions("env", history, environment)
+          ...getCompletions("env", history, environment),
+          ...getCompletions("context", history, context)
         ],
         from: pos(cursor.line, cursor.ch),
         // from: pos(cur.line, cur.ch - prefix.length),

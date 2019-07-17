@@ -76,15 +76,23 @@ body {
 
 .cm-dispatch-variable {
   color: #d04845;
-  background-color: yellow;
+  background-color: #e4e41f;
+  color: #000;
 }
 
 .cm-dispatch-tag {
   color: #d04845;
-  background-color: yellow;
+  background-color: #e4e41f;
+  color: #000;
 }
 
-.dp-hint-label {
+.dp-hint-env {
+  font-style: italic;
+  font-weight: normal;
+  color: rgba(0, 0, 255, 0.808);
+}
+
+.dp-hint-ctx {
   font-style: normal;
   font-weight: normal;
 }
@@ -93,4 +101,15 @@ body {
   float: right;
   padding-right: 5px;
   color: green;
+}
+
+.CodeMirror-hint-active .dp-hint-value {
+  float: right;
+  padding-right: 5px;
+  color: white;
+}
+
+.CodeMirror-focused .CodeMirror-selected {
+  background: rgba(78, 78, 202, 0.288);
+  color: white;
 }
