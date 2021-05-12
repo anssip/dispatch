@@ -46,7 +46,7 @@
     "@babel/register": "^7.0.0",
     "@blueprintjs/core": "^3.13.0",
     "@blueprintjs/table": "^3.4.1",
-    "codemirror": "^5.43.0",
+    "codemirror": "^5.58.2",
     "cross-env": "^5.2.0",
     "electron-is-dev": "^1.0.1",
     "electron-log": "^3.0.5",
